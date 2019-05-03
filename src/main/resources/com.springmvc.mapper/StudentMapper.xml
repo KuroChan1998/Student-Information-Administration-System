@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.springmvc.dao.StudentMapper">
+    <resultMap id="StudentWithMajorCollegeResultMap" type="com.springmvc.dto.StudentWithMajorCollegeDto" extends="BaseResultMap">
+        <result column="stu_class_name" property="stuClassName" jdbcType="VARCHAR"/>
+        <result column="stu_major_name" property="stuMajorName" jdbcType="VARCHAR"/>
+        <result column="stu_college_name" property="stuCollegeName" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="BaseResultMap" type="com.springmvc.entity.Student">
+        <id column="stu_id" property="stuId" jdbcType="VARCHAR"/>
+        <result column="class_id" property="stuClassId" jdbcType="VARCHAR"/>
+        <result column="stu_name" property="stuName" jdbcType="VARCHAR"/>
+        <result column="stu_sex" property="stuSex" jdbcType="VARCHAR"/>
+        <result column="stu_age" property="stuAge" jdbcType="INTEGER"/>
+        <result column="stu_grade" property="stuGrade" jdbcType="VARCHAR"/>
+        <result column="stu_degree" property="stuDegree" jdbcType="VARCHAR"/>
+        <result column="stu_phone" property="stuPhone" jdbcType="VARCHAR"/>
+        <result column="stu_remark" property="stuRemark" jdbcType="VARCHAR"/>
+    </resultMap>
+    <insert id="insertStudent" parameterType="com.springmvc.dto.StudentWithMajorCollegeDto">
+        insert into student
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="stuId != null and stuId != ''">
+                stu_id,
+            </if>
+            <if test="stuClassName != null and stuClassName != ''">
+                class_id,
+            </if>
+            <if test="stuName != null and stuName != ''">
+                stu_name,
+            </if>
+            <if test="stuSex != null and stuSex != ''">
+                stu_sex,
+            </if>
+            <if test="stuAge != null">
+                stu_age,
+            </if>
+            <if test="stuGrade != null and stuGrade != ''">
+                stu_grade,
+            </if>
+            <if test="stuDegree != null and stuDegree != ''">
+                stu_degree,
+            </if>
+            stu_phone,stu_remark
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="stuId != null and stuId != ''">
+                #{stuId,jdbcType=VARCHAR},
+            </if>
+            <if test="stuClassName != null and stuClassName != ''">
+                (select class_id from class where class_name=#{stuClassName,jdbcType=VARCHAR}),
+            </if>
+            <if test="stuName != null and stuName != ''">
+                #{stuName,jdbcType=VARCHAR},
+            </if>
+            <if test="stuSex != null and stuSex != ''">
+                #{stuSex,jdbcType=VARCHAR},
+            </if>
+            <if test="stuAge != null">
+                #{stuAge,jdbcType=INTEGER},
+            </if>
+            <if test="stuGrade != null and stuGrade != ''">
+                #{stuGrade,jdbcType=VARCHAR},
+            </if>
+            <if test="stuDegree != null and stuDegree != ''">
+                #{stuDegree,jdbcType=VARCHAR},
+            </if>
+            #{stuPhone,jdbcType=VARCHAR},
+            #{stuRemark,jdbcType=VARCHAR}
+        </trim>
+    </insert>
+    <delete id="deleteOneStudent">
+        delete from student where stu_id=#{stuId}
+    </delete>
+    <delete id="deleteStudentsByClassId">
+        delete from student where class_id=#{classId}
+    </delete>
+
+    <select id="queryAllStuInfo" resultMap="StudentWithMajorCollegeResultMap"
+            parameterType="com.springmvc.dto.StudentInfoSearchDto">
+        select s1.*,
+        c1.class_name as stu_class_name, m1.major_name as stu_major_name, c2.college_name as stu_college_name
+        from student s1, class c1,major m1, college c2
+        <where>
+            <if test="stuId != null and stuId!=''">
+                <bind name="stuIdLike" value=" '%' + stuId + '%' "/>
+                and s1.stu_id like #{stuIdLike}
+            </if>
+            <if test="stuName != null and stuName!=''">
+                <bind name="stuNameLike" value=" '%' + stuName + '%' "/>
+                and s1.stu_name like #{stuNameLike}
+            </if>
+            <if test="stuGrade != null and stuGrade!=''">
+                and s1.stu_grade=#{stuGrade}
+            </if>
+            and c1.class_id=s1.class_id and m1.major_id=c1.major_id
+            <if test="stuCollege != null and stuCollege !=''">
+                <bind name="stuCollegeLike" value=" '%' + stuCollege + '%' "/>
+                and c2.college_name like #{stuCollegeLike}
+            </if>
+            and c2.college_id=m1.college_id
+        </where>
+    </select>
+
+    <select id="findStudentById" resultMap="BaseResultMap">
+        select * from student where stu_id=#{stuId}
+    </select>
+
+    <select id="findStudentOwnInfoById" resultMap="StudentWithMajorCollegeResultMap">
+        select s1.*,
+          c1.class_name as stu_class_name, m1.major_name as stu_major_name, c2.college_name as stu_college_name
+        from student s1,class c1,major m1, college c2
+        where s1.stu_id=#{stuId} and c1.class_id=s1.class_id and m1.major_id=c1.major_id and c2.college_id=m1.college_id
+    </select>
+
+    <update id="updateInfo" >
+        update student set stu_id=#{stuWMCD.stuId},class_id=(select class_id from class where class_name=#{stuWMCD.stuClassName})
+          ,stu_name=#{stuWMCD.stuName},stu_sex=#{stuWMCD.stuSex},stu_age=#{stuWMCD.stuAge}
+          ,stu_grade=#{stuWMCD.stuGrade},stu_degree=#{stuWMCD.stuDegree},stu_phone=#{stuWMCD.stuPhone},stu_remark=#{stuWMCD.stuRemark}
+        where stu_id=#{stuOriId}
+    </update>
+</mapper>

@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.springmvc.dao.ClassMapper">
+    <resultMap id="ClassWithMajorCollegeResultMap" type="com.springmvc.dto.ClassWithMajorCollegeDto"
+               extends="BaseResultMap">
+        <result column="class_moni_name" property="classMoniName" jdbcType="VARCHAR"/>
+        <result column="class_tea_name" property="classTeaName" jdbcType="VARCHAR"/>
+        <result column="class_major_name" property="classMajorName" jdbcType="VARCHAR"/>
+        <result column="class_college_name" property="classCollegeName" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="BaseResultMap" type="com.springmvc.entity.Class">
+        <id column="class_id" property="classId" jdbcType="VARCHAR"/>
+        <result column="major_id" property="classMajorId" jdbcType="VARCHAR"/>
+        <result column="class_name" property="className" jdbcType="VARCHAR"/>
+        <result column="class_stu_num" property="classStuNum" jdbcType="INTEGER"/>
+        <result column="class_moni_id" property="classMoniId" jdbcType="VARCHAR"/>
+        <result column="class_tea_id" property="classTeaId" jdbcType="VARCHAR"/>
+        <result column="class_remark" property="classRemark" jdbcType="VARCHAR"/>
+    </resultMap>
+    <insert id="insertClass" parameterType="com.springmvc.dto.ClassWithMajorCollegeDto">
+        insert into class
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="classId != null and classId != ''">
+                class_id,
+            </if>
+            <if test="classMajorName != null and classMajorName != ''">
+                major_id,
+            </if>
+            <if test="className != null and className != ''">
+                class_name,
+            </if>
+            -- Mybatis Integer类型判断不要判断空串，不然会把0当成''
+            <if test="classStuNum != null">
+                class_stu_num,
+            </if>
+            class_moni_id,
+            class_tea_id,
+            class_remark
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="classId != null and classId != ''">
+                #{classId,jdbcType=VARCHAR},
+            </if>
+            <if test="classMajorName != null and classMajorName != ''">
+                (select major_id from major where major_name=#{classMajorName,jdbcType=VARCHAR}),
+            </if>
+            <if test="className != null and className != ''">
+                #{className,jdbcType=VARCHAR},
+            </if>
+            <if test="classStuNum != null">
+                #{classStuNum},
+            </if>
+            #{classMoniId,jdbcType=VARCHAR},
+            #{classTeaId,jdbcType=VARCHAR},
+            #{classRemark,jdbcType=VARCHAR}
+        </trim>
+    </insert>
+
+    <update id="updateStuNumAddOne">
+        update class set class_stu_num=class_stu_num+1 where class_id=#{classId}
+    </update>
+
+    <update id="updateStuNumMinusOne">
+        update class set class_stu_num=class_stu_num-1 where class_id=#{classId}
+    </update>
+
+    <delete id="deleteOneClass">
+        delete from class where class_id=#{classId}
+    </delete>
+    <delete id="deleteClassByMajorId">
+        delete from class where major_id=#{majorId}
+    </delete>
+
+    <select id="queryAllClassInfo" resultMap="ClassWithMajorCollegeResultMap">
+        select table1.*,table2.class_moni_name,
+        table3.class_tea_name
+        from
+        (select c1.*,m1.major_name as
+        class_major_name, c2.college_name as class_college_name
+        from class c1,major m1, college c2 where m1.major_id=c1.major_id and c2.college_id=m1.college_id) as table1
+        left join (select s1.stu_name as class_moni_name,s1.stu_id from student s1) as table2
+        on table1.class_moni_id=table2.stu_id
+        left join (select t1.tea_id, t1.tea_name as class_tea_name from teacher t1) as table3
+        on table1.class_tea_id=table3.tea_id
+        <where>
+            <if test="className !=null and className!=''">
+                <bind name="classNameLike" value=" '%' + className + '%' "/>
+                and table1.class_name like #{classNameLike}
+            </if>
+            <if test="classMajorName !=null and classMajorName!=''">
+                <bind name="classMajorNameLike" value=" '%' + classMajorName + '%' "/>
+                and table1.class_major_name like #{classMajorNameLike}
+            </if>
+            <if test="classCollegeName !=null and classCollegeName!=''">
+                <bind name="classCollegeNameLike" value=" '%' + classCollegeName + '%' "/>
+                and table1.class_college_name like #{classCollegeNameLike}
+            </if>
+        </where>
+    </select>
+
+    <select id="findStuClassOwnInfoById" resultMap="ClassWithMajorCollegeResultMap">
+      select table1.class_name,table1.class_stu_num,table2.class_moni_name,table1.class_moni_id, table3.class_tea_name,table1.class_tea_id,table1.class_major_name,table1.class_college_name,table1.class_remark
+        from
+      (select c1.class_id,c1.class_name,c1.class_stu_num, c1.class_moni_id,c1.class_tea_id,m1.major_name as class_major_name, c2.college_name as class_college_name,c1.class_remark
+        from student s1,class c1,major m1, college c2 where m1.major_id=c1.major_id and c2.college_id=m1.college_id
+          and s1.stu_id=#{stuId} and s1.class_id=c1.class_id) as table1
+      left join (select s1.stu_name as class_moni_name,s1.stu_id from student s1) as table2
+          on table1.class_moni_id=table2.stu_id
+      left join (select t1.tea_id, t1.tea_name as class_tea_name from teacher t1) as table3
+          on table1.class_tea_id=table3.tea_id
+    </select>
+
+    <select id="findTeaClassOwnInfoById" resultMap="ClassWithMajorCollegeResultMap">
+        select table1.class_name,table1.class_stu_num,table2.class_moni_name,table1.class_moni_id, table3.class_tea_name,table1.class_tea_id,table1.class_major_name,table1.class_college_name,table1.class_remark
+        from
+          (select c1.class_id,c1.class_name,c1.class_stu_num, c1.class_moni_id,c1.class_tea_id,m1.major_name as class_major_name, c2.college_name as class_college_name,c1.class_remark
+           from class c1,major m1, college c2 where m1.major_id=c1.major_id and c2.college_id=m1.college_id
+                                                               and c1.class_tea_id=#{teaId}) as table1
+          left join (select s1.stu_name as class_moni_name,s1.stu_id from student s1) as table2
+            on table1.class_moni_id=table2.stu_id
+          left join (select t1.tea_id, t1.tea_name as class_tea_name from teacher t1) as table3
+            on table1.class_tea_id=table3.tea_id
+    </select>
+    <select id="findClassNameByMajor" resultMap="BaseResultMap">
+        select c1.* from class c1,major m1
+        <where>
+            and c1.major_id=m1.major_id
+            <if test="majorName!= null and majorName!=''">
+                and m1.major_name=#{majorName}
+            </if>
+        </where>
+    </select>
+    <select id="findIdByClassName" resultType="string">
+        select class_id from class where class_name=#{className}
+    </select>
+    <select id="findClassById" resultMap="BaseResultMap">
+        select * from class where class_id=#{classId}
+    </select>
+    <select id="findClassByName" resultMap="BaseResultMap">
+        select * from class where class_name=#{className}
+    </select>
+    <select id="findClassByMoniId" resultMap="BaseResultMap">
+        select * from class where class_moni_id=#{classMoniId}
+    </select>
+    <select id="findClassByTeaId" resultMap="BaseResultMap">
+        select * from class where class_tea_id=#{classTeaId}
+    </select>
+    <select id="findMaxClassId" resultType="string">
+        SELECT MAX(CAST(class_id AS SIGNED)) FROM class
+    </select>
+    <select id="findClassByMajorId" resultMap="BaseResultMap">
+        select * from class where major_id=#{majorId}
+    </select>
+    <update id="updateMoniId">
+        update class set class_moni_id=#{classNewMoniId} where class_moni_id=#{classOriMoniId}
+    </update>
+    <update id="updateDeleteMoni">
+        update class set class_moni_id=null where class_moni_id=#{classMoniId}
+    </update>
+    <update id="updateTeaId">
+        update class set  class_tea_id=#{classNewTeaId} where class_tea_id=#{classOriTeaId}
+    </update>
+    <update id="updateDeleteTea">
+        update class set class_tea_id=null where class_tea_id=#{classTeaId}
+    </update>
+    <update id="updateInfo">
+        update class set class_id=#{classWMCD.classId}
+          ,major_id=(select major_id from major where major_name=#{classWMCD.classMajorName})
+          ,class_name=#{classWMCD.className},class_stu_num=#{classWMCD.classStuNum},class_moni_id=#{classWMCD.classMoniId}
+          ,class_tea_id=#{classWMCD.classTeaId},class_remark=#{classWMCD.classRemark}
+        where class_id=#{classOriId}
+    </update>
+    <update id="updateStuNumAddN">
+        update class set class_stu_num=class_stu_num+#{n} where class_id=#{classId}
+    </update>
+    <update id="updateStuNumMinusN">
+        update class set class_stu_num=class_stu_num-#{n} where class_id=#{classId}
+    </update>
+
+</mapper>
