@@ -97,12 +97,12 @@
 
 - 使用 IntelliJ IDEA 导入项目，选择Maven项目选项，一路点击next，然后将我的pom.xml中的依赖引入代码复制到你的pom.xml中，从下图红线处开始。若有无法引入的依赖，可能是因为maven版本不同或是该依赖已过时不存在于现有maven仓库中，请前往maven官网映入最新的该类型依赖。
 
-  ![Snipaste_2019-05-04_07-57-51](.\git_screenshot\Snipaste_2019-05-04_07-57-51.jpg)
+  ![Snipaste_2019-05-04_07-57-51](git_screenshot\Snipaste_2019-05-04_07-57-51.jpg)
 
 - 在 IntelliJ IDEA 中，配置我们的 Tomcat， 然后把使用Maven构建好的项目添加到Tomcat中
 
 - 运行
-  ![Snipaste_2019-05-04_08-02-50](.\git_screenshot\Snipaste_2019-05-04_08-02-50.jpg)
+  ![Snipaste_2019-05-04_08-02-50](git_screenshot\Snipaste_2019-05-04_08-02-50.jpg)
 
 - 登录账户/密码
 
@@ -120,25 +120,25 @@
 
 * 登录：如上文图所示
 
-* 注册![Snipaste_2019-05-04_08-11-21](.\git_screenshot\Snipaste_2019-05-04_08-11-21.jpg)
+* 注册![Snipaste_2019-05-04_08-11-21](git_screenshot\Snipaste_2019-05-04_08-11-21.jpg)
 
 * 忘记密码后的重置密码（含发送邮箱验证码）
 
-  ![Snipaste_2019-05-04_08-12-27](.\git_screenshot\Snipaste_2019-05-04_08-12-27.jpg)
+  ![Snipaste_2019-05-04_08-12-27](git_screenshot\Snipaste_2019-05-04_08-12-27.jpg)
 
 * 登录进入主页
 
 * 修改基本资料
 
-  ![Snipaste_2019-05-04_08-15-43](.\git_screenshot\Snipaste_2019-05-04_08-15-43.jpg)
+  ![Snipaste_2019-05-04_08-15-43](git_screenshot\Snipaste_2019-05-04_08-15-43.jpg)
 
 * 修改密码
 
-  ![Snipaste_2019-05-04_08-19-12](.\git_screenshot\Snipaste_2019-05-04_08-19-12.jpg)
+  ![Snipaste_2019-05-04_08-19-12](git_screenshot\Snipaste_2019-05-04_08-19-12.jpg)
 
 * 修改绑定邮箱
 
-  ![Snipaste_2019-05-04_08-21-05](.\git_screenshot\Snipaste_2019-05-04_08-21-05.jpg)
+  ![Snipaste_2019-05-04_08-21-05](git_screenshot\Snipaste_2019-05-04_08-21-05.jpg)
 
 ### 信息查询
 
@@ -146,15 +146,15 @@
 
   * 查询所有信息
 
-    ![Snipaste_2019-05-04_08-22-48](.\git_screenshot\Snipaste_2019-05-04_08-22-48.jpg)
+    ![Snipaste_2019-05-04_08-22-48](git_screenshot\Snipaste_2019-05-04_08-22-48.jpg)
 
   * 根据登录用户的用户名（应以学号注册）查询当前个人的学籍信息，若注册时未以真实学号注册，则无法查询到。
 
-    ![Snipaste_2019-05-04_08-29-37](.\git_screenshot\Snipaste_2019-05-04_08-29-37.jpg)
+    ![Snipaste_2019-05-04_08-29-37](git_screenshot\Snipaste_2019-05-04_08-29-37.jpg)
 
   * 模糊查询搜索
 
-    ![Snipaste_2019-05-04_08-30-57](.\git_screenshot\Snipaste_2019-05-04_08-30-57.jpg)
+    ![Snipaste_2019-05-04_08-30-57](git_screenshot\Snipaste_2019-05-04_08-30-57.jpg)
 
 * 教师信息查询：类似学生信息查询，图略
 
@@ -168,19 +168,19 @@
 
   * 此功能必须以管理员用户身份登录，否则会跳转至异常页面
 
-    ![Snipaste_2019-05-04_08-32-13](.\git_screenshot\Snipaste_2019-05-04_08-32-13.jpg)
+    ![Snipaste_2019-05-04_08-32-13](git_screenshot\Snipaste_2019-05-04_08-32-13.jpg)
 
   * 编辑信息
 
-    ![Snipaste_2019-05-04_08-35-33](.\git_screenshot\Snipaste_2019-05-04_08-35-33.jpg)
+    ![Snipaste_2019-05-04_08-35-33](git_screenshot\Snipaste_2019-05-04_08-35-33.jpg)
 
   * 添加
 
-    ![Snipaste_2019-05-04_08-36-39](.\git_screenshot\Snipaste_2019-05-04_08-36-39.jpg)
+    ![Snipaste_2019-05-04_08-36-39](git_screenshot\Snipaste_2019-05-04_08-36-39.jpg)
 
   * 单条、多条删除
 
-    ![Snipaste_2019-05-04_08-38-02](.\git_screenshot\Snipaste_2019-05-04_08-38-02.jpg)
+    ![Snipaste_2019-05-04_08-38-02](git_screenshot\Snipaste_2019-05-04_08-38-02.jpg)
 
 * 教师信息修改：类似学生信息修改，图略
 
