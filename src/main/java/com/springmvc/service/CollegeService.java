@@ -125,4 +125,13 @@ public interface CollegeService {
      * @Param [collegeDtos]
      **/
     void deleteManyColleges(List<CollegeDto> collegeDtos);
+
+    /**
+     * @Author JinZhiyun
+     * @Description 返回学院名字及其对应的人数
+     * @Date 21:36 2019/5/5
+     * @Param []
+     * @return java.util.List<java.lang.Object>
+     **/
+    List<Object> findCollegeStuNumPercent();
 }

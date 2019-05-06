@@ -73,5 +73,13 @@ public interface StudentMapper {
      **/
     void deleteStudentsByClassId(@Param("classId") String classId);
 
-
+    /**
+     * @Author JinZhiyun
+     * @Description 查找符合条件的对应性别的学生数
+     * @Date 9:55 2019/5/5
+     * @Param [stuSex, stuCollegeName, stuMajorName, stuClassName]
+     * @return java.lang.Integer
+     **/
+    Integer findStuNumBySex(@Param("stuSex") String stuSex, @Param("stuCollegeName") String stuCollegeName
+            , @Param("stuMajorName") String stuMajorName,@Param("stuClassName") String stuClassName);
 }

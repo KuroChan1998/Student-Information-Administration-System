@@ -7,15 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
-
 public class MajorMapperTest extends UnitTestBase {
     @Autowired
     private MajorMapper majorMapper;
 
     @Test
     public void findMajorNameByCollege() {
-        List<Major> majors=majorMapper.findMajorNameByCollege("");
+        List<Major> majors=majorMapper.findMajorByCollegeName("");
         for (Major major:majors){
             System.out.println(major);
         }

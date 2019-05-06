@@ -90,7 +90,7 @@
         delete from major where major_id=#{majorId}
     </delete>
 
-    <select id="findMajorNameByCollege" resultMap="BaseResultMap" parameterType="java.lang.String">
+    <select id="findMajorByCollegeName" resultMap="BaseResultMap" parameterType="java.lang.String">
         select m1.* from major m1,college c1
         <where>
             and m1.college_id=c1.college_id

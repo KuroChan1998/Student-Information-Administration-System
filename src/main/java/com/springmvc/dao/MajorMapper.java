@@ -16,7 +16,7 @@ public interface MajorMapper {
      * @Date 22:58 2019/4/18
      * @Param [collegeName]
      **/
-    List<Major> findMajorNameByCollege(@Param("collegeName") String collegeName);
+    List<Major> findMajorByCollegeName(@Param("collegeName") String collegeName);
 
     /**
      * @return java.util.List<com.springmvc.dto.MajorWithCollegeDto>

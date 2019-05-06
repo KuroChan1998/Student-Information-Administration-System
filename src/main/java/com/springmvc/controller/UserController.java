@@ -2,6 +2,9 @@ package com.springmvc.controller;
 
 import com.springmvc.dto.Cookies;
 import com.springmvc.entity.User;
+import com.springmvc.service.CollegeService;
+import com.springmvc.service.MajorService;
+import com.springmvc.service.StudentService;
 import com.springmvc.service.UserService;
 import com.springmvc.service.impl.util.Constants;
 import com.springmvc.service.impl.util.SetCookie;
@@ -21,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -36,6 +40,15 @@ import java.util.Map;
 public class UserController {
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private StudentService studentService;
+
+    @Autowired
+    private CollegeService collegeService;
+
+    @Autowired
+    private MajorService majorService;
 
     /**
      * @return org.springframework.web.servlet.ModelAndView
@@ -437,5 +450,95 @@ public class UserController {
     @RequestMapping("/error")
     public String error() {
         return "tips/error";
+    }
+
+    /**
+     * @Author JinZhiyun
+     * @Description 重定向到echarts可视化性别比饼图
+     * @Date 12:18 2019/5/5
+     * @Param []
+     * @return java.lang.String
+     **/
+    @RequestMapping("/senior/sex")
+    public String sex(){
+        return "senior/sex";
+    }
+
+    /**
+     * @Author JinZhiyun
+     * @Description 性别比可视化ajax
+     * @Date 18:54 2019/5/5
+     * @Param [stuCollegeName, stuMajorName, stuClassName]
+     * @return java.util.Map<java.lang.String,java.lang.Object>
+     **/
+    @RequestMapping("/findSexPercent")
+    @ResponseBody
+    public Map<String, Object> findSexPercent(@RequestParam(value = "college", required = false) String stuCollegeName
+            , @RequestParam(value = "major", required = false) String stuMajorName
+            , @RequestParam(value = "class", required = false) String stuClassName) {
+        Map<String, Object> map = new HashMap<>();
+
+        List<Integer> list=studentService.findStuNumBySex(stuCollegeName,stuMajorName,stuClassName);
+
+        map.put("total",list.get(0));
+
+        map.put("male", list.get(1));
+
+        map.put("female", list.get(2));
+
+        return map;
+    }
+
+    /**
+     * @Author JinZhiyun
+     * @Description 重定向到echarts可视化学生数柱状图
+     * @Date 19:37 2019/5/5
+     * @Param []
+     * @return java.lang.String
+     **/
+    @RequestMapping("/senior/stuNum")
+    public String stuNum(){
+        return "senior/stuNum";
+    }
+
+    /**
+     * @Author JinZhiyun
+     * @Description 学院人数比可视化ajax
+     * @Date 21:39 2019/5/5
+     * @Param []
+     * @return java.util.Map<java.lang.String,java.lang.Object>
+     **/
+    @RequestMapping("/findCollegeStuNumPercent")
+    @ResponseBody
+    public Map<String, Object> findCollegeStuNumPercent() {
+        Map<String, Object> map = new HashMap<>();
+
+        List<Object> list=collegeService.findCollegeStuNumPercent();
+
+
+        map.put("collegeName",list.get(0));
+        map.put("collegeStuNum",list.get(1));
+
+        return map;
+    }
+
+    /**
+     * @Author JinZhiyun
+     * @Description 专业人数比可视化ajax
+     * @Date 22:23 2019/5/5
+     * @Param []
+     * @return java.util.Map<java.lang.String,java.lang.Object>
+     **/
+    @RequestMapping("/findMajorStuNumPercent")
+    @ResponseBody
+    public Map<String, Object> findMajorStuNumPercent(@RequestParam(value = "college", required = false) String collegeName) {
+        Map<String, Object> map = new HashMap<>();
+
+        List<Object> list=majorService.findMajorStuNumPercent(collegeName);
+
+        map.put("majorName",list.get(0));
+        map.put("majorStuNum",list.get(1));
+
+        return map;
     }
 }

@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -43,8 +44,8 @@ public class MajorServiceImpl implements MajorService {
     private CollegeMapper collegeMapper;
 
     @Override
-    public List<Major> findMajorNameByCollege(String collegeName) {
-        return majorMapper.findMajorNameByCollege(collegeName);
+    public List<Major> findMajorByCollegeName(String collegeName) {
+        return majorMapper.findMajorByCollegeName(collegeName);
     }
 
     @Override
@@ -222,6 +223,21 @@ public class MajorServiceImpl implements MajorService {
         for (MajorWithCollegeDto majorWCD : majorWCDs) {
             deleteOneMajor(majorWCD);
         }
+    }
+
+    @Override
+    public List<Object> findMajorStuNumPercent(String collegeName) {
+        List<Major> majors=majorMapper.findMajorByCollegeName(collegeName);
+        List<String> majorNames=new ArrayList<>();
+        List<Integer> majorStuNums=new ArrayList<>();
+        for (Major major:majors){
+            majorNames.add(major.getMajorName());
+            majorStuNums.add(major.getMajorStuNum());
+        }
+        List<Object> re=new ArrayList<>();
+        re.add(majorNames);
+        re.add(majorStuNums);
+        return re;
     }
 
 }

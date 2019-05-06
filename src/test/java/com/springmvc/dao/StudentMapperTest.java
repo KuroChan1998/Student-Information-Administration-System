@@ -59,4 +59,12 @@ public class StudentMapperTest extends UnitTestBase {
         stuWMCD.setStuPhone("12345678901");
         studentMapper.insertStudent(stuWMCD);
     }
+
+    @Test
+    public void findStuNumBySex() {
+        String collegeName="";
+        String majorName="计算机科学";
+        String className="";
+        System.out.println(studentMapper.findStuNumBySex("男",collegeName,majorName,className));
+    }
 }

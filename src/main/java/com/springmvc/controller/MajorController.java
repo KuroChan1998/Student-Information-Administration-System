@@ -47,7 +47,7 @@ public class MajorController {
     @RequestMapping("/getMajorNameByCollege")
     @ResponseBody
     public Object findMajorNameByCollege(@RequestParam(value = "collegeName", required = false) String collegeName) {
-        return majorService.findMajorNameByCollege(collegeName);
+        return majorService.findMajorByCollegeName(collegeName);
     }
 
     /**

@@ -149,4 +149,5 @@ public interface UserService {
      * @Param [session, request]
      **/
     boolean ifAdmin(HttpSession session, HttpServletRequest request);
+
 }

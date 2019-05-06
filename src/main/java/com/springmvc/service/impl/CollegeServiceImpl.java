@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -183,5 +184,20 @@ public class CollegeServiceImpl implements CollegeService {
         for (CollegeDto collegeDto : collegeDtos) {
             deleteOneCollege(collegeDto);
         }
+    }
+
+    @Override
+    public List<Object> findCollegeStuNumPercent() {
+        List<College> colleges=collegeMapper.findAllCollege();
+        List<String> collegeNames=new ArrayList<>();
+        List<Integer> collegeStuNums=new ArrayList<>();
+        for (College college:colleges){
+            collegeNames.add(college.getCollegeName());
+            collegeStuNums.add(college.getCollegeStuNum());
+        }
+        List<Object> re=new ArrayList<>();
+        re.add(collegeNames);
+        re.add(collegeStuNums);
+        return re;
     }
 }

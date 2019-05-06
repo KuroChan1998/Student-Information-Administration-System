@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -102,5 +103,17 @@ public class StudentServiceImpl implements StudentService {
     public StudentWithMajorCollegeDto findStuClassMajorCollegeName(String stuId) {
         List<StudentWithMajorCollegeDto> stuWMCDs = studentMapper.findStudentOwnInfoById(stuId);
         return stuWMCDs.get(0);
+    }
+
+    @Override
+    public List<Integer> findStuNumBySex(String stuCollegeName, String stuMajorName, String stuClassName) {
+        Integer male=studentMapper.findStuNumBySex("男",stuCollegeName,stuMajorName,stuClassName);
+        Integer female=studentMapper.findStuNumBySex("女",stuCollegeName,stuMajorName,stuClassName);
+        Integer total=male+female;
+        List<Integer> list=new ArrayList<>();
+        list.add(total);
+        list.add(male);
+        list.add(female);
+        return list;
     }
 }

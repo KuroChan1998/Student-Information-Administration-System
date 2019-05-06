@@ -113,6 +113,23 @@
         from student s1,class c1,major m1, college c2
         where s1.stu_id=#{stuId} and c1.class_id=s1.class_id and m1.major_id=c1.major_id and c2.college_id=m1.college_id
     </select>
+    <select id="findStuNumBySex" resultType="_int">
+        select count(*)
+        from student s1, class c1,major m1, college c2
+        <where>
+            s1.stu_sex=#{stuSex} and c1.class_id=s1.class_id and m1.major_id=c1.major_id
+            <if test="stuClassName != null and stuClassName !=''">
+                and c1.class_name=#{stuClassName}
+            </if>
+            <if test="stuMajorName != null and stuMajorName !=''">
+                and m1.major_name=#{stuMajorName}
+            </if>
+            <if test="stuCollegeName != null and stuCollegeName !=''">
+                and c2.college_name=#{stuCollegeName}
+            </if>
+            and c2.college_id=m1.college_id
+        </where>
+    </select>
 
     <update id="updateInfo" >
         update student set stu_id=#{stuWMCD.stuId},class_id=(select class_id from class where class_name=#{stuWMCD.stuClassName})

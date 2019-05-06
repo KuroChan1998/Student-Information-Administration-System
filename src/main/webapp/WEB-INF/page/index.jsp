@@ -378,25 +378,24 @@
                             <%--</dd>--%>
                         </dl>
                     </li>
-                    <%--<li data-name="senior" class="layui-nav-item">--%>
-                        <%--<a href="javascript:;" lay-tips="高级" lay-direction="2">--%>
-                            <%--<i class="layui-icon layui-icon-senior"></i>--%>
-                            <%--<cite>高级</cite>--%>
-                        <%--</a>--%>
-                        <%--<dl class="layui-nav-child">--%>
+                    <li data-name="senior" class="layui-nav-item">
+                        <a href="javascript:;" lay-tips="高级" lay-direction="2">
+                            <i class="layui-icon layui-icon-senior"></i>
+                            <cite>高级</cite>
+                        </a>
+                        <dl class="layui-nav-child">
                             <%--<dd>--%>
                                 <%--<a layadmin-event="im">LayIM 通讯系统</a>--%>
                             <%--</dd>--%>
-                            <%--<dd data-name="echarts">--%>
-                                <%--<a href="javascript:;">Echarts集成</a>--%>
-                                <%--<dl class="layui-nav-child">--%>
-                                    <%--<dd><a lay-href="senior/echarts/line.html">折线图</a></dd>--%>
-                                    <%--<dd><a lay-href="senior/echarts/bar.html">柱状图</a></dd>--%>
-                                    <%--<dd><a lay-href="senior/echarts/map.html">地图</a></dd>--%>
-                                <%--</dl>--%>
-                            <%--</dd>--%>
-                        <%--</dl>--%>
-                    <%--</li>--%>
+                            <dd data-name="echarts">
+                                <a href="javascript:;">Echarts集成</a>
+                                <dl class="layui-nav-child">
+                                    <dd><a lay-href="${ctx}/senior/sex">男女比</a></dd>
+                                    <dd><a lay-href="${ctx}/senior/stuNum">学生人数比</a></dd>
+                                </dl>
+                            </dd>
+                        </dl>
+                    </li>
                     <%--<li data-name="user" class="layui-nav-item">--%>
                         <%--<a href="javascript:;" lay-tips="用户" lay-direction="2">--%>
                             <%--<i class="layui-icon layui-icon-user"></i>--%>

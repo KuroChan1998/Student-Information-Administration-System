@@ -16,7 +16,7 @@ public interface MajorService {
      * @Date 22:57 2019/4/18
      * @Param [collegeName]
      **/
-    List<Major> findMajorNameByCollege(String collegeName);
+    List<Major> findMajorByCollegeName(String collegeName);
 
     /**
      * @return com.github.pagehelper.PageInfo<com.springmvc.dto.MajorWithCollegeDto>
@@ -143,4 +143,13 @@ public interface MajorService {
      * @Param [majorWCDs]
      **/
     void deleteManyMajors(List<MajorWithCollegeDto> majorWCDs);
+
+    /**
+     * @Author JinZhiyun
+     * @Description 返回相应专业名字及其对应的人数
+     * @Date 22:19 2019/5/5
+     * @Param [collegeName]
+     * @return java.util.List<java.lang.Object>
+     **/
+    List<Object> findMajorStuNumPercent(String collegeName);
 }

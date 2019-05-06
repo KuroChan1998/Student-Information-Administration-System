@@ -80,4 +80,13 @@ public interface StudentService {
      * @Param [stuId]
      **/
     StudentWithMajorCollegeDto findStuClassMajorCollegeName(String stuId);
+
+    /**
+     * @Author JinZhiyun
+     * @Description 查找符合条件的对应性别的学生数，返回长度为3的list，第一项为总人数，第二项为男生个数，第三项为女生个数
+     * @Date 18:48 2019/5/5
+     * @Param [stuCollegeName, stuMajorName, stuClassName]
+     * @return java.util.List<java.lang.Integer>
+     **/
+    List<Integer> findStuNumBySex(String stuCollegeName, String stuMajorName, String stuClassName);
 }
