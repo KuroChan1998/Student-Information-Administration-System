@@ -45,6 +45,7 @@
                     <input type="password" name="repass" id="LAY-user-login-repass" lay-verify="required"
                            placeholder="确认密码" class="layui-input">
                 </div>
+                <input  name="token" type="hidden" value="${token}"/>
                 <div class="layui-form-item">
                     <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="LAY-user-forget-resetpass">重置新密码
                     </button>
@@ -56,21 +57,6 @@
                     <input type="text" name="email" id="LAY-user-login-email" lay-verify="email" placeholder="请输入注册时的邮箱"
                            class="layui-input">
                 </div>
-                <%--<div class="layui-form-item">--%>
-                    <%--<div class="layui-row">--%>
-                        <%--<div class="layui-col-xs7">--%>
-                            <%--<label class="layadmin-user-login-icon layui-icon layui-icon-vercode"--%>
-                                   <%--for="LAY-user-login-vercode"></label>--%>
-                            <%--<input type="text" name="vercode" id="LAY-user-login-vercode" lay-verify="required"--%>
-                                   <%--placeholder="图形验证码" class="layui-input">--%>
-                        <%--</div>--%>
-                        <%--<div class="layui-col-xs5">--%>
-                            <%--<div id="v_container" style="margin-left: 10px;width: 130px;height: 36px;">--%>
-                                <%--&lt;%&ndash;<img src="https://www.oschina.net/action/user/captcha" class="layadmin-user-login-codeimg" id="LAY-user-get-vercode">&ndash;%&gt;--%>
-                            <%--</div>--%>
-                        <%--</div>--%>
-                    <%--</div>--%>
-                <%--</div>--%>
                 <div class="layui-form-item">
                     <div class="layui-row">
                         <div class="layui-col-xs7">
@@ -101,15 +87,8 @@
     </div>
 
     <div class="layui-trans layadmin-user-login-footer">
-
-        <p>© 2018 <a href="http://kurochan.cn/" target="_blank">kurochan.cn</a></p>
-        <%--<p>--%>
-        <%--<span><a href="http://www.layui.com/admin/#get" target="_blank">获取授权</a></span>--%>
-        <%--<span><a href="http://www.layui.com/admin/pro/" target="_blank">在线演示</a></span>--%>
-        <%--<span><a href="http://www.layui.com/admin/" target="_blank">前往官网</a></span>--%>
-        <%--</p>--%>
+        <p>© 2019 <a href="http://kurochan.cn/" target="_blank">kurochan.cn</a></p>
     </div>
-
 </div>
 
 <script src="${ctx}/static/custom/js/external/jquery-3.3.1.min.js"></script>
@@ -189,12 +168,6 @@
         form.on('submit(LAY-user-forget-submit)', function (obj) {
             var field = obj.field;
 
-            // var res = verifyCode.validate(field.vercode);
-            // // 图形码验证
-            // if (!res) {
-            //     return layer.msg("验证码错误！");
-            // }
-
             //请求接口
             admin.req({
                 url: '${ctx}/emailVerifyCodeTest' //实际使用请改成服务端真实接口
@@ -237,10 +210,12 @@
             }
 
             //请求接口
-            admin.req({
-                url: '${ctx}/resetPassword' //实际使用请改成服务端真实接口
-                , data: {"userPassword": field.password}
-                , done: function (res) {
+            $.ajax({
+                url: '${ctx}/resetPassword?token='+field.token //实际使用请改成服务端真实接口
+                ,
+                type:'post'
+                ,data: {"userPassword": field.password}
+                , success: function (res) {
                     layer.msg('密码已成功重置', {
                         offset: '15px'
                         , icon: 1

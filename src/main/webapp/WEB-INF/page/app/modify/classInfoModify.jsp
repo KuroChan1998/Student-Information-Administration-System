@@ -259,7 +259,7 @@
                     ,
                     title: '编辑班级'
                     ,
-                    content: '${ctx}/class/edit?classId=' + data.classId +'&className='+data.className+ '&classCollegeName=' + data.classCollegeName + '&classMajorName=' + data.classMajorName
+                    content: '${ctx}/class/edit?classId=' + data.classId + '&className=' + data.className + '&classCollegeName=' + data.classCollegeName + '&classMajorName=' + data.classMajorName
                     ,
                     maxmin: true
                     ,
@@ -287,7 +287,7 @@
 
                             $.ajax({
                                 data: json,
-                                url: "${ctx}/class/updateInfo?classOriId=" + field.oriId+'&classOriName='+field.oriName,
+                                url: "${ctx}/class/updateInfo?classOriId=" + field.oriId + '&classOriName=' + field.oriName,
                                 success: function (data) {
                                     if (data.data == "classIdExist") {
                                         return layer.msg('对不起，该班级编号已存在！');

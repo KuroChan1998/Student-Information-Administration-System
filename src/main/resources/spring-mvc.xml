@@ -43,6 +43,7 @@
             <mvc:exclude-mapping path="/sendVerifyCodeToEmail"/>
             <mvc:exclude-mapping path="/emailVerifyCodeTest"/>
             <mvc:exclude-mapping path="/resetPassword"/>
+            <mvc:exclude-mapping path="/formRepeatSubmit"/>
             <bean class="com.springmvc.controller.interceptor.LoginInterceptor"/>
 
         </mvc:interceptor>
@@ -53,6 +54,11 @@
             <!--排除登录URL-->
 
             <bean class="com.springmvc.controller.interceptor.AuthorityInterceptor"/>
+        </mvc:interceptor>
+
+        <mvc:interceptor>
+            <mvc:mapping path="/**" />
+            <bean class="com.springmvc.controller.interceptor.TokenInterceptor" />
         </mvc:interceptor>
 
         <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor"/>

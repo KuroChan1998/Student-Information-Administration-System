@@ -2,7 +2,7 @@
 
 ## 简介
 
-这个项目是一个大学生信息查询系统，提供用户级别的登录注册资料管理，信息查询，信息修改（管理员权利），简单的数据可视化分析等功能。
+这个项目是一个大学生信息查询系统，提供用户级别的登录注册资料管理，信息查询，信息修改（管理员权利），简单的数据可视化分析等功能，也有基本的安全性保障。
 
 
 
@@ -11,12 +11,10 @@
 ### 后端
 
 * IOC容器：Spring
-
 * Web框架：SpringMVC
-
 * ORM框架：Mybatis
-
 * 日志：log4j
+* 安全框架：shiro
 
 ### 前端
 
@@ -202,3 +200,146 @@
 * 学生人数比可视化
 
   ![Snipaste_2019-05-05_22-52-20](git_screenshot/Snipaste_2019-05-05_22-52-20.jpg)
+
+
+
+
+
+## 安全性
+
+### 1、未登录用户进入系统
+
+通过LoginInterceptor拦截器实验直接将未用户重定向到登录页面login.jsp，并用log4j记录当前日志。
+
+```java
+public class LoginInterceptor implements HandlerInterceptor {
+    private final static org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(LoginInterceptor.class);
+
+    @Override
+    public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
+        String userId = (String) httpServletRequest.getSession().getAttribute("userId");
+        if (userId != null && userId != "") {
+            logger.info(userId + "访问系统！");
+            return true;
+        }
+        logger.info(userId + "未登录下企图进入系统！");
+        httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + "/login");
+        return false;
+    }
+}
+```
+
+### 2、非管理员访问信息修改页面
+
+通过AuthorityInterceptor拦截器实验直接将非管理员未用户重定向到错误提示录页面error.jsp，并用log4j记录当前日志。
+
+```java
+public class AuthorityInterceptor implements HandlerInterceptor {
+    private final static org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(AuthorityInterceptor.class);
+
+    @Autowired
+    private UserService userService;
+
+    @Override
+    public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
+        if (userService.ifAdmin(httpServletRequest.getSession(), httpServletRequest)) {
+            logger.info("管理员访问:" + httpServletRequest.getRequestURI());
+            return true;
+        }
+        logger.info("非管理员访问:" + httpServletRequest.getRequestURI() + " 无操作权限");
+        httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + "/error");
+        return false;
+    }
+}
+```
+
+### 3、防止用户重复提交表单
+
+定义Token注解并实现，在访问页面时产生token，在执行ajax或其他与副武器的交互时删除token，对比前后token差异判断是否重复提交了表单
+
+```java
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Token {
+    boolean save() default false;
+    boolean remove() default false;
+}
+```
+
+```java
+public class TokenInterceptor extends HandlerInterceptorAdapter {
+    private final static org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(TokenInterceptor.class);
+
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        if (handler instanceof HandlerMethod) {
+            HandlerMethod handlerMethod = (HandlerMethod) handler;
+            Method method = handlerMethod.getMethod();
+            Token annotation = method.getAnnotation(Token.class);
+            if (annotation != null) {
+                boolean needSaveSession = annotation.save();
+                if (needSaveSession) {
+                    request.getSession(false).setAttribute("token", UUID.randomUUID().toString());
+                }
+                boolean needRemoveSession = annotation.remove();
+                if (needRemoveSession) {
+                    if (isRepeatSubmit(request)) {
+                        logger.info(request.getSession().getAttribute("userId")+"重复提交了表单");
+                        response.sendRedirect(request.getContextPath() + "/formRepeatSubmit");
+                        return false;
+                    }
+                    request.getSession(false).removeAttribute("token");
+                }
+            }
+            return true;
+        } else {
+            return super.preHandle(request, response, handler);
+        }
+    }
+
+    private boolean isRepeatSubmit(HttpServletRequest request) {
+        String serverToken = (String) request.getSession(false).getAttribute("token");
+        System.out.println(serverToken);
+        if (serverToken == null) {
+            return true;
+        }
+        String clinetToken = request.getParameter("token");
+        System.out.println(clinetToken);
+        if (clinetToken == null) {
+            return true;
+        }
+        if (!serverToken.equals(clinetToken)) {
+            return true;
+        }
+        return false;
+    }
+}
+```
+
+### 4、md5带盐加密
+
+通过shiro框架提供的加密算法，使用md5散列对用户的密码加密，对存储到mysql中。
+
+这里盐为用户id，加密次数为5次，即en_pass=MD(MD(MD(MD(MD( userId+userPassword )))))
+
+盐选定为用户id这个唯一标识可以提升加密的安全性，盐的使用也可以有效防止md破解工具。
+
+```java
+public class MySecurity {
+    private static int hashIterations=5;
+
+    /**
+     * @Author JinZhiyun
+     * @Description md5加密，加密内容source,带盐加密salt，指定加密次数：hashIterations
+     * @Date 11:06 2019/5/12
+     * @Param [source, salt]
+     * @return java.lang.String
+     **/
+    public static String encryptUserPassword(String source, String salt){
+        return new Md5Hash(source, salt, hashIterations).toBase64();
+    }
+}
+```
+
+
+

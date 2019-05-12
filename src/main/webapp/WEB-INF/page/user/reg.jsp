@@ -38,13 +38,14 @@
                        class="layui-input">
             </div>
             <div class="layui-form-item">
-                <label class="layadmin-user-login-icon layui-icon layui-icon-user" for="LAY-user-login-identity"></label>
-                    <select name="identity" lay-verify="myidentity" id="LAY-user-login-identity">
-                        <option value="">请选择你的身份</option>
-                        <option value="学生">学生</option>
-                        <option value="教师">教师</option>
-                        <option value="管理员" disabled>管理员</option>
-                    </select>
+                <label class="layadmin-user-login-icon layui-icon layui-icon-user"
+                       for="LAY-user-login-identity"></label>
+                <select name="identity" lay-verify="myidentity" id="LAY-user-login-identity">
+                    <option value="">请选择你的身份</option>
+                    <option value="学生">学生</option>
+                    <option value="教师">教师</option>
+                    <option value="管理员" disabled>管理员</option>
+                </select>
             </div>
             <div class="layui-form-item">
                 <label class="layadmin-user-login-icon layui-icon layui-icon-password"
@@ -75,26 +76,10 @@
                 <input type="text" name="email" id="LAY-user-login-email" lay-verify="email" placeholder="邮箱"
                        class="layui-input">
             </div>
-            <%--<div class="layui-form-item">--%>
-                <%--<div class="layui-row">--%>
-                    <%--<div class="layui-col-xs7">--%>
-                        <%--<label class="layadmin-user-login-icon layui-icon layui-icon-vercode"--%>
-                               <%--for="LAY-user-login-vercode"></label>--%>
-                        <%--<input type="text" name="vercode" id="LAY-user-login-vercode" lay-verify="required"--%>
-                               <%--placeholder="验证码" class="layui-input">--%>
-                    <%--</div>--%>
-                    <%--<div class="layui-col-xs5">--%>
-                        <%--<div style="margin-left: 10px;">--%>
-                            <%--<button type="button" class="layui-btn layui-btn-primary layui-btn-fluid"--%>
-                                    <%--id="LAY-user-getsmscode">获取验证码--%>
-                            <%--</button>--%>
-                        <%--</div>--%>
-                    <%--</div>--%>
-                <%--</div>--%>
-            <%--</div>--%>
             <div class="layui-form-item">
                 <input type="checkbox" name="agreement" lay-skin="primary" title="同意用户协议" checked>
             </div>
+            <%--<input  name="token" type="hidden" value="${token}"/>--%>
             <div class="layui-form-item">
                 <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="LAY-user-reg-submit">注 册</button>
             </div>
@@ -112,13 +97,7 @@
     </div>
 
     <div class="layui-trans layadmin-user-login-footer">
-
-        <p>© 2018 <a href="http://kurochan.cn/" target="_blank">kurochan.cn</a></p>
-        <%--<p>--%>
-        <%--<span><a href="http://www.layui.com/admin/#get" target="_blank">获取授权</a></span>--%>
-        <%--<span><a href="http://www.layui.com/admin/pro/" target="_blank">在线演示</a></span>--%>
-        <%--<span><a href="http://www.layui.com/admin/" target="_blank">前往官网</a></span>--%>
-        <%--</p>--%>
+        <p>© 2019 <a href="http://kurochan.cn/" target="_blank">kurochan.cn</a></p>
     </div>
 
 </div>
@@ -141,12 +120,12 @@
         /*****************************************************/
         //用户名栏失去焦点提示
         $(function () {
-            $("#LAY-user-login-identity").blur(function () {
+            $("#LAY-user-login-id").blur(function () {
                 //小tips
 
                 layer.msg('请务必以自己真实的学号或工号注册，不然用该账号快捷查询自己的学籍信息模块会不起作用', {
                     offset: '100px',
-                    icon: 2,
+                    icon: 3,
                     time: 3000
                 });
             });
@@ -171,8 +150,8 @@
                 return layer.msg('你必须同意用户协议才能注册');
             }
 
-            console.log(idWithIdentityValid(field.id,field.identity))
-            if (!idWithIdentityValid(field.id,field.identity)) {
+            console.log(idWithIdentityValid(field.id, field.identity))
+            if (!idWithIdentityValid(field.id, field.identity)) {
                 return layer.msg('注意：若以学生注册用户名（学号）第一位必须为5; 若以教师注册用户名（工号）第一位必须为1', {
                     offset: '100px',
                     icon: 2,
@@ -182,16 +161,18 @@
 
 
             //请求接口
-            admin.req({
+            $.ajax({
                 url: '${ctx}/regTest' //实际使用请改成服务端真实接口
+                ,
+                type: 'post'
                 ,
                 data: {
                     "userId": field.id,
                     "userNickname": field.nickname,
                     "userPassword": field.password,
                     "userIdentity": field.identity,
-                    "userEmail":field.email,
-                    "userPhone":field.cellphone
+                    "userEmail": field.email,
+                    "userPhone": field.cellphone
                 }
                 ,
                 success: function (res) {
@@ -203,17 +184,17 @@
                         }, function () {
                             location.href = '${ctx}/login'; //跳转到登入页
                         });
-                    } else if (res.data == "regIdExist"){
+                    } else if (res.data == "regIdExist") {
                         layer.msg('用户名已被注册', {
                             icon: 5,
                             anim: 6
                         });
-                    } else if (res.data == "regNicknameExist"){
+                    } else if (res.data == "regNicknameExist") {
                         layer.msg('昵称已被注册', {
                             icon: 5,
                             anim: 6
                         });
-                    } else if (res.data == "regEmailExist"){
+                    } else if (res.data == "regEmailExist") {
                         layer.msg('邮箱已被注册', {
                             icon: 5,
                             anim: 6

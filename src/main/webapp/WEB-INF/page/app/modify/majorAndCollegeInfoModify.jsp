@@ -191,8 +191,8 @@
                 , {field: 'majorId', title: '专业号', hide: true}
                 , {field: 'majorName', title: '专业', sort: true, fixed: true}
                 , {field: 'majorCollegeName', title: '学院', sort: true}
-                , {field: 'majorStuNum', title: '专业人数', width:120,sort: true}
-                , {field: 'majorClassNum', title: '专业班级数', width:120,sort: true}
+                , {field: 'majorStuNum', title: '专业人数', width: 120, sort: true}
+                , {field: 'majorClassNum', title: '专业班级数', width: 120, sort: true}
                 , {field: 'majorTeaId', title: '专业负责人工号', hide: true}
                 , {field: 'majorTeaName', title: '专业负责人'}
                 , {width: 130, title: '操作', toolbar: '#test-table-operate-barDemo2'}
@@ -287,7 +287,7 @@
                     ,
                     title: '编辑专业'
                     ,
-                    content: '${ctx}/major/edit?majorId=' + data.majorId +'&majorCollegeName=' + data.majorCollegeName + '&majorName=' + data.majorName
+                    content: '${ctx}/major/edit?majorId=' + data.majorId + '&majorCollegeName=' + data.majorCollegeName + '&majorName=' + data.majorName
                     ,
                     maxmin: true
                     ,
@@ -314,7 +314,7 @@
 
                             $.ajax({
                                 data: json,
-                                url: "${ctx}/major/updateInfo?majorOriId=" + field.oriId+'&majorOriName='+field.oriName,
+                                url: "${ctx}/major/updateInfo?majorOriId=" + field.oriId + '&majorOriName=' + field.oriName,
                                 success: function (data) {
                                     if (data.data == "majorIdExist") {
                                         return layer.msg('对不起，该专业编号已存在！');
@@ -389,7 +389,7 @@
             , cols: [[
                 {type: 'checkbox', fixed: 'left'}
                 , {field: 'collegeId', title: '学院号', hide: true}
-                ,{field: 'collegeName', title: '学院', sort: true, fixed: true}
+                , {field: 'collegeName', title: '学院', sort: true, fixed: true}
                 , {field: 'collegeStuNum', title: '学院人数', sort: true}
                 , {field: 'collegeMajorNum', title: '学院专业数', sort: true}
                 , {field: 'collegeProperty', title: '学院性质', sort: true}
@@ -456,7 +456,7 @@
                         layer.close(index); //关闭弹层
                     }
                 });
-            }else if (obj.event === 'del') {
+            } else if (obj.event === 'del') {
                 layer.confirm('确定删除此学院吗？删除后其下所有专业、班级、学生、教师也都将被删除！！', function (index) {
 
                     //提交删除ajax
@@ -485,7 +485,7 @@
                     ,
                     title: '编辑学院'
                     ,
-                    content: '${ctx}/college/edit?collegeId=' + data.collegeId +'&collegeName=' + data.collegeName
+                    content: '${ctx}/college/edit?collegeId=' + data.collegeId + '&collegeName=' + data.collegeName
                     ,
                     maxmin: true
                     ,
@@ -512,7 +512,7 @@
 
                             $.ajax({
                                 data: json,
-                                url: "${ctx}/college/updateInfo?collegeOriId=" + field.oriId+'&collegeOriName='+field.oriName,
+                                url: "${ctx}/college/updateInfo?collegeOriId=" + field.oriId + '&collegeOriName=' + field.oriName,
                                 success: function (data) {
                                     if (data.data == "collegeIdExist") {
                                         return layer.msg('对不起，该学院编号已存在！');

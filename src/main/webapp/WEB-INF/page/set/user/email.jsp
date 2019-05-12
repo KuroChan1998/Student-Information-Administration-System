@@ -126,19 +126,19 @@
                 dataType: "json"
             });
         });
+
         //timer处理函数
         function SetRemainTime() {
             if (curCount == 0) {//超时重新获取验证码
                 window.clearInterval(InterValObj);// 停止计时器
                 $("#send-email-code").attr("disabled", false);
                 $("#send-email-code").html("重获验证码");
-                // document.getElementById("send-email-code").removeAttribute("disabled");//移除禁用状态改为可用
-                // document.getElementById("send-email-code").value="重获验证码";
             } else {
                 curCount--;
                 $("#send-email-code").html(curCount + "秒后重获");
             }
         }
+
         /*************************************************************/
 
 

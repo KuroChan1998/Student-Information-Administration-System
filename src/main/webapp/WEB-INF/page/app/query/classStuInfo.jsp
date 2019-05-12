@@ -16,14 +16,16 @@
     <title>layuiAdmin 文章管理 iframe 框</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <link rel="stylesheet" href="${ctx}/static/plugins/layuiadmin/layui/css/layui.css" media="all">
     <link rel="stylesheet" href="${ctx}/static/plugins/layuiadmin/style/admin.css" media="all">
 
 </head>
 <body>
 
-<div class="layui-form" lay-filter="layuiadmin-app-form-list" id="layuiadmin-app-form-list" style="padding: 20px 30px 0 0;">
+<div class="layui-form" lay-filter="layuiadmin-app-form-list" id="layuiadmin-app-form-list"
+     style="padding: 20px 30px 0 0;">
     <div class="layui-form-item">
         <label class="layui-form-label">学号</label>
         <div class="layui-input-inline">
@@ -69,7 +71,8 @@
     <div class="layui-form-item">
         <label class="layui-form-label">备注</label>
         <div class="layui-input-inline">
-            <textarea name="remark" style="width: 400px; height: 150px;" readonly class="layui-textarea">${stuInfo.stuRemark}</textarea>
+            <textarea name="remark" style="width: 400px; height: 150px;" readonly
+                      class="layui-textarea">${stuInfo.stuRemark}</textarea>
         </div>
     </div>
 </div>
@@ -80,9 +83,9 @@
         base: '${ctx}/static/plugins/layuiadmin/' //静态资源所在路径
     }).extend({
         index: 'lib/index' //主入口模块
-    }).use(['index', 'form'], function(){
+    }).use(['index', 'form'], function () {
         var $ = layui.$
-            ,form = layui.form;
+            , form = layui.form;
 
 
     })

@@ -4,6 +4,7 @@ import com.springmvc.dao.UserMapper;
 import com.springmvc.entity.User;
 import com.springmvc.service.UserService;
 import com.springmvc.service.impl.util.Constants;
+import com.springmvc.service.impl.util.MySecurity;
 import com.springmvc.service.impl.util.SendEmailUtil;
 import com.springmvc.service.impl.util.VerifyCode;
 import org.apache.log4j.Logger;
@@ -46,6 +47,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public int findUserByIdAndPassword(String userId, String userPassword) {
+        userPassword=MySecurity.encryptUserPassword(userPassword,userId);
         return userMapper.findByIdAndPassword(userId, userPassword);
     }
 
@@ -60,6 +62,7 @@ public class UserServiceImpl implements UserService {
         if (userMapper.findIfEmailExist(user.getUserEmail()) != 0) {
             return -3; //-3表示邮箱已被注册
         }
+        user.setUserPassword(MySecurity.encryptUserPassword(user.getUserPassword(),user.getUserId()));
         user.setUserIcon(Constants.USER_DEFAULT_ICON_PATH);
         return userMapper.insertUserRegInfo(user); //return 1表示注册成功
     }
@@ -156,6 +159,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateResetPasswordByUserId(String userPassword, String userId) {
+        userPassword=MySecurity.encryptUserPassword(userPassword,userId);
         userMapper.updateResetPasswordByUserId(userPassword, userId);
     }
 
@@ -197,6 +201,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateResetPasswordByEmail(String userEmail, String userPassword) {
+        String userId=userMapper.selectUserByUserEmail(userEmail).getUserId();
+        userPassword=MySecurity.encryptUserPassword(userPassword,userId);
         userMapper.updateResetPasswordByEmail(userEmail, userPassword);
     }
 

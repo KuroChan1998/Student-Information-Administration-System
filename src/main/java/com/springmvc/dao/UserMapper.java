@@ -25,6 +25,15 @@ public interface UserMapper {
     User selectUserById(@Param("userId") String userId);
 
     /**
+     * @Author JinZhiyun
+     * @Description 根据用户邮箱查询用户信息
+     * @Date 11:21 2019/5/12
+     * @Param [userEmail]
+     * @return com.springmvc.entity.User
+     **/
+    User selectUserByUserEmail(@Param("userEmail") String userEmail);
+
+    /**
      * @return java.lang.String
      * @Author JinZhiyun
      * @Description 根据用户Id查询当前用户密码

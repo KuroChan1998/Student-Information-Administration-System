@@ -57,25 +57,6 @@
                                        lay-verify="nickname" autocomplete="off" placeholder="请输入昵称" class="layui-input">
                             </div>
                         </div>
-                        <%--<div class="layui-form-item">--%>
-                        <%--<label class="layui-form-label">性别</label>--%>
-                        <%--<div class="layui-input-block">--%>
-                        <%--<input type="radio" name="sex" value="男" title="男">--%>
-                        <%--<input type="radio" name="sex" value="女" title="女" checked>--%>
-                        <%--</div>--%>
-                        <%--</div>--%>
-                        <%--<div class="layui-form-item">--%>
-                        <%--<label class="layui-form-label">头像</label>--%>
-                        <%--<div class="layui-input-inline">--%>
-                        <%--<input name="avatar" id="LAY_avatarSrc" placeholder="图片地址" value="" class="layui-input">--%>
-                        <%--</div>--%>
-                        <%--<div class="layui-input-inline layui-btn-container" style="width: auto;">--%>
-                        <%--<button type="button" class="layui-btn layui-btn-primary" id="uploadPic">--%>
-                        <%--<i class="layui-icon">&#xe67c;</i>上传图片--%>
-                        <%--</button>--%>
-                        <%--<button class="layui-btn layui-btn-primary" layadmin-event="avartatPreview">查看图片</button>--%>
-                        <%--</div>--%>
-                        <%--</div>--%>
                         <div class="layui-form-item">
                             <label class="layui-form-label">修改头像</label>
                             <div class="layui-input-inline uploadHeadImage">
@@ -91,7 +72,8 @@
                                     <p id="demoText">当前头像↑</p>
                                 </div>
                             </div>
-                            <div><input type="text" id="hiddenIconUrl" style="display: none" name="hiddenIconUrl" value="${userInfo.userIcon}"/></div>
+                            <div><input type="text" id="hiddenIconUrl" style="display: none" name="hiddenIconUrl"
+                                        value="${userInfo.userIcon}"/></div>
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label">手机</label>
@@ -100,13 +82,6 @@
                                        autocomplete="off" class="layui-input">
                             </div>
                         </div>
-                        <%--<div class="layui-form-item">--%>
-                            <%--<label class="layui-form-label">邮箱</label>--%>
-                            <%--<div class="layui-input-inline">--%>
-                                <%--<input type="text" name="email" value="${userInfo.userEmail}" lay-verify="email"--%>
-                                       <%--autocomplete="off" class="layui-input">--%>
-                            <%--</div>--%>
-                        <%--</div>--%>
                         <div class="layui-form-item">
                             <label class="layui-form-label">验证码</label>
                             <div class="layui-input-inline">
@@ -115,9 +90,9 @@
                                            id="LAY-user-login-smscode" class="layui-input">
                                     <%--<input type="text" name="vercode" id="LAY-user-login-smscode" lay-verify="required" placeholder="短信验证码" class="layui-input">--%>
                                 </div>
-
                             </div>
-                            <div><input type="text" style="display:none" id="hiddenUserEmail" name="email" value="${userInfo.userEmail}"/></div>
+                            <div><input type="text" style="display:none" id="hiddenUserEmail" name="email"
+                                        value="${userInfo.userEmail}"/></div>
                             <div class="layui-input-inline">
                                 <div style="margin-left: 10px">
                                     <%--<input id="send-email-code" style="width: 120px;height: 39px;text-align: center;background-color: white;border: 1px solid #E2E2E2" name="send-email-code" type="button"   value="获取验证码"  />--%>
@@ -127,19 +102,12 @@
                                 </div>
                             </div>
                         </div>
-                        <%--<div class="layui-form-item layui-form-text">--%>
-                        <%--<label class="layui-form-label">备注</label>--%>
-                        <%--<div class="layui-input-block">--%>
-                        <%--<textarea name="remarks" placeholder="请输入内容" class="layui-textarea"></textarea>--%>
-                        <%--</div>--%>
-                        <%--</div>--%>
                         <div class="layui-form-item">
                             <div class="layui-input-block">
                                 <button class="layui-btn" lay-submit lay-filter="setmyinfo">确认修改</button>
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -233,19 +201,19 @@
                 dataType: "json"
             });
         });
+
         //timer处理函数
         function SetRemainTime() {
             if (curCount == 0) {//超时重新获取验证码
                 window.clearInterval(InterValObj);// 停止计时器
                 $("#send-email-code").attr("disabled", false);
                 $("#send-email-code").html("重获验证码");
-                // document.getElementById("send-email-code").removeAttribute("disabled");//移除禁用状态改为可用
-                // document.getElementById("send-email-code").value="重获验证码";
-            }else {
+            } else {
                 curCount--;
                 $("#send-email-code").html(curCount + "秒后重获");
             }
         }
+
         /*************************************************************/
 
 
@@ -259,31 +227,31 @@
             //请求接口
             admin.req({
                 url: '${ctx}/emailVerifyCodeTest' //实际使用请改成服务端真实接口
-                , data: {"emailVerifyCode": field.emailcode,"userEmail":field.email}
+                , data: {"emailVerifyCode": field.emailcode, "userEmail": field.email}
                 , success: function (res) {
                     if (res.data == "verifyCodeCorrect") {
                         layer.msg('修改已完成，请刷新页面', {
                             icon: 1
                             , time: 1000
-                        },function(){
+                        }, function () {
 
                             /*****************************************************/
                             //验证码正确后重置用户基本资料
-                            var allData={
+                            var allData = {
                                 "userId": field.username,
                                 "userNickname": field.nickname,
                                 "userIdentity": field.role,
-                                "userIcon":field.hiddenIconUrl,
-                                "userPhone":field.cellphone
+                                "userIcon": field.hiddenIconUrl,
+                                "userPhone": field.cellphone
                             };
                             //请求接口
                             admin.req({
-                                type:'post',
-                                contentType:'application/json;charset=utf-8',
-                                data:JSON.stringify(allData),
+                                type: 'post',
+                                contentType: 'application/json;charset=utf-8',
+                                data: JSON.stringify(allData),
                                 url: '${ctx}/userInfoReset' //实际使用请改成服务端真实接口
                                 , success: function (res2) {
-                                    location.href="${ctx}/info"
+                                    location.href = "${ctx}/info"
 
                                 }
                             });
@@ -307,8 +275,6 @@
                     }
                 }
             });
-
-
 
 
             return false;

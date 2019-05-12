@@ -69,16 +69,13 @@
         <div class="layui-card-body">
             <div style="padding-bottom: 10px;">
                 <button class="layui-btn layuiadmin-btn-comm" data-type="batchdel" id="query-my-info">查询我的个人信息</button>
-                <button class="layui-btn layuiadmin-btn-comm" data-type="batchdel" style="background-color: #FFB800" id="query-all-info">查询所有信息</button>
+                <button class="layui-btn layuiadmin-btn-comm" data-type="batchdel" style="background-color: #FFB800"
+                        id="query-all-info">查询所有信息
+                </button>
             </div>
-            <%--<div style="padding-bottom: 10px;">--%>
-            <%--<button class="layui-btn layuiadmin-btn-comm" data-type="batchdel">删除</button>--%>
-            <%--</div>--%>
+
             <table id="teaInfoQuery" lay-filter="LAY-app-content-comm"></table>
-            <%--<script type="text/html" id="table-content-com">--%>
-            <%--<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>--%>
-            <%--<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>--%>
-            <%--</script>--%>
+
         </div>
     </div>
 </div>
@@ -121,7 +118,7 @@
                 , {field: 'teaAge', title: '年龄'}
                 , {field: 'teaTitle', title: '职称', sort: true}
                 , {field: 'teaMajorName', title: '专业', sort: true}
-                , {field: 'teaCollegeName', title: '学院',width:200, sort: true}
+                , {field: 'teaCollegeName', title: '学院', width: 200, sort: true}
                 , {field: 'teaRemark', title: '评价', width: 300}
             ]]
             , page: true
@@ -174,11 +171,11 @@
         $("#query-my-info").click(function () {
             table.reload('teaInfoQuery', {
                 url: '${ctx}/teacher/myOwnInfo'
-                ,request: {
+                , request: {
                     pageName: 'pageNum',
                     limitName: 'pageSize'  //如不配置，默认为page=1&limit=10
                 }
-                ,page: {
+                , page: {
                     curr: 1 //重新从第 1 页开始
                 }
             });
@@ -187,7 +184,7 @@
         $("#query-all-info").click(function () {
             table.reload('teaInfoQuery', {
                 url: '${ctx}/teacher/showAllTeaInfo'
-                ,request: {
+                , request: {
                     pageName: 'pageNum',
                     limitName: 'pageSize'  //如不配置，默认为page=1&limit=10
                 }
@@ -197,7 +194,7 @@
                     , teaTitle: ''
                     , teaCollege: ''
                 }
-                ,page: {
+                , page: {
                     curr: 1 //重新从第 1 页开始
                 }
             });

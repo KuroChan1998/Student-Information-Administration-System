@@ -1,5 +1,6 @@
 package com.springmvc.controller;
 
+import com.springmvc.controller.interceptor.Token;
 import com.springmvc.dto.Cookies;
 import com.springmvc.entity.User;
 import com.springmvc.service.CollegeService;
@@ -7,6 +8,7 @@ import com.springmvc.service.MajorService;
 import com.springmvc.service.StudentService;
 import com.springmvc.service.UserService;
 import com.springmvc.service.impl.util.Constants;
+import com.springmvc.service.impl.util.MySecurity;
 import com.springmvc.service.impl.util.SetCookie;
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -111,6 +113,7 @@ public class UserController {
      * @Param []
      **/
     @RequestMapping("/forget")
+    @Token(save = true)
     public String forget() {
         return "user/forget";
     }
@@ -270,12 +273,12 @@ public class UserController {
      * @Param [userPassword, session, request]
      **/
     @RequestMapping("/resetPassword")
+    @Token(remove = true)
     @ResponseBody
     public Map<String, Object> resetPassword(@RequestParam("userPassword") String userPassword, HttpSession session, HttpServletRequest request) {
         Map<String, Object> map = new HashedMap();
         map.put("code", 0);
         map.put("msg", "");
-
         session = request.getSession();
         String userEmail = (String) session.getAttribute(Constants.USEREMAIL_SESSION);
 
@@ -379,7 +382,7 @@ public class UserController {
         String userId = (String) session.getAttribute(Constants.USERID_SESSION);
 
         String userPassword = userService.selectUserPasswordById(userId);
-        if (!userOldPassword.equals(userPassword)) {
+        if (!(MySecurity.encryptUserPassword(userOldPassword,userId)).equals(userPassword)) {
             map.put("data", "oldPasswordWrong");
         } else {
             userService.updateResetPasswordByUserId(userNewPassword, userId);
@@ -450,6 +453,18 @@ public class UserController {
     @RequestMapping("/error")
     public String error() {
         return "tips/error";
+    }
+
+    /**
+     * @Author JinZhiyun
+     * @Description 定向到因表单重复提交而跳转的空白页面
+     * @Date 21:44 2019/5/11
+     * @Param []
+     * @return java.lang.String
+     **/
+    @RequestMapping("/formRepeatSubmit")
+    public String formRepeatSubmit(){
+        return "tips/formRepeatSubmit";
     }
 
     /**
