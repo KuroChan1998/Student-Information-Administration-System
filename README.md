@@ -92,6 +92,12 @@
 
 - 在你的Mysql中，创建一个数据库名称为mydatabse的数据库，并导入我提供的 sql/init.sql 文件, 成功会创建user、student、teacher、class、major、college六个表。
 
+  数据库物理模型如下：
+
+  ![Snipaste_2019-05-17_09-47-48](git_screenshot/Snipaste_2019-05-17_09-47-48.jpg)
+
+  ![Snipaste_2019-05-17_09-48-36](git_screenshot/Snipaste_2019-05-17_09-48-36.jpg)
+
 - 进入src/main/resources修改dbconfig.properties配置文件,把数据库登录名和密码，改为你本地的
 
 - 进入src/main/resources查看log4j.properties，如果有必要可以修改日志输出路径，目前在D盘下，你可选择不修改跳过此步。
