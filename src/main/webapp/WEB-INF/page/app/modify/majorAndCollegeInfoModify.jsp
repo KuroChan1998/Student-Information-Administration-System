@@ -264,6 +264,7 @@
                     //提交删除ajax
                     $.ajax({
                         data: data,
+                        type: 'post',
                         url: "${ctx}/major/deleteOne",
                         success: function (data) {
                             if (data.data == "deleteSuccess") {
@@ -314,6 +315,7 @@
 
                             $.ajax({
                                 data: json,
+                                type: 'post',
                                 url: "${ctx}/major/updateInfo?majorOriId=" + field.oriId + '&majorOriName=' + field.oriName,
                                 success: function (data) {
                                     if (data.data == "majorIdExist") {
@@ -462,6 +464,7 @@
                     //提交删除ajax
                     $.ajax({
                         data: data,
+                        type: 'post',
                         url: "${ctx}/college/deleteOne",
                         success: function (data) {
                             if (data.data == "deleteSuccess") {
@@ -512,6 +515,7 @@
 
                             $.ajax({
                                 data: json,
+                                type: 'post',
                                 url: "${ctx}/college/updateInfo?collegeOriId=" + field.oriId + '&collegeOriName=' + field.oriName,
                                 success: function (data) {
                                     if (data.data == "collegeIdExist") {
@@ -648,6 +652,7 @@
                             //提交 Ajax 成功后，关闭当前弹层并重载表格
                             $.ajax({
                                 data: json,
+                                type: 'post',
                                 url: "${ctx}/major/insert",
                                 success: function (data) {
                                     if (data.data == "majorIdExist") {
@@ -750,6 +755,7 @@
                             //提交 Ajax 成功后，关闭当前弹层并重载表格
                             $.ajax({
                                 data: json,
+                                type: 'post',
                                 url: "${ctx}/college/insert",
                                 success: function (data) {
                                     if (data.data == "collegeIdExist") {

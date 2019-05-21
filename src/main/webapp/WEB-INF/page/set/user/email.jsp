@@ -160,6 +160,7 @@
                         //验证码正确后修改绑定邮箱ajax
                         $.ajax({
                             url: '${ctx}/resetEmail' //实际使用请改成服务端真实接口
+                            , type: 'post'
                             ,
                             data: {
                                 "oldEmail": field.oldEmail,
@@ -173,7 +174,7 @@
                                         anim: 6
                                     });
                                 } else if (res.data == "resetEmailSuccess") {
-                                    layer.msg('修改已完成，请刷新页面', {
+                                    layer.msg('修改已完成，请F5刷新页面', {
                                         icon: 1
                                         , time: 1000
                                     }, function () {

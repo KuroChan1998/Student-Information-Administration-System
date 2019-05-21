@@ -1,6 +1,4 @@
-package com.springmvc.dao;
-
-/**
+package com.springmvc.dao; /**
  * @ClassName UnitTestBase
  * @Author JinZhiyun
  * @Description //TODO

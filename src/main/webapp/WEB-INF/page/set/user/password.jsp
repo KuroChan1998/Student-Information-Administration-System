@@ -171,6 +171,7 @@
                         //验证码正确后重置密码的ajax请求
                         admin.req({
                             url: '${ctx}/resetPasswordAfterLogin' //实际使用请改成服务端真实接口
+                            , type: 'post'
                             ,
                             data: {
                                 "oldPassword": field.oldPassword,
@@ -184,7 +185,7 @@
                                         anim: 6
                                     });
                                 } else if (res.data == "resetPasswordAfterLoginSuccess") {
-                                    layer.msg('修改已完成，请刷新页面', {
+                                    layer.msg('修改已完成，请F5刷新页面', {
                                         icon: 1
                                         , time: 1000
                                     }, function () {

@@ -230,7 +230,7 @@
                 , data: {"emailVerifyCode": field.emailcode, "userEmail": field.email}
                 , success: function (res) {
                     if (res.data == "verifyCodeCorrect") {
-                        layer.msg('修改已完成，请刷新页面', {
+                        layer.msg('修改已完成，请F5刷新页面', {
                             icon: 1
                             , time: 1000
                         }, function () {

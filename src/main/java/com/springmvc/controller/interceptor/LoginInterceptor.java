@@ -1,8 +1,9 @@
 package com.springmvc.controller.interceptor;
 
+import com.springmvc.service.impl.util.UserIp;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-
+import org.apache.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -14,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
  * @Version 1.0
  **/
 public class LoginInterceptor implements HandlerInterceptor {
-    private final static org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(LoginInterceptor.class);
+    private final static Logger logger = Logger.getLogger(LoginInterceptor.class);
 
     /**
      * @return boolean
@@ -30,7 +31,7 @@ public class LoginInterceptor implements HandlerInterceptor {
             logger.info(userId + "访问系统！");
             return true;
         }
-        logger.info(userId + "未登录下企图进入系统！");
+        logger.info("ip:"+UserIp.getIpAddress(httpServletRequest) + " 未登录下企图进入系统！");
         httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + "/login");
         return false;
     }

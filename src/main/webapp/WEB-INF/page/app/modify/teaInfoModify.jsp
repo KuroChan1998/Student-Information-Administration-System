@@ -263,6 +263,7 @@
                             //提交 Ajax 成功后，关闭当前弹层并重载表格
                             $.ajax({
                                 data: json,
+                                type: 'post',
                                 url: "${ctx}/teacher/insert",
                                 success: function (data) {
                                     if (data.data == "teaIdExist") {
@@ -312,6 +313,7 @@
                     //提交删除ajax
                     $.ajax({
                         data: data,
+                        type: 'post',
                         url: "${ctx}/teacher/deleteOne",
                         success: function (data) {
                             if (data.data == "deleteSuccess") {
@@ -365,6 +367,7 @@
 
                             $.ajax({
                                 data: json,
+                                type: 'post',
                                 url: "${ctx}/teacher/updateInfo?teaOriId=" + field.oriId,
                                 success: function (data) {
                                     if (data.data == "teaIdExist") {
