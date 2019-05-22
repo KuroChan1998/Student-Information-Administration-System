@@ -8,8 +8,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page isELIgnored="false" %>
-
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -37,12 +35,13 @@
                             <div class="layui-carousel layadmin-carousel layadmin-shortcut">
                                 <div carousel-item>
                                     <ul class="layui-row layui-col-space10">
-                                        <li class="layui-col-xs3">
-                                            <a lay-href="${ctx}/static/plugins/myPersonalProject/index.html">
-                                                <i class="layui-icon layui-icon-console"></i>
-                                                <cite>酷乐酱的个人主页</cite>
-                                            </a>
-                                        </li>
+                                        <%--<li class="layui-col-xs3">--%>
+                                        <%--<a lay-href="${ctx}/static/plugins/myPersonalProject/index.html"--%>
+                                        <%--target="_blank">--%>
+                                        <%--<i class="layui-icon layui-icon-console"></i>--%>
+                                        <%--<cite>酷乐酱的个人主页</cite>--%>
+                                        <%--</a>--%>
+                                        <%--</li>--%>
                                         <li class="layui-col-xs3">
                                             <a lay-href="${ctx}/student/query">
                                                 <i class="layui-icon layui-icon-survey"></i>
@@ -85,15 +84,14 @@
                                                 <cite>修改邮箱</cite>
                                             </a>
                                         </li>
-
-                                    </ul>
-                                    <ul class="layui-row layui-col-space10">
                                         <li class="layui-col-xs3">
                                             <a lay-href="${ctx}/student/modify">
                                                 <i class="layui-icon layui-icon-survey"></i>
                                                 <cite>学生信息修改</cite>
                                             </a>
                                         </li>
+                                    </ul>
+                                    <ul class="layui-row layui-col-space10">
                                         <li class="layui-col-xs3">
                                             <a lay-href="${ctx}/teacher/modify">
                                                 <i class="layui-icon layui-icon-survey"></i>
@@ -156,7 +154,7 @@
                             <td>当前版本</td>
                             <td>
                                 <script type="text/html" template>
-                                    v1.0.1
+                                    StuInfoAdmin-v1.0.1
                                 </script>
                             </td>
                         </tr>
@@ -200,6 +198,8 @@
                             <td>源码获取</td>
                             <td style="padding-bottom: 0;">
                                 <div class="layui-btn-container">
+                                    <a href="${ctx}/static/plugins/myPersonalProject/index.html" target="_blank"
+                                       class="layui-btn layui-btn-danger">获取授权</a>
                                     <a href="https://github.com/jinzhiyun1998/Student-Information-Administration-System"
                                        target="_blank" class="layui-btn">立即下载</a>
                                 </div>

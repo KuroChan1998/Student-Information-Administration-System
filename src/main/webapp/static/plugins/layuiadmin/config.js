@@ -13,7 +13,7 @@ layui.define(['laytpl', 'layer', 'element', 'util'], function(exports){
     ,base: layui.cache.base //记录静态资源所在路径
     ,views: layui.cache.base + 'tpl/' //动态模板所在目录
     ,entry: 'index' //默认视图文件名
-    ,engine: '.jsp' //视图文件后缀名
+    ,engine: '.html' //视图文件后缀名
     ,pageTabs: true //是否开启页面选项卡功能。iframe版推荐开启
     
     ,name: 'layuiAdmin'

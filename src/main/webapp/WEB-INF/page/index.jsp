@@ -45,6 +45,11 @@
             </ul>
             <ul class="layui-nav layui-layout-right" lay-filter="layadmin-layout-right">
                 <li class="layui-nav-item layui-hide-xs" lay-unselect>
+                    <a href="javascript:;" layadmin-event="theme">
+                        <i class="layui-icon layui-icon-theme"></i>
+                    </a>
+                </li>
+                <li class="layui-nav-item layui-hide-xs" lay-unselect>
                     <a href="javascript:;" layadmin-event="fullscreen">
                         <i class="layui-icon layui-icon-screen-full"></i>
                     </a>
@@ -63,7 +68,7 @@
                     </dl>
                 </li>
                 <li class="layui-nav-item layui-hide-xs" lay-unselect>
-                    <a href=""><i class="layui-icon layui-icon-more-vertical"></i></a>
+                    <a href="javascript:;" layadmin-event="about"><i class="layui-icon layui-icon-more-vertical"></i></a>
                 </li>
             </ul>
         </div>
@@ -86,9 +91,9 @@
                             <dd data-name="console" class="layui-this">
                                 <a lay-href="${ctx}/console">控制台</a>
                             </dd>
-                            <dd data-name="console">
-                                <a href="${ctx}/static/plugins/myPersonalProject/index.html">酷乐的个人主页</a>
-                            </dd>
+                            <%--<dd data-name="console">--%>
+                                <%--<a href="${ctx}/static/plugins/myPersonalProject/index.html" target="_blank">酷乐的个人主页</a>--%>
+                            <%--</dd>--%>
                             <%--<dd data-name="console">--%>
                             <%--<a lay-href="home/homepage2.html">主页二</a>--%>
                             <%--</dd>--%>
