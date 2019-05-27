@@ -34,15 +34,6 @@ public interface UserMapper {
     User selectUserByUserEmail(@Param("userEmail") String userEmail);
 
     /**
-     * @return java.lang.String
-     * @Author JinZhiyun
-     * @Description 根据用户Id查询当前用户密码
-     * @Date 9:50 2019/4/19
-     * @Param [userId]
-     **/
-    String selectUserPasswordById(@Param("userId") String userId);
-
-    /**
      * @return int
      * @Author JinZhiyun
      * @Description 向用户表插入注册用户信息，成功返回1

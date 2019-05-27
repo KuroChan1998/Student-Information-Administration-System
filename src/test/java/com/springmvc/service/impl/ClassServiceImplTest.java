@@ -1,13 +1,10 @@
 package com.springmvc.service.impl;
 
-import com.springmvc.dao.ClassMapper;
-import com.springmvc.dao.UnitTestBase;
+import others.UnitTestBase;
 import com.springmvc.dto.ClassWithMajorCollegeDto;
 import com.springmvc.service.ClassService;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import static org.junit.Assert.*;
 
 public class ClassServiceImplTest extends UnitTestBase {
     @Autowired

@@ -162,14 +162,14 @@
             // console.log(field);
 
             //请求接口
-            admin.req({
+            $.ajax({
                 url: '${ctx}/emailVerifyCodeTest' //实际使用请改成服务端真实接口
                 , data: {"emailVerifyCode": field.emailcode, "userEmail": field.email}
                 , success: function (res) {
                     if (res.data == "verifyCodeCorrect") {
                         /*****************************************************/
                         //验证码正确后重置密码的ajax请求
-                        admin.req({
+                        $.ajax({
                             url: '${ctx}/resetPasswordAfterLogin' //实际使用请改成服务端真实接口
                             , type: 'post'
                             ,

@@ -149,9 +149,12 @@
             var field = obj.field;
 
             // console.log(field);
+            if (field.oldEmail == field.newEmail){
+                return layer.msg('您未对绑定邮箱做任何修改！');
+            }
 
             //请求接口
-            admin.req({
+            $.ajax({
                 url: '${ctx}/emailVerifyCodeTest' //实际使用请改成服务端真实接口
                 , data: {"emailVerifyCode": field.emailcode, "userEmail": field.oldEmail}
                 , success: function (res) {

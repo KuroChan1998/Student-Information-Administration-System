@@ -4,6 +4,7 @@ import com.springmvc.dto.MajorWithCollegeDto;
 import com.springmvc.entity.Major;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import others.UnitTestBase;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package com.springmvc.service.impl;
 
 import com.github.pagehelper.PageInfo;
-import com.springmvc.dao.UnitTestBase;
+import others.UnitTestBase;
 import com.springmvc.dto.MyPage;
 import com.springmvc.dto.StudentInfoSearchDto;
 import com.springmvc.dto.StudentWithMajorCollegeDto;

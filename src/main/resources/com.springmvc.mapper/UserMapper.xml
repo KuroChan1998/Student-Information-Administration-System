@@ -63,14 +63,6 @@
             </if>
         </where>
     </select>
-    <select id="selectUserPasswordById" resultType="string">
-        SELECT user_password FROM user
-        <where>
-            <if test="userId!=null and userId!=''">
-                user_id=#{userId}
-            </if>
-        </where>
-    </select>
     <select id="selectUserByUserEmail" resultMap="BaseResultMap">
         SELECT * FROM user
         <where>

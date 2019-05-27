@@ -5,10 +5,9 @@ import com.springmvc.dto.StudentWithMajorCollegeDto;
 import com.springmvc.entity.College;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import others.UnitTestBase;
 
 import java.util.List;
-
-import static org.junit.Assert.*;
 
 public class CollegeMapperTest extends UnitTestBase {
     @Autowired

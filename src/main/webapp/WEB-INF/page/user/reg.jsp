@@ -90,8 +90,6 @@
                 <a href="javascript:;"><i class="layui-icon layui-icon-login-weibo"></i></a>
 
                 <a href="${ctx}/login" class="layadmin-user-jump-change layadmin-link layui-hide-xs">用已有帐号登入</a>
-                <a href="${ctx}/login"
-                   class="layadmin-user-jump-change layadmin-link layui-hide-sm layui-show-xs-inline-block">登入</a>
             </div>
         </div>
     </div>
@@ -150,7 +148,6 @@
                 return layer.msg('你必须同意用户协议才能注册');
             }
 
-            console.log(idWithIdentityValid(field.id, field.identity))
             if (!idWithIdentityValid(field.id, field.identity)) {
                 return layer.msg('注意：若以学生注册用户名（学号）第一位必须为5; 若以教师注册用户名（工号）第一位必须为1', {
                     offset: '100px',
@@ -189,12 +186,12 @@
                             icon: 5,
                             anim: 6
                         });
-                    } else if (res.data == "regNicknameExist") {
+                    } /*else if (res.data == "regNicknameExist") {
                         layer.msg('昵称已被注册', {
                             icon: 5,
                             anim: 6
                         });
-                    } else if (res.data == "regEmailExist") {
+                    } */else if (res.data == "regEmailExist") {
                         layer.msg('邮箱已被注册', {
                             icon: 5,
                             anim: 6

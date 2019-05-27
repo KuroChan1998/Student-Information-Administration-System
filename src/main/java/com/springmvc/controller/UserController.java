@@ -77,7 +77,7 @@ public class UserController {
      **/
     @RequestMapping("/login")
     public String login() {
-        return "/user/login";
+        return "user/login";
     }
 
     /**
@@ -119,9 +119,9 @@ public class UserController {
     }
 
     /**
-     * @return java.util.Map<java.lang.String   ,   java.lang.Object>
+     * @return java.util.Map<java.lang.String       ,       java.lang.Object>
      * @Author JinZhiyun
-     * @Description /测试登录成功与否的ajax交互
+     * @Description 测试登录成功与否的ajax交互
      * @Date 9:38 2019/4/19
      * @Param [userId, userPassword, remember, session, request, response]
      **/
@@ -136,6 +136,7 @@ public class UserController {
         if (loginUserNum == 0) {
             map.put("data", "resultFail");
         } else if (loginUserNum == 1) {
+            System.out.println("userId=" + userId + ", userPassword=" + userPassword);
             map.put("data", "resultSuccess");
             //登录成功设置session
             session = request.getSession(true);
@@ -188,7 +189,7 @@ public class UserController {
     }
 
     /**
-     * @return java.util.Map<java.lang.String   ,   java.lang.Object>
+     * @return java.util.Map<java.lang.String       ,       java.lang.Object>
      * @Author JinZhiyun
      * @Description 判断注册成功与否的ajax交互
      * @Date 9:39 2019/4/19
@@ -201,22 +202,13 @@ public class UserController {
         map.put("code", 0);
         map.put("msg", "");
 
-        int i = userService.insertUserRegInfo(user);
+        map.put("data", userService.insertUserRegInfo(user));
 
-        if (i == -1) {
-            map.put("data", "regIdExist");
-        } else if (i == -2) {
-            map.put("data", "regNicknameExist");
-        } else if (i == -3) {
-            map.put("data", "regEmailExist");
-        } else {
-            map.put("data", "regSuccess");
-        }
         return map;
     }
 
     /**
-     * @return java.util.Map<java.lang.String   ,   java.lang.Object>
+     * @return java.util.Map<java.lang.String       ,       java.lang.Object>
      * @Author JinZhiyun
      * @Description 发送验证码的ajax交互
      * @Date 9:44 2019/4/19
@@ -237,7 +229,7 @@ public class UserController {
     }
 
     /**
-     * @return java.util.Map<java.lang.String   ,   java.lang.Object>
+     * @return java.util.Map<java.lang.String       ,       java.lang.Object>
      * @Author JinZhiyun
      * @Description 检测验证码是否正确的ajax交互
      * @Date 9:45 2019/4/19
@@ -252,11 +244,10 @@ public class UserController {
 
         session = request.getSession();
         String code = (String) session.getAttribute(Constants.EMAIL_VERIFYCODE_SESSION);
-        System.out.println(userEmail);
-        if (code == null || !code.equals(emailVerifyCode)) {
-            map.put("data", "verifyCodeWrong");
-        } else if (userService.findUserByEmail(userEmail) != 1) {
+        if (userService.findUserByEmail(userEmail) != 1) {
             map.put("data", "emailUnregistered");
+        } else if (code == null || !code.equals(emailVerifyCode)) {
+            map.put("data", "verifyCodeWrong");
         } else {
             session.setAttribute(Constants.USEREMAIL_SESSION, userEmail);
             map.put("data", "verifyCodeCorrect");
@@ -266,7 +257,7 @@ public class UserController {
     }
 
     /**
-     * @return java.util.Map<java.lang.String   ,   java.lang.Object>
+     * @return java.util.Map<java.lang.String       ,       java.lang.Object>
      * @Author JinZhiyun
      * @Description 重置密码的ajax交互
      * @Date 9:46 2019/4/19
@@ -285,6 +276,7 @@ public class UserController {
         if (userEmail != null && userEmail != "") {
             userService.updateResetPasswordByEmail(userEmail, userPassword);
         }
+        map.put("data", "resetPasswordSuccess");
 
         return map;
     }
@@ -306,13 +298,13 @@ public class UserController {
 
 
     /**
-     * @return java.util.Map<java.lang.String   ,   java.lang.Object>
+     * @return java.util.Map<java.lang.String       ,       java.lang.Object>
      * @Author JinZhiyun
      * @Description 上传头像
      * @Date 15:37 2019/4/10
      * @Param [file, request, session]
      **/
-    @RequestMapping("/upload/userIcon")
+    @RequestMapping("/uploadUserIcon")
     @ResponseBody
     public Map<String, Object> uploadUserIcon(@RequestParam(value = "file", required = false) MultipartFile file, HttpServletRequest request, HttpSession session) {
         Map<String, Object> map2 = new HashMap<>();
@@ -331,7 +323,7 @@ public class UserController {
     }
 
     /**
-     * @return java.util.Map<java.lang.String   ,   java.lang.Object>
+     * @return java.util.Map<java.lang.String       ,      java.lang.Object>
      * @Author JinZhiyun
      * @Description 重置用户基本信息的ajax交互
      * @Date 9:48 2019/4/19
@@ -342,11 +334,9 @@ public class UserController {
     public Map<String, Object> userInfoReset(@RequestBody User user) {
         Map<String, Object> map = new HashMap<>();
 
-        userService.updateResetUserInfo(user);
-
         map.put("code", 0);
         map.put("msg", "");
-        map.put("data", "");
+        map.put("data", userService.updateResetUserInfo(user));
         return map;
     }
 
@@ -365,7 +355,7 @@ public class UserController {
     }
 
     /**
-     * @return java.util.Map<java.lang.String   ,   java.lang.Object>
+     * @return java.util.Map<java.lang.String       ,       java.lang.Object>
      * @Author JinZhiyun
      * @Description 已登录主页后在password.jsp页面修改密码的ajax交互
      * @Date 9:49 2019/4/19
@@ -381,8 +371,8 @@ public class UserController {
         session = request.getSession();
         String userId = (String) session.getAttribute(Constants.USERID_SESSION);
 
-        String userPassword = userService.selectUserPasswordById(userId);
-        if (!(MySecurity.encryptUserPassword(userOldPassword,userId)).equals(userPassword)) {
+        String userPassword = userService.selectUserById(userId).getUserPassword();
+        if (!(MySecurity.encryptUserPassword(userOldPassword, userId)).equals(userPassword)) {
             map.put("data", "oldPasswordWrong");
         } else {
             userService.updateResetPasswordByUserId(userNewPassword, userId);
@@ -407,7 +397,7 @@ public class UserController {
     }
 
     /**
-     * @return java.util.Map<java.lang.String   ,   java.lang.Object>
+     * @return java.util.Map<java.lang.String       ,       java.lang.Object>
      * @Author JinZhiyun
      * @Description 修改邮箱的ajax交互
      * @Date 9:52 2019/4/19
@@ -456,35 +446,35 @@ public class UserController {
     }
 
     /**
+     * @return java.lang.String
      * @Author JinZhiyun
      * @Description 定向到因表单重复提交而跳转的空白页面
      * @Date 21:44 2019/5/11
      * @Param []
-     * @return java.lang.String
      **/
     @RequestMapping("/formRepeatSubmit")
-    public String formRepeatSubmit(){
+    public String formRepeatSubmit() {
         return "tips/formRepeatSubmit";
     }
 
     /**
+     * @return java.lang.String
      * @Author JinZhiyun
      * @Description 重定向到echarts可视化性别比饼图
      * @Date 12:18 2019/5/5
      * @Param []
-     * @return java.lang.String
      **/
     @RequestMapping("/senior/sex")
-    public String sex(){
+    public String sex() {
         return "senior/sex";
     }
 
     /**
+     * @return java.util.Map<java.lang.String   ,   java.lang.Object>
      * @Author JinZhiyun
      * @Description 性别比可视化ajax
      * @Date 18:54 2019/5/5
      * @Param [stuCollegeName, stuMajorName, stuClassName]
-     * @return java.util.Map<java.lang.String,java.lang.Object>
      **/
     @RequestMapping("/findSexPercent")
     @ResponseBody
@@ -493,9 +483,9 @@ public class UserController {
             , @RequestParam(value = "class", required = false) String stuClassName) {
         Map<String, Object> map = new HashMap<>();
 
-        List<Integer> list=studentService.findStuNumBySex(stuCollegeName,stuMajorName,stuClassName);
+        List<Integer> list = studentService.findStuNumBySex(stuCollegeName, stuMajorName, stuClassName);
 
-        map.put("total",list.get(0));
+        map.put("total", list.get(0));
 
         map.put("male", list.get(1));
 
@@ -505,54 +495,54 @@ public class UserController {
     }
 
     /**
+     * @return java.lang.String
      * @Author JinZhiyun
      * @Description 重定向到echarts可视化学生数柱状图
      * @Date 19:37 2019/5/5
      * @Param []
-     * @return java.lang.String
      **/
     @RequestMapping("/senior/stuNum")
-    public String stuNum(){
+    public String stuNum() {
         return "senior/stuNum";
     }
 
     /**
+     * @return java.util.Map<java.lang.String   ,   java.lang.Object>
      * @Author JinZhiyun
      * @Description 学院人数比可视化ajax
      * @Date 21:39 2019/5/5
      * @Param []
-     * @return java.util.Map<java.lang.String,java.lang.Object>
      **/
     @RequestMapping("/findCollegeStuNumPercent")
     @ResponseBody
     public Map<String, Object> findCollegeStuNumPercent() {
         Map<String, Object> map = new HashMap<>();
 
-        List<Object> list=collegeService.findCollegeStuNumPercent();
+        List<Object> list = collegeService.findCollegeStuNumPercent();
 
 
-        map.put("collegeName",list.get(0));
-        map.put("collegeStuNum",list.get(1));
+        map.put("collegeName", list.get(0));
+        map.put("collegeStuNum", list.get(1));
 
         return map;
     }
 
     /**
+     * @return java.util.Map<java.lang.String   ,   java.lang.Object>
      * @Author JinZhiyun
      * @Description 专业人数比可视化ajax
      * @Date 22:23 2019/5/5
      * @Param []
-     * @return java.util.Map<java.lang.String,java.lang.Object>
      **/
     @RequestMapping("/findMajorStuNumPercent")
     @ResponseBody
     public Map<String, Object> findMajorStuNumPercent(@RequestParam(value = "college", required = false) String collegeName) {
         Map<String, Object> map = new HashMap<>();
 
-        List<Object> list=majorService.findMajorStuNumPercent(collegeName);
+        List<Object> list = majorService.findMajorStuNumPercent(collegeName);
 
-        map.put("majorName",list.get(0));
-        map.put("majorStuNum",list.get(1));
+        map.put("majorName", list.get(0));
+        map.put("majorStuNum", list.get(1));
 
         return map;
     }

@@ -25,13 +25,13 @@ public interface UserService {
     int findUserByIdAndPassword(String userId, String userPassword);
 
     /**
-     * @return int
+     * @return java.lang.String
      * @Author JinZhiyun
      * @Description 用户注册验证服务
      * @Date 10:47 2019/4/8
      * @Param [user]
      **/
-    int insertUserRegInfo(User user);
+    String insertUserRegInfo(User user);
 
     /**
      * @return void
@@ -43,11 +43,11 @@ public interface UserService {
     void updateResetPasswordByEmail(String userEmail, String userPassword);
 
     /**
-     * @return
-     * @Author JinZhiyun
+     * @return int
+     * @author JinZhiyun
      * @Description 返回邮箱符合的用户个数
-     * @Date 23:17 2019/4/10
-     * @Param
+     * @Date 20:21 2019/5/25
+     * @Param [userEmail]
      **/
     int findUserByEmail(String userEmail);
 
@@ -88,13 +88,13 @@ public interface UserService {
     String uploadUserIcon(MultipartFile file, HttpServletRequest request, String UserId);
 
     /**
-     * @return void
+     * @return java.lang.String
      * @Author JinZhiyun
      * @Description 修改用户基本资料
      * @Date 23:20 2019/4/10
      * @Param [user]
      **/
-    void updateResetUserInfo(User user);
+    String updateResetUserInfo(User user);
 
     /**
      * @return void
@@ -104,15 +104,6 @@ public interface UserService {
      * @Param [userPassword, userId]
      **/
     void updateResetPasswordByUserId(String userPassword, String userId);
-
-    /**
-     * @return java.lang.String
-     * @Author JinZhiyun
-     * @Description 获取当前用户的密码
-     * @Date 23:21 2019/4/10
-     * @Param [userId]
-     **/
-    String selectUserPasswordById(String userId);
 
     /**
      * @return com.springmvc.entity.User

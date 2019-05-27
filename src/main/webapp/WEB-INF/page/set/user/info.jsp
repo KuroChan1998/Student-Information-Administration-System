@@ -37,7 +37,7 @@
                                 <select name="role" lay-verify="myidentity">
                                     <option value="${userInfo.userIdentity}" selected>${userInfo.userIdentity}</option>
                                     <option value="${elseIdentity.get(0)}" disabled>${elseIdentity.get(0)}</option>
-                                    <option value="${elseIdentity.get(0)}" disabled>${elseIdentity.get(1)}</option>
+                                    <option value="${elseIdentity.get(1)}" disabled>${elseIdentity.get(1)}</option>
                                 </select>
                             </div>
                             <div class="layui-form-mid layui-word-aux">当前身份不可更改为其它身份</div>
@@ -67,7 +67,7 @@
                             </div>
                             <div class="layui-input-inline">
                                 <div class="layui-upload-list">
-                                    <img class="layui-upload-img headImage" src="${userInfo.userIcon}" id="demo1"
+                                    <img class="layui-upload-img headImage" src="${ctx}${userInfo.userIcon}" id="demo1"
                                          height="110">
                                     <p id="demoText">当前头像↑</p>
                                 </div>
@@ -136,7 +136,7 @@
         //拖拽上传
         var uploadInst = upload.render({
             elem: '#headImg'
-            , url: '/upload/userIcon'
+            , url: '${ctx}/uploadUserIcon'
             , size: 2048 //KB
             , before: function (obj) {
                 //预读本地文件示例，不支持ie8
@@ -225,38 +225,43 @@
 
             // console.log(field);
             //请求接口
-            admin.req({
+            $.ajax({
                 url: '${ctx}/emailVerifyCodeTest' //实际使用请改成服务端真实接口
                 , data: {"emailVerifyCode": field.emailcode, "userEmail": field.email}
                 , success: function (res) {
                     if (res.data == "verifyCodeCorrect") {
-                        layer.msg('修改已完成，请F5刷新页面', {
-                            icon: 1
-                            , time: 1000
-                        }, function () {
-
-                            /*****************************************************/
-                            //验证码正确后重置用户基本资料
-                            var allData = {
-                                "userId": field.username,
-                                "userNickname": field.nickname,
-                                "userIdentity": field.role,
-                                "userIcon": field.hiddenIconUrl,
-                                "userPhone": field.cellphone
-                            };
-                            //请求接口
-                            admin.req({
-                                type: 'post',
-                                contentType: 'application/json;charset=utf-8',
-                                data: JSON.stringify(allData),
-                                url: '${ctx}/userInfoReset' //实际使用请改成服务端真实接口
-                                , success: function (res2) {
-                                    location.href = "${ctx}/info"
-
+                        /*****************************************************/
+                        //验证码正确后重置用户基本资料
+                        var allData = {
+                            "userId": field.username,
+                            "userNickname": field.nickname,
+                            "userIdentity": field.role,
+                            "userIcon": field.hiddenIconUrl,
+                            "userPhone": field.cellphone
+                        };
+                        //请求接口
+                        $.ajax({
+                            type: 'post',
+                            contentType: 'application/json;charset=utf-8',
+                            data: JSON.stringify(allData),
+                            url: '${ctx}/userInfoReset' //实际使用请改成服务端真实接口
+                            , success: function (res2) {
+                                if (res2.data == "updateSuccess") {
+                                    layer.msg('修改已完成，请F5刷新页面', {
+                                        icon: 1
+                                        , time: 1000
+                                    }, function () {
+                                        location.href = "${ctx}/info"
+                                    });
+                                } else {
+                                    layer.msg('未知错误', {
+                                        icon: 5,
+                                        anim: 6
+                                    });
                                 }
-                            });
-                            /*****************************************************/
+                            }
                         });
+                        /*****************************************************/
                     } else if (res.data == "emailUnregistered") {
                         layer.msg('该邮箱尚未注册', {
                             icon: 5,
@@ -275,7 +280,6 @@
                     }
                 }
             });
-
 
             return false;
         });

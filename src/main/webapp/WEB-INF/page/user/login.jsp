@@ -132,7 +132,7 @@
 
 
             //请求登入接口
-            admin.req({
+            $.ajax({
                 type: 'post'
                 , url: '${ctx}/loginTest' //实际使用请改成服务端真实接口
                 , data: {'userId': field.username, 'userPassword': field.password, 'remember': field.remember}

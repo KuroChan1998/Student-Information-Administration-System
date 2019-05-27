@@ -1,9 +1,7 @@
 package com.springmvc.service.impl;
 
-import com.springmvc.dao.UnitTestBase;
+import others.UnitTestBase;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 public class MajorServiceImplTest extends UnitTestBase {
 

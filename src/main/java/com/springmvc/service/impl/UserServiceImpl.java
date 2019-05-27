@@ -52,19 +52,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int insertUserRegInfo(User user) {
+    public String insertUserRegInfo(User user) {
         if (userMapper.findIfIdExist(user.getUserId()) != 0) {
-            return -1; //-1表示用户名已被注册
+            return "regIdExist"; //regIdExist表示用户名已被注册
         }
-        if (userMapper.findIfNicknameExist(user.getUserNickname()) != 0) {
-            return -2; //-2表示昵称已被注册
-        }
+//        if (userMapper.findIfNicknameExist(user.getUserNickname()) != 0) {
+//            return "regNicknameExist"; //regNicknameExist表示昵称已被注册
+//        }
         if (userMapper.findIfEmailExist(user.getUserEmail()) != 0) {
-            return -3; //-3表示邮箱已被注册
+            return "regEmailExist"; //regEmailExist表示邮箱已被注册
         }
         user.setUserPassword(MySecurity.encryptUserPassword(user.getUserPassword(),user.getUserId()));
         user.setUserIcon(Constants.USER_DEFAULT_ICON_PATH);
-        return userMapper.insertUserRegInfo(user); //return 1表示注册成功
+        userMapper.insertUserRegInfo(user);
+        return "regSuccess";//return "regSuccess"表示注册成功
     }
 
     @Override
@@ -153,19 +154,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateResetUserInfo(User user) {
+    public String updateResetUserInfo(User user) {
         userMapper.updateResetUserInfo(user);
+        return "updateSuccess"; //updateSuccess表示昵注册成功
     }
 
     @Override
     public void updateResetPasswordByUserId(String userPassword, String userId) {
         userPassword=MySecurity.encryptUserPassword(userPassword,userId);
         userMapper.updateResetPasswordByUserId(userPassword, userId);
-    }
-
-    @Override
-    public String selectUserPasswordById(String userId) {
-        return userMapper.selectUserPasswordById(userId);
     }
 
     @Override

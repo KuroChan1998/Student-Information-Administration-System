@@ -56,7 +56,7 @@
                 </li>
                 <li class="layui-nav-item" lay-unselect>
                     <a href="javascript:;">
-                        <img src="${userInfo.userIcon}" class="layui-nav-img">
+                        <img src="${ctx}${userInfo.userIcon}" class="layui-nav-img">
                         ${userInfo.userId}
                     </a>
                     <dl class="layui-nav-child">

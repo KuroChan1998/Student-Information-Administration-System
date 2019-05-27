@@ -1,16 +1,13 @@
 package com.springmvc.service.impl;
 
 import com.github.pagehelper.PageInfo;
-import com.springmvc.dao.UnitTestBase;
+import others.UnitTestBase;
 import com.springmvc.dto.MyPage;
 import com.springmvc.dto.TeacherInfoSearchDto;
 import com.springmvc.dto.TeacherWithMajorCollegeDto;
-import com.springmvc.entity.Teacher;
 import com.springmvc.service.TeacherService;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import static org.junit.Assert.*;
 
 public class TeacherServiceImplTest extends UnitTestBase {
     @Autowired

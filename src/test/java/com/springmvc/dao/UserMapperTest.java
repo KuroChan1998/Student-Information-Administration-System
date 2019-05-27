@@ -3,9 +3,7 @@ package com.springmvc.dao;
 import com.springmvc.entity.User;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-
-import javax.jws.soap.SOAPBinding;
+import others.UnitTestBase;
 
 /**
  * @ClassName UserMapperTest
@@ -62,12 +60,6 @@ public class UserMapperTest extends UnitTestBase {
         String userId="516030910428";
         String userPassword=">?<<<<";
         userMapper.updateResetPasswordByUserId(userPassword,userId);
-    }
-
-    @Test
-    public void  selectUserPasswordById(){
-        String userId="516030910428";
-        System.out.println(userMapper.selectUserPasswordById(userId));
     }
 
     @Test
