@@ -83,10 +83,10 @@
 ### 1、运行环境和所需工具
 
 - ide：IntelliJ IDEA
-- 项目构建工具：Maven
-- 数据库：Mysql8.0.13
-- JDK版本：>jdk1.8
-- Tomcat版本：Tomcat7.x
+- 项目构建工具：Maven 3.x
+- 数据库：Mysql 8.0.13
+- JDK版本：>=jdk 1.8
+- Tomcat版本：>=Tomcat 7.x
 
 ### 2、初始化项目
 
@@ -113,7 +113,7 @@
 
 - 登录账户/密码
 
-  - 管理员账户：admin/admin
+  - 管理员账户：admin1/admin1
   - 学生账户：516030910428/123456
   - 教师账户：1000000001/123456
 
@@ -215,11 +215,11 @@
 
 ### 1、未登录用户进入系统
 
-通过LoginInterceptor拦截器实验直接将未用户重定向到登录页面login.jsp，并用log4j记录当前日志。
+通过LoginInterceptor拦截器直接将未登录用户重定向到登录页面login.jsp，并用log4j记录当前日志。
 
 ```java
 public class LoginInterceptor implements HandlerInterceptor {
-    private final static org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(LoginInterceptor.class);
+    private final static Logger logger = Logger.getLogger(LoginInterceptor.class);
 
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
@@ -237,11 +237,11 @@ public class LoginInterceptor implements HandlerInterceptor {
 
 ### 2、非管理员访问信息修改页面
 
-通过AuthorityInterceptor拦截器实验直接将非管理员未用户重定向到错误提示录页面error.jsp，并用log4j记录当前日志。
+通过AuthorityInterceptor拦截器直接将非管理员未用户重定向到错误提示录页面error.jsp，并用log4j记录当前日志。
 
 ```java
 public class AuthorityInterceptor implements HandlerInterceptor {
-    private final static org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(AuthorityInterceptor.class);
+    private final static Logger logger = Logger.getLogger(AuthorityInterceptor.class);
 
     @Autowired
     private UserService userService;
@@ -261,7 +261,7 @@ public class AuthorityInterceptor implements HandlerInterceptor {
 
 ### 3、防止用户重复提交表单
 
-定义Token注解并实现，在访问页面时产生token，在执行ajax或其他与副武器的交互时删除token，对比前后token差异判断是否重复提交了表单
+定义Token注解并实现，在访问页面时产生token，在执行ajax或其他与服务端的交互时删除token，对比前后token差异判断是否重复提交了表单。
 
 ```java
 @Target(ElementType.METHOD)
@@ -274,7 +274,7 @@ public @interface Token {
 
 ```java
 public class TokenInterceptor extends HandlerInterceptorAdapter {
-    private final static org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(TokenInterceptor.class);
+    private final static Logger logger = Logger.getLogger(TokenInterceptor.class);
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {

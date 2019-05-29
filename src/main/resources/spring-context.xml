@@ -123,7 +123,7 @@
 
     <!-- 事务 aop 配置 -->
     <aop:config>
-        <aop:pointcut id="serviceMethods" expression="execution(public * com.springmvc.service..*.*(..))"/>
+        <aop:pointcut id="serviceMethods" expression="execution(public * com.springmvc.service.*.*(..))"/>
         <aop:advisor advice-ref="txAdvice" pointcut-ref="serviceMethods"/>
     </aop:config>
 
