@@ -67,19 +67,19 @@
                                             </a>
                                         </li>
                                         <li class="layui-col-xs3">
-                                            <a lay-href="${ctx}/info">
+                                            <a lay-href="${ctx}/user/info">
                                                 <i class="layui-icon layui-icon-user"></i>
                                                 <cite>个人资料</cite>
                                             </a>
                                         </li>
                                         <li class="layui-col-xs3">
-                                            <a lay-href="${ctx}/password">
+                                            <a lay-href="${ctx}/user/password">
                                                 <i class="layui-icon layui-icon-set"></i>
                                                 <cite>修改密码</cite>
                                             </a>
                                         </li>
                                         <li class="layui-col-xs3">
-                                            <a lay-href="${ctx}/email">
+                                            <a lay-href="${ctx}/user/email">
                                                 <i class="layui-icon layui-icon-set"></i>
                                                 <cite>修改邮箱</cite>
                                             </a>
@@ -154,7 +154,7 @@
                             <td>当前版本</td>
                             <td>
                                 <script type="text/html" template>
-                                    StuInfoAdmin-v1.0.1
+                                    StuInfoAdmin-v1.1.0
                                 </script>
                             </td>
                         </tr>
@@ -207,6 +207,22 @@
                         </tr>
                         </tbody>
                     </table>
+                </div>
+            </div>
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    更新公告
+                    <i class="layui-icon layui-icon-tips" lay-tips="注意查看哦" lay-offset="5"></i>
+                </div>
+                <div class="layui-card-body layui-text layadmin-text">
+                    <p>大学生信息管理系统1.1.0版本上线啦！</p>
+                    <p>更新如下内容：</p>
+                    <p> 优化了数据表结构，对原有的表的部分字段进行了修改，并增加了title和grade两个表</p>
+                    <p>优化了sql语句效率</p>
+                    <p> 优化了前端查询界面及查询方式，使其更加全面，对用户友好</p>
+                    <p> 更新了登录界面记住密码的cookie设置</p>
+                    <p> 更新了邮箱验证码服务，增加了验证码有效时间</p>
+                    <p> 优化了源代码结构，增强了规范性和可拓展性</p>
                 </div>
             </div>
             <div class="layui-card">
@@ -289,7 +305,7 @@
                     },
                     title: {
                         text: '全校男女比',
-                        subtext: '总人数:' + res.total,
+                        subtext: '总人数:' + res.studentPercent.total,
                         textStyle: {
                             color: '#235894'
                         }
@@ -317,8 +333,8 @@
                             }
                         },
                         data: [
-                            {value: res.male, name: '男'},
-                            {value: res.female, name: '女'}
+                            {value: res.studentPercent.male, name: '男'},
+                            {value: res.studentPercent.female, name: '女'}
                         ],
                         itemStyle: itemStyle
                     }]
@@ -333,7 +349,10 @@
         $.ajax({
             async: false,
             type: "get",
-            url: "${ctx}/findCollegeStuNumPercent",
+            data:{
+                type: "allCollege"
+            },
+            url: "${ctx}/findPersonTotalPercentByCommonName",
             success: function (res) {
                 console.log(res);
                 var dom = document.getElementById("container2");
@@ -359,7 +378,7 @@
                     xAxis: [
                         {
                             type: 'category',
-                            data: res.collegeName,
+                            data: res.commonName,
                             axisTick: {
                                 alignWithLabel: true
                             }
@@ -375,7 +394,7 @@
                             name: '人数',
                             type: 'bar',
                             barWidth: '50%',
-                            data: res.collegeStuNum
+                            data: res.total
                         }
                     ]
                 };

@@ -2,27 +2,20 @@ package com.springmvc.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
-import com.springmvc.dto.MyPage;
-import com.springmvc.dto.ResultMap;
-import com.springmvc.dto.StudentInfoSearchDto;
-import com.springmvc.dto.StudentWithMajorCollegeDto;
-import com.springmvc.entity.Student;
+import com.springmvc.dto.other.MyPage;
+import com.springmvc.dto.other.ResultMap;
+import com.springmvc.dto.student.StudentSearchDto;
+import com.springmvc.dto.student.StudentWithGradeClassMajorCollegeDto;
 import com.springmvc.entity.User;
-import com.springmvc.service.StudentService;
-import com.springmvc.service.UserService;
-import com.springmvc.service.impl.util.Constants;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-import org.apache.commons.collections.map.HashedMap;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.springmvc.util.Constants;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -35,13 +28,7 @@ import java.util.Map;
  **/
 @Controller
 @RequestMapping("/student")
-public class StudentController {
-    @Autowired
-    private StudentService studentService;
-
-    @Autowired
-    private UserService userService;
-
+public class StudentController extends BaseController{
     /**
      * @return java.lang.String
      * @Author JinZhiyun
@@ -55,6 +42,35 @@ public class StudentController {
     }
 
     /**
+     * @author JinZhiyun
+     * @Description 查询学生信息的ajax交互
+     * @Date 14:48 2019/6/19
+     * @Param [myPage, studentSearch]
+     * @return com.springmvc.dto.other.ResultMap<java.util.List<com.springmvc.dto.student.StudentSearchDto>>
+     **/
+    @RequestMapping("/showAllStuInfo")
+    @ResponseBody
+    public ResultMap<List<StudentWithGradeClassMajorCollegeDto>> showAllStuInfo(MyPage myPage, StudentSearchDto studentSearch) {
+        PageInfo<StudentWithGradeClassMajorCollegeDto> pageInfo = studentService.selectAllStudentInfo(myPage, studentSearch);//从数据库中获取查询所需的数据，在此之前，你不需要在sql语句中编写分页语句，该插件会在查询时直接将分页语句添加到数据库后
+        return new ResultMap<>(0, "", (int) pageInfo.getTotal(), pageInfo.getList());
+    }
+
+    /**
+     * @return com.springmvc.dto.other.ResultMap<java.util.List   <   com.springmvc.dto.StudentWithMajorCollegeDto>>
+     * @Author JinZhiyun
+     * @Description 查询学生个人信息的ajax交互
+     * @Date 11:10 2019/4/19
+     * @Param [myPage, session, request]
+     **/
+    @RequestMapping("/myOwnInfo")
+    @ResponseBody
+    public ResultMap<List<StudentWithGradeClassMajorCollegeDto>> myOwnInfo(MyPage myPage) {
+        User user = (User) session.getAttribute(Constants.USERINFO_SESSION);
+        PageInfo<StudentWithGradeClassMajorCollegeDto> pageInfo = studentService.selectStudentOwnInfoByNum(myPage, user.getUserName());
+        return new ResultMap<>(0, "", (int) pageInfo.getTotal(), pageInfo.getList());
+    }
+
+    /**
      * @return java.lang.String
      * @Author JinZhiyun
      * @Description 定向到学生信息修改页面stuInfoModify.jsp
@@ -65,68 +81,18 @@ public class StudentController {
     public String modify() {
         //是否权限判断直接交给springmvc拦截器
         return "app/modify/stuInfoModify";
-
     }
 
     /**
-     * @return com.springmvc.dto.ResultMap<java.util.List   <   com.springmvc.dto.StudentWithMajorCollegeDto>>
-     * @Author JinZhiyun
-     * @Description 查询学生信息的ajax交互
-     * @Date 23:01 2019/4/18
-     * @Param [myPage, stuISD]
-     **/
-    @RequestMapping("/showAllStuInfo")
-    @ResponseBody
-    public ResultMap<List<StudentWithMajorCollegeDto>> showAllStuInfo(MyPage myPage, StudentInfoSearchDto stuISD) {
-        PageInfo<StudentWithMajorCollegeDto> pageInfo = studentService.queryAllStuInfo(myPage, stuISD);//从数据库中获取查询所需的数据，在此之前，你不需要在sql语句中编写分页语句，该插件会在查询时直接将分页语句添加到数据库后
-        return new ResultMap<>(0, "", (int) pageInfo.getTotal(), pageInfo.getList());
-    }
-
-    /**
-     * @return java.lang.String
-     * @Author JinZhiyun
-     * @Description 定向到班长信息iframe子页面classStuInfo.jsp
-     * @Date 23:03 2019/4/18
-     * @Param [model, stuId]
-     **/
-    @RequestMapping("/stuInfo")
-    public String stuInfo(Model model, @RequestParam(value = "stuId", required = false) String stuId) {
-        Student student = studentService.findStudentById(stuId);
-        model.addAttribute(Constants.STUDENT_MODEL, student);
-        return "app/query/classStuInfo";
-    }
-
-    /**
-     * @return com.springmvc.dto.ResultMap<java.util.List   <   com.springmvc.dto.StudentWithMajorCollegeDto>>
-     * @Author JinZhiyun
-     * @Description 查询学生个人信息的ajax交互
-     * @Date 11:10 2019/4/19
-     * @Param [myPage, session, request]
-     **/
-    @RequestMapping("/myOwnInfo")
-    @ResponseBody
-    public ResultMap<List<StudentWithMajorCollegeDto>> myOwnInfo(MyPage myPage, HttpSession session, HttpServletRequest request) {
-        User user = userService.updateUserSession(session, request);
-        PageInfo<StudentWithMajorCollegeDto> pageInfo = studentService.findStudentOwnInfoById(myPage, user.getUserId());
-        return new ResultMap<>(0, "", (int) pageInfo.getTotal(), pageInfo.getList());
-    }
-
-    /**
-     * @return java.lang.String
-     * @Author JinZhiyun
+     * @author JinZhiyun
      * @Description 重定向到编辑学生iframe子页面并返回相应model
-     * @Date 8:55 2019/4/26
-     * @Param [model, stuId, stuCollegeName, stuMajorName, stuClassName]
+     * @Date 16:11 2019/7/7
+     * @Param [model, stuWGCMC]
+     * @return java.lang.String
      **/
     @RequestMapping("/edit")
-    public String stuEdit(Model model, @RequestParam(value = "stuId", required = false) String stuId
-            , @RequestParam(value = "stuCollegeName", required = false) String stuCollegeName
-            , @RequestParam(value = "stuMajorName", required = false) String stuMajorName
-            , @RequestParam(value = "stuClassName", required = false) String stuClassName) {
-        model.addAttribute("stuId", stuId);
-        model.addAttribute("stuCollegeName", stuCollegeName);
-        model.addAttribute("stuMajorName", stuMajorName);
-        model.addAttribute("stuClassName", stuClassName);
+    public String stuEdit(Model model, StudentWithGradeClassMajorCollegeDto stuWGCMC) {
+        model.addAttribute(Constants.STUDENT_ALL_INFO_MODEL, stuWGCMC);
         return "app/modify/stuForm";
     }
 
@@ -139,57 +105,52 @@ public class StudentController {
      **/
     @RequestMapping("/updateInfo")
     @ResponseBody
-    public Map<String, Object> updateInfo(@RequestParam("stuOriId") String stuOriId, StudentWithMajorCollegeDto stuWCD) {
-        Map<String, Object> map = new HashedMap();
-//        map.put("code", 0);
-//        map.put("msg", "");
-        if (!stuOriId.equals(stuWCD.getStuId())) { //如果学号修改过了
-            if (studentService.findStudentById(stuWCD.getStuId()) != null) { //如果修改后的学生学号已存在
-                map.put("data", "stuIdExist");
+    public Map<String, Object> updateInfo(@RequestParam("stuOriNum") String stuOriNum, StudentWithGradeClassMajorCollegeDto stuWGCMC) {
+        Map<String, Object> map = new HashMap();
+        if (!stuOriNum.equals(stuWGCMC.getStuNum())) { //如果学号修改过了
+            if (studentService.selectStudentByNum(stuWGCMC.getStuNum()) != null) { //如果修改后的学生学号已存在
+                map.put("data", "stuNumExist");
                 return map;
             }
         }
-        studentService.updateInfo(stuOriId, stuWCD);
+        studentService.updateStudentInfo(stuOriNum, stuWGCMC);
         map.put("data", "updateSuccess");
         return map;
     }
 
     /**
-     * @return java.util.Map<java.lang.String   ,   java.lang.Object>
-     * @Author JinZhiyun
+     * @author JinZhiyun
      * @Description 添加学生ajax交互
-     * @Date 21:37 2019/4/26
-     * @Param [stuWCD]
+     * @Date 21:18 2019/6/23
+     * @Param [stuWGCMC]
+     * @return java.util.Map<java.lang.String,java.lang.Object>
      **/
     @RequestMapping("/insert")
     @ResponseBody
-    public Map<String, Object> insertStudent(StudentWithMajorCollegeDto stuWCD) {
-        System.out.println(stuWCD);
-        Map<String, Object> map = new HashedMap();
-
-        if (studentService.findStudentById(stuWCD.getStuId()) != null) {
-            map.put("data", "stuIdExist");
+    public Map<String, Object> insertStudent(StudentWithGradeClassMajorCollegeDto stuWGCMC) {
+        Map<String, Object> map = new HashMap();
+        if (studentService.selectStudentByNum(stuWGCMC.getStuNum()) != null) { //如果修改后的学生学号已存在
+            map.put("data", "stuNumExist");
         } else {
-            studentService.insertStudent(stuWCD);
+            studentService.insertStudent(stuWGCMC);
             map.put("data", "insertSuccess");
         }
         return map;
     }
 
     /**
-     * @return java.util.Map<java.lang.String   ,   java.lang.Object>
-     * @Author JinZhiyun
+     * @author JinZhiyun
      * @Description 删除一个学生ajax交互
-     * @Date 21:56 2019/4/26
-     * @Param [stuWCD]
+     * @Date 18:47 2019/6/24
+     * @Param [stuNum]
+     * @return java.util.Map<java.lang.String,java.lang.Object>
      **/
     @RequestMapping("/deleteOne")
     @ResponseBody
-    public Map<String, Object> deleteOneStudent(StudentWithMajorCollegeDto stuWCD) {
-        System.out.println(stuWCD);
-        Map<String, Object> map = new HashedMap();
+    public Map<String, Object> deleteOneStudent(@RequestParam("stuNum") String stuNum) {
+        Map<String, Object> map = new HashMap();
 
-        studentService.deleteOneStudent(stuWCD);
+        studentService.deleteOneStudent(stuNum);
         map.put("data", "deleteSuccess");
         return map;
     }
@@ -204,12 +165,28 @@ public class StudentController {
     @RequestMapping("/deleteMany")
     @ResponseBody
     public Map<String, Object> deleteManyStudents(@RequestParam("students") String students) {
-        Map<String, Object> map = new HashedMap();
-
-        List<StudentWithMajorCollegeDto> stuWMCDs = JSON.parseArray(students, StudentWithMajorCollegeDto.class);
-
-        studentService.deleteManyStudents(stuWMCDs);
+        Map<String, Object> map = new HashMap();
+        List<StudentWithGradeClassMajorCollegeDto> stuWGCMCs = JSON.parseArray(students, StudentWithGradeClassMajorCollegeDto.class);
+        List<String> stuNums=new ArrayList<>();
+        for (StudentWithGradeClassMajorCollegeDto stuWGCMC:stuWGCMCs) {
+            stuNums.add(stuWGCMC.getStuNum());
+        }
+        studentService.deleteManyStudents(stuNums);
         map.put("data", "deleteSuccess");
         return map;
+    }
+
+    /**
+     * @author JinZhiyun
+     * @Description 定向到班长信息iframe子页面classStuInfo.jsp
+     * @Date 12:51 2019/7/7
+     * @Param [model, stuNum]
+     * @return java.lang.String
+     **/
+    @RequestMapping("/stuInfo")
+    public String stuInfo(Model model, @RequestParam(value = "stuNum", required = false) String stuNum) {
+        StudentWithGradeClassMajorCollegeDto stuWGCMC= studentService.selectStudentInfoByNum(stuNum);
+        model.addAttribute(Constants.STUDENT_MODEL, stuWGCMC);
+        return "app/query/classStuInfo";
     }
 }

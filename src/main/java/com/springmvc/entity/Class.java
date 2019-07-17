@@ -1,5 +1,7 @@
 package com.springmvc.entity;
 
+import java.io.Serializable;
+
 /**
  * @ClassName Class
  * @Author JinZhiyun
@@ -7,19 +9,28 @@ package com.springmvc.entity;
  * @Date 2019/4/15 16:45
  * @Version 1.0
  **/
-public class Class {
+public class Class implements Serializable {
+    private static final long serialVersionUID = 5262671908815902069L;
+
+    //班级表代理主键，uuid
     private String classId;
 
-    private String classMajorId;
+    //班级所属专业id，外键，参照major.major_id
+    private Integer classMajor;
 
+    //班级名称，唯一
     private String className;
 
-    private Integer classStuNum;
+    //班级所属年级id，外键，参照grade.grade_id
+    private Integer classGrade;
 
-    private String classMoniId;
+    //班级班长学号
+    private String classStuNum;
 
-    private String classTeaId;
+    //班级班主任工号
+    private String classTeaNum;
 
+    //班级备注
     private String classRemark;
 
     public String getClassId() {
@@ -30,12 +41,12 @@ public class Class {
         this.classId = classId;
     }
 
-    public String getClassMajorId() {
-        return classMajorId;
+    public Integer getClassMajor() {
+        return classMajor;
     }
 
-    public void setClassMajorId(String classMajorId) {
-        this.classMajorId = classMajorId;
+    public void setClassMajor(Integer classMajor) {
+        this.classMajor = classMajor;
     }
 
     public String getClassName() {
@@ -46,28 +57,28 @@ public class Class {
         this.className = className;
     }
 
-    public Integer getClassStuNum() {
+    public Integer getClassGrade() {
+        return classGrade;
+    }
+
+    public void setClassGrade(Integer classGrade) {
+        this.classGrade = classGrade;
+    }
+
+    public String getClassStuNum() {
         return classStuNum;
     }
 
-    public void setClassStuNum(Integer classStuNum) {
+    public void setClassStuNum(String classStuNum) {
         this.classStuNum = classStuNum;
     }
 
-    public String getClassMoniId() {
-        return classMoniId;
+    public String getClassTeaNum() {
+        return classTeaNum;
     }
 
-    public void setClassMoniId(String classMoniId) {
-        this.classMoniId = classMoniId;
-    }
-
-    public String getClassTeaId() {
-        return classTeaId;
-    }
-
-    public void setClassTeaId(String classTeaId) {
-        this.classTeaId = classTeaId;
+    public void setClassTeaNum(String classTeaNum) {
+        this.classTeaNum = classTeaNum;
     }
 
     public String getClassRemark() {
@@ -82,11 +93,11 @@ public class Class {
     public String toString() {
         return "Class{" +
                 "classId='" + classId + '\'' +
-                ", classMajorId='" + classMajorId + '\'' +
+                ", classMajor=" + classMajor +
                 ", className='" + className + '\'' +
-                ", classStuNum=" + classStuNum +
-                ", classMoniId='" + classMoniId + '\'' +
-                ", classTeaId='" + classTeaId + '\'' +
+                ", classGrade=" + classGrade +
+                ", classStuNum='" + classStuNum + '\'' +
+                ", classTeaNum='" + classTeaNum + '\'' +
                 ", classRemark='" + classRemark + '\'' +
                 '}';
     }

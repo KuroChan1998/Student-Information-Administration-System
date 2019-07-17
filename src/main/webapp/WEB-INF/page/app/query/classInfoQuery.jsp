@@ -27,27 +27,36 @@
     <div class="layui-card">
         <div class="layui-form layui-card-header layuiadmin-card-header-auto">
             <div class="layui-form-item">
-                <div class="layui-inline">
-                    <label class="layui-form-label">班级名称</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="className" placeholder="请输入" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
                 <%--学院和专业联动复选框--%>
                 <div class="layui-inline">
                     <label class="layui-form-label">学院</label>
                     <div class="layui-input-inline">
                         <select id="classCollege" name="classCollege" lay-search lay-filter="college">
-                            <option value="">请选择标签</option>
-
+                            <option value="">请输入或选择学院</option>
                         </select>
                     </div>
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">专业</label>
                     <div class="layui-input-inline">
-                        <select id="classMajor" name="classMajor" lay-search>
-                            <option value="">请选择标签</option>
+                        <select id="classMajor" name="classMajor" lay-filter="major" lay-search>
+                            <option value="">请输入或选择专业</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">班级</label>
+                    <div class="layui-input-inline">
+                        <select id="classClass" name="classClass" lay-filter="class" lay-search>
+                            <option value="">请输入或选择班级</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">年级</label>
+                    <div class="layui-input-inline">
+                        <select id="classGrade" name="classGrade">
+                            <option value="">请选择年级</option>
                         </select>
                     </div>
                 </div>
@@ -96,6 +105,21 @@
             , table = layui.table
             , laypage = layui.laypage;
 
+        //从数据库异步获取年级数据填充到年级select框中
+        $.ajax({
+            type: "get",
+            url: "${ctx}/grade/getGradeName",
+            success: function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    var json = data[i];
+                    var str = "";
+                    str += '<option value="' + json.gradeName + '">' + json.gradeName + '</option>';
+                    $("#classGrade").append(str);
+                }
+                form.render('select');
+            }
+        });
+
         //从数据库异步获取学院数据填充到学院select框中
         $.ajax({
             type: "get",
@@ -121,13 +145,26 @@
                 form.render('select');
             }
         });
+        //从数据库异步获取班级数据填充到班级select框中
+        $.ajax({
+            type: "get",
+            data: {majorName: $(this).attr("lay-value")},
+            url: "${ctx}/class/getClassNameByMajor",
+            success: function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    var json = data[i];
+                    $("#classClass").append('<option value="' + json.className + '">' + json.className + '</option>');
+                }
+                form.render('select');
+            }
+        });
 
 
         //联动监听select
         form.on('select(college)', function (data) {
             //获取部门的ID通过异步查询子集
             $("#classMajor").empty();
-            $("#classMajor").append('<option value="">请选择标签</option>');
+            $("#classMajor").append('<option value="">请输入或选择专业</option>');
             var college_name = $(this).attr("lay-value");
             console.log(college_name);
             $.ajax({
@@ -143,6 +180,24 @@
                 }
             });
         });
+        form.on('select(major)', function (data) {
+            //获取部门的ID通过异步查询子集
+            $("#classClass").empty();
+            $("#classClass").append('<option value="">请输入或选择班级</option>');
+            var major_name = $(this).attr("lay-value");
+            $.ajax({
+                type: "get",
+                data: {majorName: major_name},
+                url: "${ctx}/class/getClassNameByMajor",
+                success: function (data) {
+                    for (var i = 0; i < data.length; i++) {
+                        var json = data[i];
+                        $("#classClass").append('<option value="' + json.className + '">' + json.className + '</option>');
+                    }
+                    form.render('select');
+                }
+            });
+        });
 
         //方法级渲染
         table.render({
@@ -150,16 +205,16 @@
             , url: '${ctx}/class/showAllClassInfo' //向后端默认传page和limit
             , cols: [[
                 {field: 'className', title: '班级', sort: true, fixed: true}
-                , {field: 'classStuNum', title: '班级人数', sort: true}
-                , {field: 'classMoniName', title: '班长'}
-                , {field: 'classMoniId', title: '班长学号', hide: true}
+                , {field: 'classStuName', title: '班长'}
+                , {field: 'classStuNum', title: '班长学号', hide: true}
                 , {width: 120, title: '操作', toolbar: '#test-table-operate-barDemo1'}
                 , {field: 'classTeaName', title: '班主任'}
-                , {field: 'classTeaId', title: '班主任学号', hide: true}
+                , {field: 'classTeaNum', title: '班主任工号', hide: true}
                 , {width: 130, title: '操作', toolbar: '#test-table-operate-barDemo2'}
+                , {field: 'classGradeName', title: '年级', sort: true}
                 , {field: 'classMajorName', title: '专业', sort: true}
-                , {field: 'classCollegeName', title: '学院', width: 200, sort: true}
-                , {field: 'classRemark', title: '班级描述', width: 300}
+                , {field: 'classCollegeName', title: '学院', sort: true}
+                , {field: 'classRemark', title: '班级描述', width: 250}
             ]]
             , page: true
             , limit: 10
@@ -191,7 +246,7 @@
                 layer.open({
                     type: 2
                     , title: '查看班长'
-                    , content: '/student/stuInfo?stuId=' + data.classMoniId
+                    , content: '/student/stuInfo?stuNum=' + data.classStuNum
                     , maxmin: true
                     , area: ['550px', '630px']
                     , yes: function (index, layero) {
@@ -202,7 +257,7 @@
                 layer.open({
                     type: 2
                     , title: '查看班主任'
-                    , content: '/teacher/teaInfo?teaId=' + data.classTeaId
+                    , content: '/teacher/teaInfo?teaNum=' + data.classTeaNum
                     , maxmin: true
                     , area: ['550px', '550px']
                     , yes: function (index, layero) {
@@ -222,7 +277,8 @@
             table.reload('classInfoQuery', {
                 url: '${ctx}/class/showAllClassInfo' //向后端默认传page和limit
                 , where: { //设定异步数据接口的额外参数，任意设
-                    className: field.className
+                    classGradeName: field.classGrade
+                    , className: field.classClass
                     , classMajorName: field.classMajor
                     , classCollegeName: field.classCollege
                 }
@@ -259,7 +315,8 @@
                     limitName: 'pageSize'  //如不配置，默认为page=1&limit=10
                 }
                 , where: { //设定异步数据接口的额外参数，任意设
-                    className: ''
+                    classGradeName: ''
+                    , className: ''
                     , classMajorName: ''
                     , classCollegeName: ''
                 }

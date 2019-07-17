@@ -34,7 +34,8 @@
         <mvc:interceptor>
             <!--开放登录权限-->
             <mvc:mapping path="/**/*"/>
-            <!--排除登录URL-->
+            <!--排除登录未登录时可访问的URL-->
+            <mvc:exclude-mapping path="/"/>
             <mvc:exclude-mapping path="/login"/>
             <mvc:exclude-mapping path="/reg"/>
             <mvc:exclude-mapping path="/forget"/>
@@ -44,7 +45,7 @@
             <mvc:exclude-mapping path="/emailVerifyCodeTest"/>
             <mvc:exclude-mapping path="/resetPassword"/>
             <mvc:exclude-mapping path="/formRepeatSubmit"/>
-            <bean class="com.springmvc.controller.interceptor.LoginInterceptor"/>
+            <bean class="com.springmvc.interceptor.LoginInterceptor"/>
 
         </mvc:interceptor>
 
@@ -53,12 +54,12 @@
             <mvc:mapping path="/*/modify"/>
             <!--排除登录URL-->
 
-            <bean class="com.springmvc.controller.interceptor.AuthorityInterceptor"/>
+            <bean class="com.springmvc.interceptor.AuthorityInterceptor"/>
         </mvc:interceptor>
 
         <mvc:interceptor>
             <mvc:mapping path="/**" />
-            <bean class="com.springmvc.controller.interceptor.TokenInterceptor" />
+            <bean class="com.springmvc.interceptor.TokenInterceptor" />
         </mvc:interceptor>
 
         <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor"/>

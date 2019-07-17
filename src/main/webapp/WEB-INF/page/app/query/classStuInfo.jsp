@@ -29,7 +29,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">学号</label>
         <div class="layui-input-inline">
-            <input type="text" name="id" readonly value="${stuInfo.stuId}" class="layui-input">
+            <input type="text" name="id" readonly value="${stuInfo.stuNum}" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
@@ -41,19 +41,19 @@
     <div class="layui-form-item">
         <label class="layui-form-label">性别</label>
         <div class="layui-input-inline">
-            <input type="text" name="sex" readonly value="${stuInfo.stuSex}" class="layui-input">
+            <input type="text" name="sex" readonly value="${stuInfo.sex}" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">年龄</label>
+        <label class="layui-form-label">生日</label>
         <div class="layui-input-inline">
-            <input type="text" name="age" readonly value="${stuInfo.stuAge}" class="layui-input">
+            <input type="text" name="age" readonly value="${stuInfo.stuBirthdayToString}" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">年级</label>
         <div class="layui-input-inline">
-            <input type="text" name="grade" readonly value="${stuInfo.stuGrade}" class="layui-input">
+            <input type="text" name="grade" readonly value="${stuInfo.stuGradeName}" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">

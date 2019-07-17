@@ -5,14 +5,21 @@ layui.define(['table', 'form'], function (exports) {
 
     form.verify({
         //数组的两个值分别代表：[正则匹配、匹配不符时的提示文字]
-        age: function (value) {
+        birthday: function (value) {
+            if (value != '') {
+                if (!isValidBirthday(value)) {
+                    return '请输入合法的出生日期';
+                }
+            }
+        }
+        , age: function (value) {
             var regNum = /^[0-9]{1,2}$/;
             if (!regNum.test(value)) {
                 return '请输入合法的年龄';
             }
         }
         , id: function (value) {
-            if (!Number(value)) {
+            if (!Number12(value)) {
                 return '用户名必须为12位数字';
             }
         }
@@ -24,7 +31,7 @@ layui.define(['table', 'form'], function (exports) {
             }
         }
         , teaId: function (value) {
-            if (!Number(value)) {
+            if (!Number12(value)) {
                 return '工号必须为12位数字';
             } else {
                 if (value.charAt(0) != '1') {
@@ -33,7 +40,7 @@ layui.define(['table', 'form'], function (exports) {
             }
         }
         , stuId: function (value) {
-            if (!Number(value)) {
+            if (!Number12(value)) {
                 return '学号必须为12位数字';
             } else {
                 if (value.charAt(0) != '5') {
@@ -62,15 +69,3 @@ layui.define(['table', 'form'], function (exports) {
 
     exports('myform', {})
 });
-
-//判断是否为12位数字
-function Number(value) {
-    eval("var reg = /\^[0-9]{" + 12 + "\}$/;");
-    var re = new RegExp(reg);
-    if (re.test(value)) {
-        return true;
-    }
-    else {
-        return false;
-    }
-}

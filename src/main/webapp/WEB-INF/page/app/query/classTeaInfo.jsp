@@ -29,7 +29,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">工号</label>
         <div class="layui-input-inline">
-            <input type="text" name="id" readonly value="${teaInfo.teaId}" class="layui-input">
+            <input type="text" name="id" readonly value="${teaInfo.teaNum}" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
@@ -47,13 +47,13 @@
     <div class="layui-form-item">
         <label class="layui-form-label">年龄</label>
         <div class="layui-input-inline">
-            <input type="text" name="age" readonly value="${teaInfo.teaAge}" class="layui-input">
+            <input type="text" name="age" readonly value="${teaInfo.teaBirthdayToString}" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">职称</label>
         <div class="layui-input-inline">
-            <input type="text" name="title" readonly value="${teaInfo.teaTitle}" class="layui-input">
+            <input type="text" name="title" readonly value="${teaInfo.teaTitleName}" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">

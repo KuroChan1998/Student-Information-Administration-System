@@ -38,7 +38,7 @@
                                 <label class="layui-form-label">学院</label>
                                 <div class="layui-input-inline">
                                     <select id="majorCollege" name="majorCollege" lay-search lay-filter="college">
-                                        <option value="">请选择标签</option>
+                                        <option value="">请输入或选择学院</option>
 
                                     </select>
                                 </div>
@@ -47,7 +47,18 @@
                                 <label class="layui-form-label">专业</label>
                                 <div class="layui-input-inline">
                                     <select id="major" name="major" lay-search>
+                                        <option value="">请输入或选择专业</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">性质</label>
+                                <div class="layui-input-inline">
+                                    <select id="property" name="property">
                                         <option value="">请选择标签</option>
+                                        <option value="工科">工科</option>
+                                        <option value="文科">文科</option>
+                                        <option value="理科">理科</option>
                                     </select>
                                 </div>
                             </div>
@@ -80,7 +91,18 @@
                                     <label class="layui-form-label">学院</label>
                                     <div class="layui-input-inline">
                                         <select id="college" name="college" lay-search lay-filter="college">
+                                            <option value="">请输入或选择学院</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">性质</label>
+                                    <div class="layui-input-inline">
+                                        <select id="property2" name="property2">
                                             <option value="">请选择标签</option>
+                                            <option value="工科">工科</option>
+                                            <option value="文科">文科</option>
+                                            <option value="理科">理科</option>
                                         </select>
                                     </div>
                                 </div>
@@ -155,7 +177,7 @@
         form.on('select(college)', function (data) {
             //获取部门的ID通过异步查询子集
             $("#major").empty();
-            $("#major").append('<option value="">请选择标签</option>');
+            $("#major").append('<option value="">请输入或选择专业</option>');
             var college_name = $(this).attr("lay-value");
             console.log(college_name);
             $.ajax({
@@ -178,11 +200,11 @@
             elem: '#majorInfoQuery'
             , url: '${ctx}/major/showAllMajorInfo' //向后端默认传page和limit
             , cols: [[
-                {field: 'majorName', title: '专业', sort: true, fixed: true}
+                , {field: 'majorId', title: '专业号', hide: true}
+                , {field: 'majorName', title: '专业', sort: true, fixed: true}
+                , {field: 'majorCollegeProperty', title: '性质', sort: true}
                 , {field: 'majorCollegeName', title: '学院', sort: true}
-                , {field: 'majorStuNum', title: '专业人数', sort: true}
-                , {field: 'majorClassNum', title: '专业班级数', sort: true}
-                , {field: 'majorTeaId', title: '专业负责人工号', hide: true}
+                , {field: 'majorTeaNum', title: '专业负责人工号', hide: true}
                 , {field: 'majorTeaName', title: '专业负责人'}
                 , {width: 130, title: '操作', toolbar: '#test-table-operate-barDemo2'}
                 , {field: 'majorRemark', title: '专业备注', width: 300}
@@ -219,6 +241,7 @@
                 , where: { //设定异步数据接口的额外参数，任意设
                     majorName: field.major
                     , majorCollegeName: field.majorCollege
+                    , majorCollegeProperty: field.property
                 }
                 , request: {
                     pageName: 'pageNum',
@@ -239,7 +262,7 @@
                 layer.open({
                     type: 2
                     , title: '查看专业负责人'
-                    , content: '/teacher/teaInfo?teaId=' + data.majorTeaId
+                    , content: '/teacher/teaInfo?teaNum=' + data.majorTeaNum
                     , maxmin: true
                     , area: ['550px', '550px']
                     , yes: function (index, layero) {
@@ -272,6 +295,7 @@
                 , where: { //设定异步数据接口的额外参数，任意设
                     majorName: ''
                     , majorCollegeName: ''
+                    , majorCollegeProperty: ''
                 }
                 , page: {
                     curr: 1 //重新从第 1 页开始
@@ -283,11 +307,10 @@
             elem: '#collegeInfoQuery'
             , url: '${ctx}/college/showAllCollegeInfo' //向后端默认传page和limit
             , cols: [[
-                {field: 'collegeName', title: '学院', sort: true, fixed: true}
-                , {field: 'collegeStuNum', title: '学院人数', sort: true}
-                , {field: 'collegeMajorNum', title: '学院班级数', sort: true}
+                {field: 'collegeId', title: '学院号', hide: true}
+                , {field: 'collegeName', title: '学院', sort: true, fixed: true}
                 , {field: 'collegeProperty', title: '学院性质', sort: true}
-                , {field: 'collegeTeaId', title: '学院负责人工号', hide: true}
+                , {field: 'collegeTeaNum', title: '学院负责人工号', hide: true}
                 , {field: 'collegeTeaName', title: '学院负责人'}
                 , {width: 130, title: '操作', toolbar: '#test-table-operate-barDemo3'}
                 , {field: 'collegeRemark', title: '专业备注', width: 300}
@@ -322,6 +345,7 @@
                 url: '${ctx}/college/showAllCollegeInfo' //向后端默认传page和limit
                 , where: { //设定异步数据接口的额外参数，任意设
                     collegeName: field.college
+                    , collegeProperty: field.property2
                 }
                 , request: {
                     pageName: 'pageNum',
@@ -342,7 +366,7 @@
                 layer.open({
                     type: 2
                     , title: '查看学院负责人'
-                    , content: '/teacher/teaInfo?teaId=' + data.collegeTeaId
+                    , content: '/teacher/teaInfo?teaNum=' + data.collegeTeaNum
                     , maxmin: true
                     , area: ['550px', '550px']
                     , yes: function (index, layero) {

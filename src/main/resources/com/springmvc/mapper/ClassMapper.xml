@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.springmvc.dao.ClassMapper">
+    <resultMap id="BaseResultMap" type="com.springmvc.entity.Class">
+        <id column="class_id" property="classId" jdbcType="VARCHAR"/>
+        <result column="class_major" property="classMajor" jdbcType="INTEGER"/>
+        <result column="class_name" property="className" jdbcType="VARCHAR"/>
+        <result column="class_grade" property="classGrade" jdbcType="INTEGER"/>
+        <result column="class_stu_num" property="classStuNum" jdbcType="VARCHAR"/>
+        <result column="class_tea_num" property="classTeaNum" jdbcType="VARCHAR"/>
+        <result column="class_remark" property="classRemark" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="ClassWithGMCResultMap" type="com.springmvc.dto.classP.ClassWithGradeMajorCollegeDto"
+               extends="BaseResultMap">
+        <result column="class_grade_name" property="classGradeName" jdbcType="VARCHAR"/>
+        <result column="class_tea_name" property="classTeaName" jdbcType="VARCHAR"/>
+        <result column="class_stu_name" property="classStuName" jdbcType="VARCHAR"/>
+        <result column="class_major_name" property="classMajorName" jdbcType="VARCHAR"/>
+        <result column="class_college_name" property="classCollegeName" jdbcType="VARCHAR"/>
+    </resultMap>
+    <insert id="insertClass" parameterType="com.springmvc.dto.classP.ClassWithGradeMajorCollegeDto">
+        <selectKey keyProperty="classId" resultType="string" order="BEFORE">
+            select replace(uuid(), '-', '') from dual
+        </selectKey>
+        insert into class
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="classId != null and classId != ''">
+                class_id,
+            </if>
+            <if test="classMajorName != null and classMajorName != ''">
+                class_major,
+            </if>
+            <if test="className != null and className != ''">
+                class_name,
+            </if>
+            <if test="classGradeName != null and classGradeName != ''">
+                class_grade,
+            </if>
+            class_stu_num,
+            class_tea_num,
+            class_remark
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="classId != null and classId != ''">
+                #{classId,jdbcType=VARCHAR},
+            </if>
+            <if test="classMajorName != null and classMajorName != ''">
+                (select major_id from major where major_name=#{classMajorName,jdbcType=VARCHAR}),
+            </if>
+            <if test="className != null and className != ''">
+                #{className,jdbcType=VARCHAR},
+            </if>
+            <if test="classGradeName != null and classGradeName != ''">
+                (select grade_id from grade where grade_name=#{classGradeName,jdbcType=VARCHAR}),
+            </if>
+            #{classStuNum,jdbcType=VARCHAR},
+            #{classTeaNum,jdbcType=VARCHAR},
+            #{classRemark,jdbcType=VARCHAR}
+        </trim>
+    </insert>
+
+    <update id="updateClassStuNum">
+        update class set class_stu_num=#{stuNum} where class_stu_num=#{stuOriNum}
+    </update>
+    <update id="updateClassTeaNum">
+        update class set class_tea_num=#{teaNum} where class_tea_num=#{teaOriNum}
+    </update>
+    <update id="updateClassInfo">
+        update class
+        <set>
+            <trim suffixOverrides=",">
+                <if test="classWGMC.className != null and classWGMC.className != ''">
+                    class_name=#{classWGMC.className},
+                </if>
+                <if test="classWGMC.classMajorName != null and classWGMC.classMajorName != ''">
+                    class_major=(select major_id from major where major_name=#{classWGMC.classMajorName}),
+                </if>
+                <if test="classWGMC.classGradeName != null and classWGMC.classGradeName != ''">
+                    class_grade=(select grade_id from grade where grade_name=#{classWGMC.classGradeName}),
+                </if>
+                class_stu_num=#{classWGMC.classStuNum},class_tea_num=#{classWGMC.classTeaNum},class_remark=#{classWGMC.classRemark}
+                where class_id=#{classOriId}
+            </trim>
+        </set>
+    </update>
+    <delete id="deleteOneClass">
+        delete from class where class_name=#{className}
+    </delete>
+
+    <select id="selectClassByMajorName" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select c1.* from class c1 inner join major m1
+        on c1.class_major=m1.major_id
+        <if test="majorName!= null and majorName!=''">
+            and m1.major_name=#{majorName}
+        </if>
+    </select>
+    <select id="selectAllClassInfo" resultMap="ClassWithGMCResultMap"
+            parameterType="com.springmvc.dto.classP.ClassSearchDto">
+        select c1.*,g1.grade_name as class_grade_name, m1.major_name as class_major_name, c2.college_name as
+        class_college_name,
+        s1.stu_name as class_stu_name,t1.tea_name as class_tea_name
+        from class c1 inner join grade g1 on c1.class_grade=g1.grade_id
+        <if test="classGradeName !=null and classGradeName!=''">
+            and g1.grade_name = #{classGradeName}
+        </if>
+        inner join major m1 on c1.class_major = m1.major_id
+        <if test="className !=null and className!=''">
+            <bind name="classNameLike" value=" '%' + className + '%' "/>
+            and c1.class_name like #{classNameLike}
+        </if>
+        <if test="classMajorName !=null and classMajorName!=''">
+            <bind name="classMajorNameLike" value=" '%' + classMajorName + '%' "/>
+            and m1.major_name like #{classMajorNameLike}
+        </if>
+        inner join college c2 on m1.major_college = c2.college_id
+        <if test="classCollegeName !=null and classCollegeName!=''">
+            <bind name="classCollegeNameLike" value=" '%' + classCollegeName + '%' "/>
+            and c2.college_name like #{classCollegeNameLike}
+        </if>
+        left join student s1 on c1.class_stu_num = s1.stu_num
+        left join teacher t1 on c1.class_tea_num = t1.tea_num
+    </select>
+    <select id="selectStuClassOwnInfoByNum" resultMap="ClassWithGMCResultMap">
+        select c1.*,g1.grade_name as class_grade_name, m1.major_name as class_major_name, c2.college_name as class_college_name,
+          s2.stu_name as class_stu_name,t1.tea_name as class_tea_name
+           from class c1 inner join student s1 on c1.class_id = s1.stu_class and s1.stu_num=#{stuNum}
+          inner join grade g1 on c1.class_grade = g1.grade_id
+            inner join major m1 on c1.class_major = m1.major_id
+             inner join college c2 on m1.major_college = c2.college_id
+               left join student s2 on c1.class_stu_num = s2.stu_num
+                  left join teacher t1 on c1.class_tea_num = t1.tea_num
+    </select>
+    <select id="selectTeaClassOwnInfoByNum" resultMap="ClassWithGMCResultMap">
+         select c1.*,g1.grade_name as class_grade_name, m1.major_name as class_major_name, c2.college_name as class_college_name,
+          s1.stu_name as class_stu_name,t1.tea_name as class_tea_name
+           from class c1
+          inner join grade g1 on c1.class_grade = g1.grade_id and c1.class_tea_num=#{teaNum}
+            inner join major m1 on c1.class_major = m1.major_id
+             inner join college c2 on m1.major_college = c2.college_id
+               left join student s1 on c1.class_stu_num = s1.stu_num
+                  left join teacher t1 on c1.class_tea_num = t1.tea_num
+    </select>
+    <select id="selectClassByName" resultMap="BaseResultMap">
+        select * from class where class_name=#{className}
+    </select>
+    <select id="selectClassByStuNum" resultMap="BaseResultMap">
+        select * from class where class_stu_num=#{classStuName}
+    </select>
+    <select id="selectClassByTeaNum" resultMap="BaseResultMap">
+         select * from class where class_tea_num=#{classTeaName}
+    </select>
+</mapper>

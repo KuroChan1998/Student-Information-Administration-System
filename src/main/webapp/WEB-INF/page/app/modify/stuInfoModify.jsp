@@ -30,7 +30,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">学号</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="stuId" placeholder="请输入" autocomplete="off" class="layui-input">
+                        <input type="text" name="stuNum" placeholder="请输入" autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-inline">
@@ -40,26 +40,55 @@
                     </div>
                 </div>
                 <div class="layui-inline">
+                    <label class="layui-form-label">性别</label>
+                    <div class="layui-input-inline">
+                        <select name="stuSex">
+                            <option value="">请选择性别</option>
+                            <option value="男">男</option>
+                            <option value="女">女</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
                     <label class="layui-form-label">年级</label>
                     <div class="layui-input-inline">
-                        <select name="stuGrade">
+                        <select id="stuGrade" name="stuGrade">
                             <option value="">请选择标签</option>
-                            <option value="2018级">2018级</option>
-                            <option value="2017级">2017级</option>
-                            <option value="2016级">2016级</option>
-                            <option value="2015级">2015级</option>
-                            <option value="2014级">2014级</option>
-                            <option value="2013级">2013级</option>
-                            <option value="2012级">2012级</option>
-                            <option value="2011级">2011级</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">学位</label>
+                    <div class="layui-input-inline">
+                        <select name="stuDegree">
+                            <option value="">请选择学位</option>
+                            <option value="本科">本科</option>
+                            <option value="硕士">硕士</option>
+                            <option value="博士">博士</option>
                         </select>
                     </div>
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">学院</label>
                     <div class="layui-input-inline">
-                        <select id="stuCollege" name="stuCollege" lay-search>
-                            <option value="">请输入或选择标签</option>
+                        <select id="stuCollege" name="stuCollege" lay-filter="stuCollege" lay-search>
+                            <option value="">请输入或选择学院</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">专业</label>
+                    <div class="layui-input-inline">
+                        <select id="stuMajor" name="stuMajor" lay-filter="stuMajor" lay-search>
+                            <option value="">请选择专业</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">班级</label>
+                    <div class="layui-input-inline">
+                        <select id="stuClass" name="stuClass" lay-filter="stuClass" lay-search>
+                            <option value="">请选择班级</option>
                         </select>
                     </div>
                 </div>
@@ -103,6 +132,21 @@
             , table = layui.table
             , laypage = layui.laypage;
 
+        //从数据库异步获取年级数据填充到年级select框中
+        $.ajax({
+            type: "get",
+            url: "${ctx}/grade/getGradeName",
+            success: function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    var json = data[i];
+                    var str = "";
+                    str += '<option value="' + json.gradeName + '">' + json.gradeName + '</option>';
+                    $("#stuGrade").append(str);
+                }
+                form.render('select');
+            }
+        });
+
         //从数据库异步获取学院数据填充到学院select框中
         $.ajax({
             type: "get",
@@ -117,6 +161,70 @@
                 form.render('select');
             }
         });
+        //从数据库异步获取专业数据填充到专业select框中
+        $.ajax({
+            type: "get",
+            data: {collegeName: $(this).attr("lay-value")},
+            url: "${ctx}/major/getMajorNameByCollege",
+            success: function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    var json = data[i];
+                    $("#stuMajor").append('<option value="' + json.majorName + '">' + json.majorName + '</option>');
+                }
+                form.render('select');
+            }
+        });
+        //从数据库异步获取班级数据填充到班级select框中
+        $.ajax({
+            type: "get",
+            data: {majorName: $(this).attr("lay-value")},
+            url: "${ctx}/class/getClassNameByMajor",
+            success: function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    var json = data[i];
+                    $("#stuClass").append('<option value="' + json.className + '">' + json.className + '</option>');
+                }
+                form.render('select');
+            }
+        });
+
+        //联动监听select
+        form.on('select(stuCollege)', function (data) {
+            //获取部门的ID通过异步查询子集
+            $("#stuMajor").empty();
+            $("#stuMajor").append('<option value="">请选择专业</option>');
+            var college_name = $(this).attr("lay-value");
+            $.ajax({
+                type: "get",
+                data: {collegeName: college_name},
+                url: "${ctx}/major/getMajorNameByCollege",
+                success: function (data) {
+                    for (var i = 0; i < data.length; i++) {
+                        var json = data[i];
+                        $("#stuMajor").append('<option value="' + json.majorName + '">' + json.majorName + '</option>');
+                    }
+                    form.render('select');
+                }
+            });
+        });
+        form.on('select(stuMajor)', function (data) {
+            //获取部门的ID通过异步查询子集
+            $("#stuClass").empty();
+            $("#stuClass").append('<option value="">请选择班级</option>');
+            var major_name = $(this).attr("lay-value");
+            $.ajax({
+                type: "get",
+                data: {majorName: major_name},
+                url: "${ctx}/class/getClassNameByMajor",
+                success: function (data) {
+                    for (var i = 0; i < data.length; i++) {
+                        var json = data[i];
+                        $("#stuClass").append('<option value="' + json.className + '">' + json.className + '</option>');
+                    }
+                    form.render('select');
+                }
+            });
+        });
 
         //方法级渲染
         table.render({
@@ -124,17 +232,18 @@
             , url: '${ctx}/student/showAllStuInfo' //向后端默认传page和limit
             , cols: [[
                 {type: 'checkbox', fixed: 'left'}
-                , {field: 'stuId', title: '学号', width: 130, sort: true, fixed: true}
+                , {field: 'stuId', title: '学生id', sort: true,  hide: true}
+                , {field: 'stuNum', title: '学号', sort: true, fixed: true}
                 , {field: 'stuName', title: '姓名'}
-                , {field: 'stuSex', title: '性别', width: 80, sort: true}
-                , {field: 'stuAge', title: '年龄', width: 80}
-                , {field: 'stuGrade', title: '年级', sort: true}
-                , {field: 'stuDegree', title: '学位', width: 80, sort: true}
+                , {field: 'stuSex', title: '性别', sort: true}
+                , {field: 'stuBirthdayToString', title: '出生日期', sort: true}
+                , {field: 'stuGradeName', title: '年级', sort: true}
+                , {field: 'stuDegree', title: '学位', sort: true}
                 , {field: 'stuClassName', title: '班级', sort: true}
                 , {field: 'stuMajorName', title: '专业', sort: true}
                 , {field: 'stuCollegeName', title: '学院', sort: true}
                 , {field: 'stuPhone', title: '联系方式'}
-                , {field: 'stuRemark', title: '备注', width: 250}
+                , {field: 'stuRemark', title: '备注', width: 150}
                 , {title: '操作', minWidth: 150, align: 'center', fixed: 'right', toolbar: '#table-content-list1'}
             ]]
             , page: true
@@ -166,10 +275,14 @@
                     limitName: 'pageSize'  //如不配置，默认为page=1&limit=10
                 }
                 , where: { //设定异步数据接口的额外参数，任意设
-                    stuId: ''
+                    stuNum: ''
                     , stuName: ''
-                    , stuGrade: ''
-                    , stuCollege: ''
+                    , stuSex: ''
+                    , stuGradeName: ''
+                    , stuDegree: ''
+                    , stuCollegeName: ''
+                    , stuMajorName: ''
+                    , stuClassName: ''
                 }
                 , page: {
                     curr: 1 //重新从第 1 页开始
@@ -180,16 +293,18 @@
         //监听搜索
         form.on('submit(LAY-app-contcomm-search)', function (data) {
             var field = data.field;
-
-            // console.log(field);
             //执行重载
             table.reload('stuInfoQuery', {
                 url: '${ctx}/student/showAllStuInfo' //向后端默认传page和limit
                 , where: { //设定异步数据接口的额外参数，任意设
-                    stuId: field.stuId
+                    stuNum: field.stuNum
                     , stuName: field.stuName
-                    , stuGrade: field.stuGrade
-                    , stuCollege: field.stuCollege
+                    , stuSex: field.stuSex
+                    , stuGradeName: field.stuGrade
+                    , stuDegree: field.stuDegree
+                    , stuCollegeName: field.stuCollege
+                    , stuMajorName: field.stuMajor
+                    , stuClassName: field.stuClass
                 }
                 , request: {
                     pageName: 'pageNum',
@@ -222,14 +337,17 @@
                         url: "${ctx}/student/deleteMany",
                         success: function (data) {
                             if (data.data == "deleteSuccess") {
+                                layer.msg('已删除');
                                 table.reload('stuInfoQuery', {
                                     url: '${ctx}/student/showAllStuInfo' //向后端默认传page和limit); //重载表格
                                     , request: {
                                         pageName: 'pageNum',
                                         limitName: 'pageSize'  //如不配置，默认为page=1&limit=10
                                     }
+                                    , page: {
+                                        curr: 1 //重新从第 1 页开始
+                                    }
                                 });
-                                layer.msg('已删除');
                             } else {
                                 layer.msg('未知错误');
                             }
@@ -245,7 +363,7 @@
                     , title: '添加学生'
                     , content: '${ctx}/student/edit'
                     , maxmin: true
-                    , area: ['800px', '730px']
+                    , area: ['820px', '730px']
                     , btn: ['确定', '取消']
                     , yes: function (index, layero) {
                         //点击确认触发 iframe 内容中的按钮提交
@@ -255,13 +373,12 @@
                         iframeWindow.layui.form.on('submit(layuiadmin-app-form-submit)', function (data) {
                             var field = data.field; //获取提交的字段
                             // var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
-
                             var json = {
-                                stuId: field.id
+                                stuNum: field.id
                                 , stuName: field.name
-                                , stuSex: field.sex
-                                , stuAge: field.age
-                                , stuGrade: field.grade
+                                , stuSex: field.stuSex
+                                , stuBirthdayToString: field.birthday
+                                , stuGradeName: field.grade
                                 , stuDegree: field.degree
                                 , stuClassName: field.class
                                 , stuMajorName: field.major
@@ -269,26 +386,19 @@
                                 , stuPhone: field.phone
                                 , stuRemark: field.remark
                             };
-
+                            console.log(json)
                             //提交 Ajax 成功后，关闭当前弹层并重载表格
                             $.ajax({
                                 data: json,
                                 type: 'post',
                                 url: "${ctx}/student/insert",
                                 success: function (data) {
-                                    if (data.data == "stuIdExist") {
+                                    if (data.data == "stuNumExist") {
                                         return layer.msg('对不起，该学号已存在！');
                                     } else if (data.data == "insertSuccess") {
                                         layer.msg('添加成功', {
                                             icon: 1
                                             , time: 1000
-                                        });
-                                        table.reload('stuInfoQuery', {
-                                            url: '${ctx}/student/showAllStuInfo' //向后端默认传page和limit); //重载表格
-                                            , request: {
-                                                pageName: 'pageNum',
-                                                limitName: 'pageSize'  //如不配置，默认为page=1&limit=10
-                                            }
                                         });
 
                                         layer.close(index); //再执行关闭
@@ -316,11 +426,8 @@
         //监听工具条
         table.on('tool(LAY-app-content-comm)', function (obj) {
             var data = obj.data;
-
             if (obj.event === 'del') {
                 layer.confirm('确定删除此学生吗？', function (index) {
-
-
                     //提交删除ajax
                     $.ajax({
                         data: data,
@@ -348,11 +455,11 @@
                     ,
                     title: '编辑学生'
                     ,
-                    content: '${ctx}/student/edit?stuId=' + data.stuId + '&stuCollegeName=' + data.stuCollegeName + '&stuMajorName=' + data.stuMajorName + '&stuClassName=' + data.stuClassName
+                    content: '${ctx}/student/edit?stuNum=' + data.stuNum + '&stuCollegeName=' + data.stuCollegeName + '&stuMajorName=' + data.stuMajorName + '&stuClassName=' + data.stuClassName+ '&stuGradeName=' + data.stuGradeName
                     ,
                     maxmin: true
                     ,
-                    area: ['800px', '730px']
+                    area: ['820px', '730px']
                     ,
                     btn: ['确定', '取消']
                     ,
@@ -364,11 +471,12 @@
                         iframeWindow.layui.form.on('submit(layuiadmin-app-form-edit)', function (data) {
                             var field = data.field; //获取提交的字段
                             var json = {
-                                stuId: field.id
+                                stuOriNum:  field.oriId
+                                , stuNum: field.id
                                 , stuName: field.name
                                 , stuSex: field.sex
-                                , stuAge: field.age
-                                , stuGrade: field.grade
+                                , stuBirthdayToString: field.birthday
+                                , stuGradeName: field.grade
                                 , stuDegree: field.degree
                                 , stuClassName: field.class
                                 , stuMajorName: field.major
@@ -377,13 +485,12 @@
                                 , stuRemark: field.remark
                             };
 
-
                             $.ajax({
                                 data: json,
                                 type: 'post',
-                                url: "${ctx}/student/updateInfo?stuOriId=" + field.oriId,
+                                url: "${ctx}/student/updateInfo",
                                 success: function (data) {
-                                    if (data.data == "stuIdExist") {
+                                    if (data.data == "stuNumExist") {
                                         return layer.msg('对不起，该学号已存在！');
                                     } else if (data.data == "updateSuccess") {
                                         layer.msg('修改成功', {
@@ -411,12 +518,11 @@
                     success: function (layero, index) {
                         //给iframe元素赋值
                         var othis = layero.find('iframe').contents().find("#layuiadmin-app-form-list").click();
-                        othis.find('input[name="id"]').val(data.stuId);
+                        othis.find('input[name="id"]').val(data.stuNum);
                         othis.find('input[name="name"]').val(data.stuName);
                         othis.find('input[name="sex"][value="男"]').attr("checked", data.stuSex == '男' ? true : false);
                         othis.find('input[name="sex"][value="女"]').attr("checked", data.stuSex == '女' ? true : false);
-                        othis.find('input[name="age"]').val(data.stuAge);
-                        othis.find('select[name="grade"]').val(data.stuGrade);
+                        othis.find('input[name="birthday"]').val(data.stuBirthdayToString);
                         othis.find('select[name="degree"]').val(data.stuDegree);
                         othis.find('input[name="phone"]').val(data.stuPhone);
                         // 学院，专业，班级名称通过url传值给后端，后端存于model，如果通过iframe传值，无法在子页面启动数据库查询所有学院名称填充select的ajax

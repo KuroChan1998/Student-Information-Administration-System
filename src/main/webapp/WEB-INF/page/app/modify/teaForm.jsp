@@ -30,14 +30,16 @@
         <label class="layui-form-label">工号</label>
         <div class="layui-input-inline">
             <input type="text" name="id" value="" class="layui-input" lay-verify="teaId">
-            <input type="text" name="oriId" value="${teaId}" class="layui-input" style="display:none;">
+            <input type="text" name="oriId" value="${teaAllInfo.teaNum}" class="layui-input" style="display:none;">
         </div>
+        <div class="layui-form-mid " style="color:red">*必填项</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">姓名</label>
         <div class="layui-input-inline">
             <input type="text" name="name" value="" class="layui-input" lay-verify="name">
         </div>
+        <div class="layui-form-mid " style="color:red">*必填项</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">性别</label>
@@ -45,23 +47,22 @@
             <input type="radio" name="sex" value="男" title="男" checked>
             <input type="radio" name="sex" value="女" title="女">
         </div>
+        <div class="layui-form-mid " style="color:red">*必填项</div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">年龄</label>
+        <label class="layui-form-label">出生日期</label>
         <div class="layui-input-inline">
-            <input type="text" name="age" value="" class="layui-input" lay-verify="age">
+            <input type="text" class="layui-input" id="birthday" name="birthday" lay-verify="birthday">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">职称</label>
         <div class="layui-input-inline">
-            <select name="title" lay-verify="required">
-                <option value="">请选择标签</option>
-                <option value="教授">教授</option>
-                <option value="副教授">副教授</option>
-                <option value="讲师">讲师</option>
+            <select name="title" id="title" lay-verify="required">
+                <option value="">请选择职称</option>
             </select>
         </div>
+        <div class="layui-form-mid " style="color:red">*必填项</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">学院-专业</label>
@@ -76,11 +77,12 @@
                 <option value="">请选择专业</option>
             </select>
         </div>
+        <div class="layui-form-mid " style="color:red">*必填项</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">联系方式</label>
         <div class="layui-input-inline">
-            <input type="text" name="phone" value="" class="layui-input" lay-verify="phone">
+            <input type="text" name="phone" value="" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
@@ -100,15 +102,40 @@
 
 <script src="${ctx}/static/plugins/layuiadmin/layui/layui.js"></script>
 <script src="${ctx}/static/custom/js/myLayVerify.js"></script>
+<script src="${ctx}/static/custom/js/myValidity.js"></script>
 <script>
     layui.config({
         base: '${ctx}/static/plugins/layuiadmin/' //静态资源所在路径
     }).extend({
         index: 'lib/index' //主入口模块
-    }).use(['index', 'form'], function () {
+    }).use(['index', 'form','laydate'], function () {
         var $ = layui.$
-            , form = layui.form;
+            , form = layui.form
+            , laydate = layui.laydate;
+        laydate.render({
+            elem: '#birthday' //指定元素
+            ,value: '1980-1-1'
+            ,isInitValue: false //是否允许填充初始值，默认为 true'
+            ,min: '1920-1-1'
+            ,max: '2018-12-31'
+        });
 
+        //从数据库异步获取职称数据填充到职称select框中
+        $.ajax({
+            async: false,
+            type: "get",
+            url: "${ctx}/title/getTitleName",
+            success: function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    var json = data[i];
+                    var str = "";
+                    str += '<option value="' + json.titleName + '">' + json.titleName + '</option>';
+                    $("#title").append(str);
+                }
+                form.render('select');
+            }
+        });
+        $("#title").val('${teaAllInfo.teaTitleName}');
 
         //从数据库异步获取学院数据填充到学院select框中
         $.ajax({
@@ -124,7 +151,7 @@
             }
         });
 
-        $("#college").val('${teaCollegeName}');//根据父页面传来的model来预渲染联动select
+        $("#college").val('${teaAllInfo.teaCollegeName}');//根据父页面传来的model来预渲染联动select
         $("#major").empty();
         $("#major").append('<option value="">请选择专业</option>');
         var college_name = $("#college").val();
@@ -142,7 +169,7 @@
             }
         });
 
-        $("#major").val('${teaMajorName}');
+        $("#major").val('${teaAllInfo.teaMajorName}');
         form.render('select');
 
         //联动监听select
@@ -164,24 +191,7 @@
                 }
             });
         });
-        form.on('select(major)', function (data) {
-            //获取部门的ID通过异步查询子集
-            $("#class").empty();
-            $("#class").append('<option value="">请选择班级</option>');
-            var major_name = $(this).attr("lay-value");
-            $.ajax({
-                type: "get",
-                data: {majorName: major_name},
-                url: "${ctx}/class/getClassNameByMajor",
-                success: function (data) {
-                    for (var i = 0; i < data.length; i++) {
-                        var json = data[i];
-                        $("#class").append('<option value="' + json.className + '">' + json.className + '</option>');
-                    }
-                    form.render('select');
-                }
-            });
-        });
+
 
     })
 </script>

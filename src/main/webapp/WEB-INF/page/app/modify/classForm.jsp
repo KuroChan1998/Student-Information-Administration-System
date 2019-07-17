@@ -27,40 +27,37 @@
 <div class="layui-form" lay-filter="layuiadmin-app-form-list" id="layuiadmin-app-form-list"
      style="padding: 20px 30px 0 0;">
     <div class="layui-form-item">
-        <label class="layui-form-label">班级编号</label>
-        <div class="layui-input-inline">
-            <input type="text" name="id" value="" class="layui-input" lay-verify="CMCid" disabled>
-        </div>
-        <div class="layui-form-mid layui-word-aux">此项暂不可修改，数据库中编号，创建时确定</div>
-        <input type="text" name="oriId" value="${classId}" class="layui-input" style="display:none;">
-    </div>
-    <div class="layui-form-item">
         <label class="layui-form-label">班级名称</label>
         <div class="layui-input-inline">
             <input type="text" name="name" value="" class="layui-input" lay-verify="name">
-            <input type="text" name="oriName" value="${className}" class="layui-input" style="display:none;">
+            <input type="text" name="oriId" value="${classAllInfo.classId}" class="layui-input" style="display:none;">
+            <input type="text" name="oriName" value="${classAllInfo.className}" class="layui-input" style="display:none;">
         </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">班级人数</label>
-        <div class="layui-input-inline">
-            <input type="text" name="stuNum" value="" class="layui-input" lay-verify="required" disabled>
-        </div>
-        <div class="layui-form-mid layui-word-aux">此项暂不可修改，因为参与计算</div>
+        <div class="layui-form-mid " style="color:red">*必填项</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">学院-专业</label>
         <div class="layui-input-inline">
             <select id="college" name="college" lay-search lay-filter="college" lay-verify="required">
-                <option value="">请选择学院</option>
+                <option value="">请输入或选择学院</option>
                 <%--<option value="电子信息与电气工程学院">电子信息与电气工程学院</option>--%>
             </select>
         </div>
         <div class="layui-input-inline">
             <select id="major" name="major" lay-search lay-filter="major" lay-verify="required">
-                <option value="">请选择专业</option>
+                <option value="">请输入或选择学院</option>
             </select>
         </div>
+        <div class="layui-form-mid " style="color:red">*必填项</div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">年级</label>
+        <div class="layui-input-inline">
+            <select name="grade" id="grade" lay-verify="required">
+                <option value="">请选择年级</option>
+            </select>
+        </div>
+        <div class="layui-form-mid " style="color:red">*必填项</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">班长学号</label>
@@ -101,7 +98,22 @@
     }).use(['index', 'form'], function () {
         var $ = layui.$
             , form = layui.form;
-
+        //从数据库异步获取年级数据填充到年级select框中
+        $.ajax({
+            async: false,
+            type: "get",
+            url: "${ctx}/grade/getGradeName",
+            success: function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    var json = data[i];
+                    var str = "";
+                    str += '<option value="' + json.gradeName + '">' + json.gradeName + '</option>';
+                    $("#grade").append(str);
+                }
+                form.render('select');
+            }
+        });
+        $("#grade").val('${classAllInfo.classGradeName}');
 
         //从数据库异步获取学院数据填充到学院select框中
         $.ajax({
@@ -117,9 +129,9 @@
             }
         });
 
-        $("#college").val('${classCollegeName}');//根据父页面传来的model来预渲染联动select
+        $("#college").val('${classAllInfo.classCollegeName}');//根据父页面传来的model来预渲染联动select
         $("#major").empty();
-        $("#major").append('<option value="">请选择专业</option>');
+        $("#major").append('<option value="">请输入或选择学院</option>');
         var college_name = $("#college").val();
         $.ajax({
             async: false,
@@ -135,14 +147,14 @@
             }
         });
 
-        $("#major").val('${classMajorName}');
+        $("#major").val('${classAllInfo.classMajorName}');
         form.render('select');
 
         //联动监听select
         form.on('select(college)', function (data) {
             //获取部门的ID通过异步查询子集
             $("#major").empty();
-            $("#major").append('<option value="">请选择专业</option>');
+            $("#major").append('<option value="">请输入或选择学院</option>');
             var college_name = $(this).attr("lay-value");
             $.ajax({
                 type: "get",
@@ -163,7 +175,7 @@
             layer.open({
                 type: 2
                 , title: '查看班长'
-                , content: '/student/stuInfo?stuId=' + $("#moniId").val()
+                , content: '/student/stuInfo?stuNum=' + $("#moniId").val()
                 , maxmin: true
                 , area: ['550px', '600px']
                 , yes: function (index, layero) {
@@ -176,7 +188,7 @@
             layer.open({
                 type: 2
                 , title: '查看教师'
-                , content: '/teacher/teaInfo?teaId=' + $("#teaId").val()
+                , content: '/teacher/teaInfo?teaNum=' + $("#teaId").val()
                 , maxmin: true
                 , area: ['550px', '550px']
                 , yes: function (index, layero) {

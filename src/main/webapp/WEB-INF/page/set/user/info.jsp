@@ -29,8 +29,9 @@
             <div class="layui-card">
                 <div class="layui-card-header">设置我的资料</div>
                 <div class="layui-card-body" pad15>
-
                     <div class="layui-form" lay-filter="">
+                        <div><input type="text" name="userId" id="userId" style="display: none"
+                                    value="${userInfo.userId}"/></div>
                         <div class="layui-form-item">
                             <label class="layui-form-label">我的角色</label>
                             <div class="layui-input-inline">
@@ -45,10 +46,10 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">用户名</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="username" value="${userInfo.userId}" readonly
+                                <input type="text" name="username" value="${userInfo.userName}"
                                        class="layui-input" lay-verify="id">
                             </div>
-                            <div class="layui-form-mid layui-word-aux">此项不可修改。(学号或工号）一般用于后台登入名</div>
+                            <div class="layui-form-mid layui-word-aux"></div>
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label">昵称</label>
@@ -83,6 +84,15 @@
                             </div>
                         </div>
                         <div class="layui-form-item">
+                            <label class="layui-form-label">邮箱</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="email" id="hiddenUserEmail" value="${userInfo.userEmail}"
+                                       readonly
+                                       class="layui-input" lay-verify="email">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">修改邮箱请前往“修改绑定邮箱”页面</div>
+                        </div>
+                        <div class="layui-form-item">
                             <label class="layui-form-label">验证码</label>
                             <div class="layui-input-inline">
                                 <div class="layui-row">
@@ -91,8 +101,6 @@
                                     <%--<input type="text" name="vercode" id="LAY-user-login-smscode" lay-verify="required" placeholder="短信验证码" class="layui-input">--%>
                                 </div>
                             </div>
-                            <div><input type="text" style="display:none" id="hiddenUserEmail" name="email"
-                                        value="${userInfo.userEmail}"/></div>
                             <div class="layui-input-inline">
                                 <div style="margin-left: 10px">
                                     <%--<input id="send-email-code" style="width: 120px;height: 39px;text-align: center;background-color: white;border: 1px solid #E2E2E2" name="send-email-code" type="button"   value="获取验证码"  />--%>
@@ -116,6 +124,8 @@
 
 
 <script src="${ctx}/static/plugins/layuiadmin/layui/layui.js"></script>
+<script src="${ctx}/static/custom/js/myLayVerify.js"></script>
+<script src="${ctx}/static/custom/js/myValidity.js"></script>
 <script>
     layui.config({
         base: '${ctx}/static/plugins/layuiadmin/' //静态资源所在路径
@@ -136,7 +146,7 @@
         //拖拽上传
         var uploadInst = upload.render({
             elem: '#headImg'
-            , url: '${ctx}/uploadUserIcon'
+            , url: '${ctx}/user/uploadUserIcon'
             , size: 2048 //KB
             , before: function (obj) {
                 //预读本地文件示例，不支持ie8
@@ -223,6 +233,14 @@
         form.on('submit(setmyinfo)', function (obj) {
             var field = obj.field;
 
+            if (!idWithIdentityValid(field.username, field.role)) {
+                return layer.msg('注意：若以学生注册用户名（学号）第一位必须为5; 若以教师注册用户名（工号）第一位必须为1', {
+                    offset: '100px',
+                    icon: 2,
+                    time: 3000
+                });
+            }
+
             // console.log(field);
             //请求接口
             $.ajax({
@@ -233,25 +251,32 @@
                         /*****************************************************/
                         //验证码正确后重置用户基本资料
                         var allData = {
-                            "userId": field.username,
+                            "userId": field.userId,
+                            "userName": field.username,
                             "userNickname": field.nickname,
                             "userIdentity": field.role,
                             "userIcon": field.hiddenIconUrl,
-                            "userPhone": field.cellphone
+                            "userPhone": field.cellphone,
+                            "userEmail": field.email,
                         };
                         //请求接口
                         $.ajax({
                             type: 'post',
                             contentType: 'application/json;charset=utf-8',
                             data: JSON.stringify(allData),
-                            url: '${ctx}/userInfoReset' //实际使用请改成服务端真实接口
+                            url: '${ctx}/user/userInfoReset' //实际使用请改成服务端真实接口
                             , success: function (res2) {
                                 if (res2.data == "updateSuccess") {
                                     layer.msg('修改已完成，请F5刷新页面', {
                                         icon: 1
                                         , time: 1000
                                     }, function () {
-                                        location.href = "${ctx}/info"
+                                        location.href = "${ctx}/user/info"
+                                    });
+                                } else if (res2.data == "updateNameExist") {
+                                    layer.msg('用户名已被注册', {
+                                        icon: 5,
+                                        anim: 6
                                     });
                                 } else {
                                     layer.msg('未知错误', {

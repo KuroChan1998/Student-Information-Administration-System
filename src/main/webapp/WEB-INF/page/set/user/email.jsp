@@ -162,7 +162,7 @@
                         /*****************************************************/
                         //验证码正确后修改绑定邮箱ajax
                         $.ajax({
-                            url: '${ctx}/resetEmail' //实际使用请改成服务端真实接口
+                            url: '${ctx}/user/resetEmail' //实际使用请改成服务端真实接口
                             , type: 'post'
                             ,
                             data: {
@@ -181,7 +181,7 @@
                                         icon: 1
                                         , time: 1000
                                     }, function () {
-                                        location.href = '${ctx}/email';
+                                        location.href = '${ctx}/user/email';
                                     });
                                 } else {
                                     return layer.msg('未知错误', {

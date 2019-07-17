@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.springmvc.dao.GradeMapper">
+    <resultMap id="BaseResultMap" type="com.springmvc.entity.Grade">
+        <id column="grade_id" property="gradeId" jdbcType="INTEGER"/>
+        <result column="grade_name" property="gradeName" jdbcType="VARCHAR"/>
+        <result column="grade_stu_num" property="gradeStuNum" jdbcType="VARCHAR"/>
+        <result column="grade_tea_num" property="gradeTeaNum" jdbcType="VARCHAR"/>
+        <result column="grade_remark" property="gradeRemark" jdbcType="VARCHAR"/>
+    </resultMap>
+    <update id="updateGradeStuNum">
+        update grade set grade_stu_num=#{stuNum} where grade_stu_num=#{stuOriNum}
+    </update>
+    <update id="updateGradeTeaNum">
+        update grade set grade_tea_num=#{teaNum} where grade_tea_num=#{teaOriNum}
+    </update>
+
+    <select id="selectAllGrade" resultMap="BaseResultMap">
+        select * from grade;
+    </select>
+</mapper>

@@ -27,16 +27,7 @@
     <div class="layui-row layui-col-space15">
         <div class="layui-col-sm12">
             <div class="layui-card">
-                <div class="layui-card-header">学院人数比</div>
-                <div class="layui-card-body">
-                    <div class="layui-carousel layadmin-carousel layadmin-dataview" data-anim="fade"
-                         lay-filter="LAY-index-plat">
-                        <div id="container" style="height: 100%"></div>
-                    </div>
-
-                </div>
-                <div class="layui-card-header"></div>
-                <div class="layui-card-header">查询相应学院下的专业人数比</div>
+                <div class="layui-card-header">查询相应学院下的专业人数比、专业下的班级人数比</div>
                 <div class="layui-card-body">
                     <div class="layui-form layui-card-header layuiadmin-card-header-auto">
                         <div class="layui-form-item">
@@ -50,13 +41,33 @@
                                 </div>
                             </div>
                             <div class="layui-inline">
+                                <label class="layui-form-label">专业</label>
+                                <div class="layui-input-inline">
+                                    <select id="major" name="major" lay-search lay-filter="major">
+                                        <option value="">请输入或选择专业</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
                                 <button class="layui-btn layuiadmin-btn-comm" data-type="reload" lay-submit
                                         lay-filter="LAY-app-contcomm-search">
                                     <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
                                 </button>
+                                <button class="layui-btn layuiadmin-btn-comm" data-type="batchdel" id="allCollege" style="background-color: #FF5722">所有学院人数比</button>
+                                <button class="layui-btn layuiadmin-btn-comm" data-type="batchdel" id="allMajor" style="background-color: #FFB800">所有专业人数比</button>
+                                <button class="layui-btn layuiadmin-btn-comm" data-type="batchdel" id="allClass" style="background-color: #01AAED">所有班级人数比</button>
                             </div>
                         </div>
                     </div>
+                    <div class="layui-carousel layadmin-carousel layadmin-dataview" data-anim="fade"
+                         lay-filter="LAY-index-plat">
+                        <div id="container" style="height: 100%"></div>
+                    </div>
+
+                </div>
+                <div class="layui-card-header"></div>
+                <div class="layui-card-header">查询相应学院下的专业人数比</div>
+                <div class="layui-card-body">
                     <div class="layui-carousel layadmin-carousel layadmin-dataview" data-anim="fade"
                          lay-filter="LAY-index-plat">
                         <div id="container2" style="height: 100%"></div>
@@ -103,15 +114,54 @@
             }
         });
 
-
+        $("#major").empty();
+        $("#major").append('<option value="">请输入或选择专业</option>');
+        var college_name = $("#college").val();
         $.ajax({
             async: false,
             type: "get",
-            url: "${ctx}/findCollegeStuNumPercent",
+            data: {collegeName: college_name},
+            url: "${ctx}/major/getMajorNameByCollege",
+            success: function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    var json = data[i];
+                    $("#major").append('<option value="' + json.majorName + '">' + json.majorName + '</option>');
+                }
+                form.render('select');
+            }
+        });
+
+        //联动监听select
+        form.on('select(college)', function (data) {
+            //获取部门的ID通过异步查询子集
+            $("#major").empty();
+            $("#major").append('<option value="">请输入或选择专业</option>');
+            var college_name = $(this).attr("lay-value");
+            $.ajax({
+                type: "get",
+                data: {collegeName: college_name},
+                url: "${ctx}/major/getMajorNameByCollege",
+                success: function (data) {
+                    for (var i = 0; i < data.length; i++) {
+                        var json = data[i];
+                        $("#major").append('<option value="' + json.majorName + '">' + json.majorName + '</option>');
+                    }
+                    form.render('select');
+                }
+            });
+        });
+
+        var dom = document.getElementById("container");
+        var myChart = echarts.init(dom);
+        $.ajax({
+            async: false,
+            type: "get",
+            data:{
+                type: "allCollege"
+            },
+            url: "${ctx}/findPersonTotalPercentByCommonName",
             success: function (res) {
                 console.log(res);
-                var dom = document.getElementById("container");
-                var myChart = echarts.init(dom);
                 var app = {};
                 option = null;
                 app.title = '坐标轴刻度与标签对齐';
@@ -133,7 +183,7 @@
                     xAxis: [
                         {
                             type: 'category',
-                            data: res.collegeName,
+                            data: res.commonName,
                             axisTick: {
                                 alignWithLabel: true
                             }
@@ -149,7 +199,7 @@
                             name: '人数',
                             type: 'bar',
                             barWidth: '50%',
-                            data: res.collegeStuNum
+                            data: res.total
                         }
                     ]
                 };
@@ -166,7 +216,10 @@
         $.ajax({
             async: false,
             type: "get",
-            url: "${ctx}/findMajorStuNumPercent",
+            data:{
+                type: "grade"
+            },
+            url: "${ctx}/findPersonTotalPercentByCommonName",
             success: function (res) {
                 console.log(res);
 
@@ -191,7 +244,7 @@
                     xAxis: [
                         {
                             type: 'category',
-                            data: res.majorName,
+                            data: res.commonName,
                             axisTick: {
                                 alignWithLabel: true
                             }
@@ -207,7 +260,7 @@
                             name: '人数',
                             type: 'bar',
                             barWidth: '50%',
-                            data: res.majorStuNum
+                            data: res.total
                         }
                     ]
                 };
@@ -228,14 +281,68 @@
             $.ajax({
                 type: "get",
                 data: field,
-                url: "${ctx}/findMajorStuNumPercent",
+                url: "${ctx}/findPersonTotalPercentByCommonName?type=byMajorOrCollege",
                 success: function (res) {
-                    var option = myChart2.getOption();
+                    var option = myChart.getOption();
 
-                    option.series[0].data = res.majorStuNum;
-                    option.xAxis[0].data = res.majorName;
+                    option.series[0].data = res.total;
+                    option.xAxis[0].data = res.commonName;
 
-                    myChart2.setOption(option, true);
+                    myChart.setOption(option, true);
+                }
+            });
+        });
+
+        $("#allCollege").click(function () {
+            $.ajax({
+                type: "get",
+                url: "${ctx}/findPersonTotalPercentByCommonName",
+                data:{
+                    type: "allCollege"
+                },
+                success: function (res) {
+                    var option = myChart.getOption();
+
+                    option.series[0].data = res.total;
+                    option.xAxis[0].data = res.commonName;
+
+                    myChart.setOption(option, true);
+                }
+            });
+        });
+
+        $("#allMajor").click(function () {
+            $.ajax({
+                type: "get",
+                url: "${ctx}/findPersonTotalPercentByCommonName",
+                data:{
+                    type: "allMajor"
+                },
+                success: function (res) {
+                    var option = myChart.getOption();
+
+                    option.series[0].data = res.total;
+                    option.xAxis[0].data = res.commonName;
+
+                    myChart.setOption(option, true);
+                }
+            });
+        });
+
+        $("#allClass").click(function () {
+            $.ajax({
+                type: "get",
+                url: "${ctx}/findPersonTotalPercentByCommonName",
+                data:{
+                    type: "allClass"
+                },
+                success: function (res) {
+                    var option = myChart.getOption();
+
+                    option.series[0].data = res.total;
+                    option.xAxis[0].data = res.commonName;
+
+                    myChart.setOption(option, true);
                 }
             });
         });

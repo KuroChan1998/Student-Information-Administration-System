@@ -1,137 +1,81 @@
 package com.springmvc.service;
 
 import com.github.pagehelper.PageInfo;
-import com.springmvc.dto.CollegeDto;
-import com.springmvc.dto.MyPage;
+import com.springmvc.dto.college.CollegeDto;
+import com.springmvc.dto.other.MyPage;
 import com.springmvc.entity.College;
 import com.springmvc.entity.User;
 
 import java.util.List;
 
+/**
+ * @author JinZhiyun
+ * @IntefaceName CollegeService
+ * @Description 学院业务接口
+ * @Date 2019/6/14 12:52
+ * @Version 1.0
+ **/
 public interface CollegeService {
     /**
-     * @return java.util.List<com.springmvc.entity.College>
-     * @Author JinZhiyun
+     * @author JinZhiyun
      * @Description 找出所有的学院
-     * @Date 22:53 2019/4/18
+     * @Date 13:34 2019/6/14
      * @Param []
+     * @return java.util.List<com.springmvc.entity.College>
      **/
-    List<College> findAllCollege();
+    List<College> selectAllCollege();
 
     /**
-     * @return com.github.pagehelper.PageInfo<com.springmvc.dto.CollegeDto>
-     * @Author JinZhiyun
+     * @author JinZhiyun
      * @Description 返回符合的学院信息的分页结果
-     * @Date 22:55 2019/4/18
-     * @Param [myPage, collegeName]
+     * @Date 19:20 2019/7/10
+     * @Param [myPage, collegeDto]
+     * @return com.github.pagehelper.PageInfo<com.springmvc.dto.college.CollegeDto>
      **/
-    PageInfo<CollegeDto> queryAllCollegeInfo(MyPage myPage, String collegeName);
+    PageInfo<CollegeDto> selectAllCollegeInfo(MyPage myPage, CollegeDto collegeDto);
 
     /**
-     * @return com.github.pagehelper.PageInfo<com.springmvc.dto.CollegeDto>
-     * @Author JinZhiyun
-     * @Description 返回用户Id对应的学院及其附带信息分页结果
-     * @Date 17:31 2019/4/19
+     * @author JinZhiyun
+     * @Description 返回用户名对应的学院及其附带信息分页结果
+     * @Date 19:40 2019/7/10
      * @Param [myPage, user]
+     * @return com.github.pagehelper.PageInfo<com.springmvc.dto.college.CollegeDto>
      **/
-    PageInfo<CollegeDto> findCollegeOwnInfoById(MyPage myPage, User user);
+    PageInfo<CollegeDto> selectCollegeOwnInfoByNum(MyPage myPage, User user);
 
     /**
-     * @return java.lang.String
-     * @Author JinZhiyun
+     * @author JinZhiyun
      * @Description 根据业务逻辑返回更新学院ajax的map键data值
-     * @Date 16:49 2019/5/2
+     * @Date 9:51 2019/7/14
      * @Param [collegeOriId, collegeOriName, collegeDto]
-     **/
-    String updateMapDataResult(String collegeOriId, String collegeOriName, CollegeDto collegeDto);
-
-    /**
-     * @return com.springmvc.entity.College
-     * @Author JinZhiyun
-     * @Description 根据学院id找到学院
-     * @Date 16:53 2019/5/2
-     * @Param [collegeId]
-     **/
-    College findCollegeById(String collegeId);
-
-    /**
-     * @return com.springmvc.entity.College
-     * @Author JinZhiyun
-     * @Description 根据学院名称找到学院
-     * @Date 16:56 2019/5/2
-     * @Param [collegeName]
-     **/
-    College findCollegeByName(String collegeName);
-
-    /**
      * @return java.lang.String
-     * @Author JinZhiyun
-     * @Description 返回负责人所在的学院id
-     * @Date 17:01 2019/5/2
-     * @Param [CollegeTeaId]
      **/
-    String findCollegeIdByTeaId(String collegeTeaId);
+    String updateCollegeInfo(String collegeOriId, String collegeOriName, CollegeDto collegeDto);
 
     /**
-     * @return void
-     * @Author JinZhiyun
-     * @Description 更新学院信息业务
-     * @Date 17:09 2019/5/2
-     * @Param [collegeOriId, collegeDto]
-     **/
-    void updateInfo(String collegeOriId, CollegeDto collegeDto);
-
-    /**
-     * @return java.lang.String
-     * @Author JinZhiyun
-     * @Description 返回添加学院级时的建议学院编号
-     * @Date 17:23 2019/5/2
-     * @Param []
-     **/
-    String findRecommendedMajorId();
-
-    /**
-     * @return java.lang.String
-     * @Author JinZhiyun
+     * @author JinZhiyun
      * @Description 根据业务逻辑返回更新学院ajax的map键data值
-     * @Date 17:29 2019/5/2
+     * @Date 15:05 2019/7/14
      * @Param [collegeDto]
+     * @return java.lang.String
      **/
-    String insertMapDataResult(CollegeDto collegeDto);
+    String insertCollege(CollegeDto collegeDto);
 
     /**
-     * @return void
-     * @Author JinZhiyun
-     * @Description 添加学院业务
-     * @Date 19:34 2019/5/2
-     * @Param [collegeDto]
-     **/
-    void insertCollege(CollegeDto collegeDto);
-
-    /**
-     * @return void
-     * @Author JinZhiyun
+     * @author JinZhiyun
      * @Description 删除学院业务
-     * @Date 21:04 2019/5/2
-     * @Param [collegeDto]
-     **/
-    void deleteOneCollege(CollegeDto collegeDto);
-
-    /**
+     * @Date 15:58 2019/7/14
+     * @Param [collegeName]
      * @return void
-     * @Author JinZhiyun
-     * @Description 删除多个学院
-     * @Date 21:59 2019/5/2
-     * @Param [collegeDtos]
      **/
-    void deleteManyColleges(List<CollegeDto> collegeDtos);
+    void deleteOneCollege(String collegeName);
 
     /**
-     * @Author JinZhiyun
-     * @Description 返回学院名字及其对应的人数
-     * @Date 21:36 2019/5/5
-     * @Param []
-     * @return java.util.List<java.lang.Object>
+     * @author JinZhiyun
+     * @Description 删除多个学院
+     * @Date 16:06 2019/7/14
+     * @Param [collegeNames]
+     * @return void
      **/
-    List<Object> findCollegeStuNumPercent();
+    void deleteManyColleges(List<String> collegeNames);
 }

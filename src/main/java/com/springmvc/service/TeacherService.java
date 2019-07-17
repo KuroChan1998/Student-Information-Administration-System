@@ -1,74 +1,90 @@
 package com.springmvc.service;
 
 import com.github.pagehelper.PageInfo;
-import com.springmvc.dto.MyPage;
-import com.springmvc.dto.TeacherInfoSearchDto;
-import com.springmvc.dto.TeacherWithMajorCollegeDto;
+import com.springmvc.dto.other.MyPage;
+import com.springmvc.dto.teacher.TeacherSearchDto;
+import com.springmvc.dto.teacher.TeacherWithTitleMajorCollegeDto;
 import com.springmvc.entity.Teacher;
 
 import java.util.List;
 
+/**
+ * @author JinZhiyun
+ * @IntefaceName TitleService
+ * @Description 教师业务接口
+ * @Date 2019/6/14 12:52
+ * @Version 1.0
+ **/
 public interface TeacherService {
     /**
-     * @return com.github.pagehelper.PageInfo<com.springmvc.dto.TeacherWithMajorCollegeDto>
-     * @Author JinZhiyun
+     * @author JinZhiyun
      * @Description 返回所有符合条件教师信息的分页结果
-     * @Date 9:18 2019/4/19
-     * @Param [myPage, teaISD]
+     * @Date 8:39 2019/6/30
+     * @Param [myPage, teacherSearch]
+     * @return com.github.pagehelper.PageInfo<com.springmvc.dto.teacher.TeacherWithTitleMajorCollegeDto>
      **/
-    PageInfo<TeacherWithMajorCollegeDto> queryAllTeaInfo(MyPage myPage, TeacherInfoSearchDto teaISD);
+    PageInfo<TeacherWithTitleMajorCollegeDto> selectAllTeacherInfo(MyPage myPage, TeacherSearchDto teacherSearch);
 
     /**
-     * @return com.springmvc.entity.Teacher
-     * @Author JinZhiyun
+     * @author JinZhiyun
+     * @Description 返回用户名对应的教师及其附带信息分页结果
+     * @Date 9:08 2019/6/30
+     * @Param [myPage, teaNum]
+     * @return com.github.pagehelper.PageInfo<com.springmvc.dto.teacher.TeacherWithTitleMajorCollegeDto>
+     **/
+    PageInfo<TeacherWithTitleMajorCollegeDto> selectTeacherOwnInfoByNum(MyPage myPage, String teaNum);
+
+    /**
+     * @author JinZhiyun
      * @Description 返回工号对应的教师
-     * @Date 9:23 2019/4/19
-     * @Param [teaId]
+     * @Date 12:31 2019/6/30
+     * @Param [teaNum]
+     * @return com.springmvc.entity.Teacher
      **/
-    Teacher findTeacherById(String teaId);
+    Teacher selectTeacherByNum(String teaNum);
 
     /**
-     * @return com.github.pagehelper.PageInfo<com.springmvc.dto.TeacherWithMajorCollegeDto>
-     * @Author JinZhiyun
-     * @Description 返回用户Id对应的教师及其附带信息分页结果
-     * @Date 11:06 2019/4/19
-     * @Param [myPage, teaId]
-     **/
-    PageInfo<TeacherWithMajorCollegeDto> findTeacherOwnInfoById(MyPage myPage, String teaId);
-
-    /**
+     * @author JinZhiyun
+     * @Description 修改教师信息
+     * @Date 12:36 2019/6/30
+     * @Param [teaOriNum, teaWTMC]
      * @return void
-     * @Author JinZhiyun
-     * @Description 修改学生信息
-     * @Date 22:26 2019/4/27
-     * @Param [teaOriId, teaWMCD]
      **/
-    void updateInfo(String teaOriId, TeacherWithMajorCollegeDto teaWMCD);
+    void updateTeacherInfo(String teaOriNum, TeacherWithTitleMajorCollegeDto teaWTMC);
 
     /**
-     * @return void
-     * @Author JinZhiyun
+     * @author JinZhiyun
      * @Description 添加教师业务
-     * @Date 22:50 2019/4/27
-     * @Param [teaWmCD]
+     * @Date 16:16 2019/6/30
+     * @Param [teaWTMC]
+     * @return void
      **/
-    void insertTeacher(TeacherWithMajorCollegeDto teaWMCD);
+    void insertTeacher(TeacherWithTitleMajorCollegeDto teaWTMC);
 
     /**
-     * @return void
-     * @Author JinZhiyun
+     * @author JinZhiyun
      * @Description 删除一个教师业务
-     * @Date 23:08 2019/4/27
-     * @Param [teaWMCD]
+     * @Date 16:42 2019/6/30
+     * @Param [teaNum]
+     * @return void
      **/
-    void deleteOneTeacher(TeacherWithMajorCollegeDto teaWMCD);
+    void deleteOneTeacher(String teaNum);
 
     /**
-     * @return void
-     * @Author JinZhiyun
+     * @author JinZhiyun
      * @Description 删除多个教师业务
-     * @Date 8:18 2019/4/28
-     * @Param [teaWMCD]
+     * @Date 17:15 2019/6/30
+     * @Param [teaNums]
+     * @return void
      **/
-    void deleteManyTeachers(List<TeacherWithMajorCollegeDto> teaWMCDs);
+    void deleteManyTeachers(List<String> teaNums);
+
+    /**
+     * @author JinZhiyun
+     * @Description 由工号返回相应教师信息
+     * @Date 12:49 2019/7/7
+     * @Param [teaNum]
+     * @return com.springmvc.dto.teacher.TeacherWithTitleMajorCollegeDto
+     **/
+    TeacherWithTitleMajorCollegeDto selectTeacherInfoByNum(String teaNum);
 }

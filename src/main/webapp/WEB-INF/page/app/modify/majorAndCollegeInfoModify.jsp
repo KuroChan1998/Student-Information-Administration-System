@@ -38,7 +38,7 @@
                                 <label class="layui-form-label">学院</label>
                                 <div class="layui-input-inline">
                                     <select id="majorCollege" name="majorCollege" lay-search lay-filter="college">
-                                        <option value="">请选择标签</option>
+                                        <option value="">请输入或选择学院</option>
 
                                     </select>
                                 </div>
@@ -47,7 +47,18 @@
                                 <label class="layui-form-label">专业</label>
                                 <div class="layui-input-inline">
                                     <select id="major" name="major" lay-search>
+                                        <option value="">请输入或选择专业</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">性质</label>
+                                <div class="layui-input-inline">
+                                    <select id="property" name="property" lay-search>
                                         <option value="">请选择标签</option>
+                                        <option value="工科">工科</option>
+                                        <option value="文科">文科</option>
+                                        <option value="理科">理科</option>
                                     </select>
                                 </div>
                             </div>
@@ -85,7 +96,18 @@
                                     <label class="layui-form-label">学院</label>
                                     <div class="layui-input-inline">
                                         <select id="college" name="college" lay-search lay-filter="college">
+                                            <option value="">请输入或选择学院</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">性质</label>
+                                    <div class="layui-input-inline">
+                                        <select id="property2" name="property2">
                                             <option value="">请选择标签</option>
+                                            <option value="工科">工科</option>
+                                            <option value="文科">文科</option>
+                                            <option value="理科">理科</option>
                                         </select>
                                     </div>
                                 </div>
@@ -165,7 +187,7 @@
         form.on('select(college)', function (data) {
             //获取部门的ID通过异步查询子集
             $("#major").empty();
-            $("#major").append('<option value="">请选择标签</option>');
+            $("#major").append('<option value="">请输入或选择专业</option>');
             var college_name = $(this).attr("lay-value");
             $.ajax({
                 type: "get",
@@ -190,10 +212,9 @@
                 {type: 'checkbox', fixed: 'left'}
                 , {field: 'majorId', title: '专业号', hide: true}
                 , {field: 'majorName', title: '专业', sort: true, fixed: true}
+                , {field: 'majorCollegeProperty', title: '性质', sort: true}
                 , {field: 'majorCollegeName', title: '学院', sort: true}
-                , {field: 'majorStuNum', title: '专业人数', width: 120, sort: true}
-                , {field: 'majorClassNum', title: '专业班级数', width: 120, sort: true}
-                , {field: 'majorTeaId', title: '专业负责人工号', hide: true}
+                , {field: 'majorTeaNum', title: '专业负责人工号', hide: true}
                 , {field: 'majorTeaName', title: '专业负责人'}
                 , {width: 130, title: '操作', toolbar: '#test-table-operate-barDemo2'}
                 , {field: 'majorRemark', title: '专业备注', width: 300}
@@ -231,6 +252,7 @@
                 , where: { //设定异步数据接口的额外参数，任意设
                     majorName: field.major
                     , majorCollegeName: field.majorCollege
+                    , majorCollegeProperty: field.property
                 }
                 , request: {
                     pageName: 'pageNum',
@@ -251,7 +273,7 @@
                 layer.open({
                     type: 2
                     , title: '查看专业负责人'
-                    , content: '/teacher/teaInfo?teaId=' + data.majorTeaId
+                    , content: '/teacher/teaInfo?teaNum=' + data.majorTeaNum
                     , maxmin: true
                     , area: ['550px', '550px']
                     , yes: function (index, layero) {
@@ -288,7 +310,7 @@
                     ,
                     title: '编辑专业'
                     ,
-                    content: '${ctx}/major/edit?majorId=' + data.majorId + '&majorCollegeName=' + data.majorCollegeName + '&majorName=' + data.majorName
+                    content: '${ctx}/major/edit?majorId=' + data.majorId + '&majorName=' + data.majorName +'&majorCollegeName=' + data.majorCollegeName
                     ,
                     maxmin: true
                     ,
@@ -304,11 +326,10 @@
                         iframeWindow.layui.form.on('submit(layuiadmin-app-form-edit)', function (data) {
                             var field = data.field; //获取提交的字段
                             var json = {
-                                majorId: field.id
+                                majorOriId: field.oriId
+                                , majorOriName: field.oriName
                                 , majorName: field.name
-                                , majorStuNum: field.stuNum
-                                , majorClassNum: field.classNum
-                                , majorTeaId: field.teaId
+                                , majorTeaNum: field.teaId
                                 , majorCollegeName: field.college
                                 , majorRemark: field.remark
                             };
@@ -316,15 +337,13 @@
                             $.ajax({
                                 data: json,
                                 type: 'post',
-                                url: "${ctx}/major/updateInfo?majorOriId=" + field.oriId + '&majorOriName=' + field.oriName,
+                                url: "${ctx}/major/updateInfo",
                                 success: function (data) {
-                                    if (data.data == "majorIdExist") {
-                                        return layer.msg('对不起，该专业编号已存在！');
-                                    } else if (data.data == "majorNameExist") {
+                                    if (data.data == "majorNameExist") {
                                         return layer.msg('对不起，该专业名称已存在！');
-                                    } else if (data.data == "majorTeaIdNotExist") {
+                                    } else if (data.data == "majorTeaNumNotExist") {
                                         return layer.msg('对不起，该指定为负责人的教师工号不存在！');
-                                    } else if (data.data == "majorTeaIdRepeat") {
+                                    } else if (data.data == "majorTeaNumRepeat") {
                                         return layer.msg('对不起，该指定为负责人的教师已经担任了某专业的负责人！');
                                     } else if (data.data == "updateSuccess") {
                                         layer.msg('修改成功', {
@@ -352,11 +371,8 @@
                     success: function (layero, index) {
                         //给iframe元素赋值
                         var othis = layero.find('iframe').contents().find("#layuiadmin-app-form-list").click();
-                        othis.find('input[name="id"]').val(data.majorId);
                         othis.find('input[name="name"]').val(data.majorName);
-                        othis.find('input[name="stuNum"]').val(data.majorStuNum);
-                        othis.find('input[name="classNum"]').val(data.majorClassNum);
-                        othis.find('input[name="teaId"]').val(data.majorTeaId);
+                        othis.find('input[name="teaId"]').val(data.majorTeaNum);
                         // 学院，专业，班级名称通过url传值给后端，后端存于model，如果通过iframe传值，无法在子页面启动数据库查询所有学院名称填充select的ajax
                         // othis.find('select[name="college"]').val(data.stuCollegeName);
                         // othis.find('select[name="major"]').val(data.stuMajorName);
@@ -378,6 +394,7 @@
                 , where: { //设定异步数据接口的额外参数，任意设
                     majorName: ''
                     , majorCollegeName: ''
+                    , majorCollegeProperty: ''
                 }
                 , page: {
                     curr: 1 //重新从第 1 页开始
@@ -392,10 +409,8 @@
                 {type: 'checkbox', fixed: 'left'}
                 , {field: 'collegeId', title: '学院号', hide: true}
                 , {field: 'collegeName', title: '学院', sort: true, fixed: true}
-                , {field: 'collegeStuNum', title: '学院人数', sort: true}
-                , {field: 'collegeMajorNum', title: '学院专业数', sort: true}
                 , {field: 'collegeProperty', title: '学院性质', sort: true}
-                , {field: 'collegeTeaId', title: '学院负责人工号', hide: true}
+                , {field: 'collegeTeaNum', title: '学院负责人工号', hide: true}
                 , {field: 'collegeTeaName', title: '学院负责人'}
                 , {width: 130, title: '操作', toolbar: '#test-table-operate-barDemo3'}
                 , {field: 'collegeRemark', title: '专业备注', width: 300}
@@ -431,6 +446,7 @@
                 url: '${ctx}/college/showAllCollegeInfo' //向后端默认传page和limit
                 , where: { //设定异步数据接口的额外参数，任意设
                     collegeName: field.college
+                    , collegeProperty: field.property2
                 }
                 , request: {
                     pageName: 'pageNum',
@@ -451,7 +467,7 @@
                 layer.open({
                     type: 2
                     , title: '查看学院负责人'
-                    , content: '/teacher/teaInfo?teaId=' + data.collegeTeaId
+                    , content: '/teacher/teaInfo?teaNum=' + data.collegeTeaNum
                     , maxmin: true
                     , area: ['550px', '550px']
                     , yes: function (index, layero) {
@@ -504,11 +520,10 @@
                         iframeWindow.layui.form.on('submit(layuiadmin-app-form-edit)', function (data) {
                             var field = data.field; //获取提交的字段
                             var json = {
-                                collegeId: field.id
+                                collegeOriName: field.oriName
+                                , collegeOriId: field.oriId
                                 , collegeName: field.name
-                                , collegeStuNum: field.stuNum
-                                , collegeMajorNum: field.majorNum
-                                , collegeTeaId: field.teaId
+                                , collegeTeaNum: field.teaId
                                 , collegeProperty: field.property
                                 , collegeRemark: field.remark
                             };
@@ -516,15 +531,13 @@
                             $.ajax({
                                 data: json,
                                 type: 'post',
-                                url: "${ctx}/college/updateInfo?collegeOriId=" + field.oriId + '&collegeOriName=' + field.oriName,
+                                url: "${ctx}/college/updateInfo",
                                 success: function (data) {
-                                    if (data.data == "collegeIdExist") {
-                                        return layer.msg('对不起，该学院编号已存在！');
-                                    } else if (data.data == "collegeNameExist") {
+                                    if (data.data == "collegeNameExist") {
                                         return layer.msg('对不起，该学院名称已存在！');
-                                    } else if (data.data == "collegeTeaIdNotExist") {
+                                    } else if (data.data == "collegeTeaNumNotExist") {
                                         return layer.msg('对不起，该指定为负责人的教师工号不存在！');
-                                    } else if (data.data == "collegeTeaIdRepeat") {
+                                    } else if (data.data == "collegeTeaNumRepeat") {
                                         return layer.msg('对不起，该指定为负责人的教师已经担任了某学院的负责人！');
                                     } else if (data.data == "updateSuccess") {
                                         layer.msg('修改成功', {
@@ -552,16 +565,9 @@
                     success: function (layero, index) {
                         //给iframe元素赋值
                         var othis = layero.find('iframe').contents().find("#layuiadmin-app-form-list").click();
-                        othis.find('input[name="id"]').val(data.collegeId);
                         othis.find('input[name="name"]').val(data.collegeName);
-                        othis.find('input[name="stuNum"]').val(data.collegeStuNum);
-                        othis.find('input[name="majorNum"]').val(data.collegeMajorNum);
-                        othis.find('input[name="teaId"]').val(data.collegeTeaId);
+                        othis.find('input[name="teaId"]').val(data.collegeTeaNum);
                         othis.find('select[name="property"]').val(data.collegeProperty);
-                        // 学院，专业，班级名称通过url传值给后端，后端存于model，如果通过iframe传值，无法在子页面启动数据库查询所有学院名称填充select的ajax
-                        // othis.find('select[name="college"]').val(data.stuCollegeName);
-                        // othis.find('select[name="major"]').val(data.stuMajorName);
-                        // othis.find('select[name="class"]').val(data.stuClassName);
                         othis.find('textarea[name="remark"]').val(data.collegeRemark);
                     }
                 });
@@ -578,6 +584,7 @@
                 }
                 , where: { //设定异步数据接口的额外参数，任意设
                     collegeName: ''
+                    , collegeProperty: ''
                 }
                 , page: {
                     curr: 1 //重新从第 1 页开始
@@ -640,11 +647,8 @@
                             var field = data.field; //获取提交的字段
                             // var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
                             var json = {
-                                majorId: field.id
-                                , majorName: field.name
-                                , majorStuNum: field.stuNum
-                                , majorClassNum: field.classNum
-                                , majorTeaId: field.teaId
+                                majorName: field.name
+                                , majorTeaNum: field.teaId
                                 , majorCollegeName: field.college
                                 , majorRemark: field.remark
                             };
@@ -655,25 +659,16 @@
                                 type: 'post',
                                 url: "${ctx}/major/insert",
                                 success: function (data) {
-                                    if (data.data == "majorIdExist") {
-                                        return layer.msg('对不起，该专业编号已存在！');
-                                    } else if (data.data == "majorNameExist") {
+                                    if (data.data == "majorNameExist") {
                                         return layer.msg('对不起，该专业名称已存在！');
-                                    } else if (data.data == "majorTeaIdNotExist") {
+                                    } else if (data.data == "majorTeaNumNotExist") {
                                         return layer.msg('对不起，该指定为负责人的教师工号不存在！');
-                                    } else if (data.data == "majorTeaIdRepeat") {
+                                    } else if (data.data == "majorTeaNumRepeat") {
                                         return layer.msg('对不起，该指定为负责人的教师已经担任了某专业的负责人！');
                                     } else if (data.data == "insertSuccess") {
                                         layer.msg('添加成功', {
                                             icon: 1
                                             , time: 1000
-                                        });
-                                        table.reload('majorInfoQuery', {
-                                            url: '${ctx}/major/showAllMajorInfo' //向后端默认传page和limit); //重载表格
-                                            , request: {
-                                                pageName: 'pageNum',
-                                                limitName: 'pageSize'  //如不配置，默认为page=1&limit=10
-                                            }
                                         });
 
                                         layer.close(index); //再执行关闭
@@ -743,11 +738,8 @@
                             var field = data.field; //获取提交的字段
                             // var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
                             var json = {
-                                collegeId: field.id
-                                , collegeName: field.name
-                                , collegeStuNum: field.stuNum
-                                , collegeMajorNum: field.majorNum
-                                , collegeTeaId: field.teaId
+                                collegeName: field.name
+                                , collegeTeaNum: field.teaId
                                 , collegeProperty: field.property
                                 , collegeRemark: field.remark
                             };
@@ -758,25 +750,16 @@
                                 type: 'post',
                                 url: "${ctx}/college/insert",
                                 success: function (data) {
-                                    if (data.data == "collegeIdExist") {
-                                        return layer.msg('对不起，该学院编号已存在！');
-                                    } else if (data.data == "collegeNameExist") {
+                                    if (data.data == "collegeNameExist") {
                                         return layer.msg('对不起，该学院名称已存在！');
-                                    } else if (data.data == "collegeTeaIdNotExist") {
+                                    } else if (data.data == "collegeTeaNumNotExist") {
                                         return layer.msg('对不起，该指定为负责人的教师工号不存在！');
-                                    } else if (data.data == "collegeTeaIdRepeat") {
+                                    } else if (data.data == "collegeTeaNumRepeat") {
                                         return layer.msg('对不起，该指定为负责人的教师已经担任了某学院的负责人！');
                                     } else if (data.data == "insertSuccess") {
                                         layer.msg('添加成功', {
                                             icon: 1
                                             , time: 1000
-                                        });
-                                        table.reload('collegeInfoQuery', {
-                                            url: '${ctx}/college/showAllCollegeInfo' //向后端默认传page和limit); //重载表格
-                                            , request: {
-                                                pageName: 'pageNum',
-                                                limitName: 'pageSize'  //如不配置，默认为page=1&limit=10
-                                            }
                                         });
 
                                         layer.close(index); //再执行关闭

@@ -30,14 +30,16 @@
         <label class="layui-form-label">学号</label>
         <div class="layui-input-inline">
             <input type="text" name="id" value="" class="layui-input" lay-verify="stuId">
-            <input type="text" name="oriId" value="${stuId}" class="layui-input" style="display:none;">
+            <input type="text" name="oriId" value="${stuAllInfo.stuNum}" class="layui-input" style="display:none;">
         </div>
+        <div class="layui-form-mid " style="color:red">*必填项</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">姓名</label>
         <div class="layui-input-inline">
             <input type="text" name="name" value="" class="layui-input" lay-verify="name">
         </div>
+        <div class="layui-form-mid " style="color:red">*必填项</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">性别</label>
@@ -45,28 +47,22 @@
             <input type="radio" name="sex" value="男" title="男" checked>
             <input type="radio" name="sex" value="女" title="女">
         </div>
+        <div class="layui-form-mid " style="color:red">*必填项</div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">年龄</label>
+        <label class="layui-form-label">出生日期</label>
         <div class="layui-input-inline">
-            <input type="text" name="age" value="" class="layui-input" lay-verify="age">
+            <input type="text" class="layui-input" id="birthday" name="birthday" lay-verify="birthday">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">年级</label>
         <div class="layui-input-inline">
-            <select name="grade" lay-verify="required">
-                <option value="">请选择标签</option>
-                <option value="2018级">2018级</option>
-                <option value="2017级">2017级</option>
-                <option value="2016级">2016级</option>
-                <option value="2015级">2015级</option>
-                <option value="2014级">2014级</option>
-                <option value="2013级">2013级</option>
-                <option value="2012级">2012级</option>
-                <option value="2011级">2011级</option>
+            <select name="grade" id="grade" lay-verify="required">
+                <option value="">请选择年级</option>
             </select>
         </div>
+        <div class="layui-form-mid " style="color:red">*必填项</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">学位</label>
@@ -78,6 +74,7 @@
                 <option value="博士">博士</option>
             </select>
         </div>
+        <div class="layui-form-mid " style="color:red">*必填项</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">学院-专业-班级</label>
@@ -97,11 +94,12 @@
                 <option value="">请选择班级</option>
             </select>
         </div>
+        <div class="layui-form-mid " style="color:red">*必填项</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">联系方式</label>
         <div class="layui-input-inline">
-            <input type="text" name="phone" value="" class="layui-input" lay-verify="phone">
+            <input type="text" name="phone" value="" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
@@ -121,14 +119,41 @@
 
 <script src="${ctx}/static/plugins/layuiadmin/layui/layui.js"></script>
 <script src="${ctx}/static/custom/js/myLayVerify.js"></script>
+<script src="${ctx}/static/custom/js/myValidity.js"></script>
 <script>
     layui.config({
         base: '${ctx}/static/plugins/layuiadmin/' //静态资源所在路径
     }).extend({
         index: 'lib/index' //主入口模块
-    }).use(['index', 'form'], function () {
+    }).use(['index', 'form','laydate'], function () {
         var $ = layui.$
-            , form = layui.form;
+            , form = layui.form
+            , laydate = layui.laydate;
+
+        laydate.render({
+            elem: '#birthday' //指定元素
+            ,value: '2000-1-1'
+            ,isInitValue: false //是否允许填充初始值，默认为 true'
+            ,min: '1920-1-1'
+            ,max: '2018-12-31'
+        });
+
+        //从数据库异步获取年级数据填充到年级select框中
+        $.ajax({
+            async: false,
+            type: "get",
+            url: "${ctx}/grade/getGradeName",
+            success: function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    var json = data[i];
+                    var str = "";
+                    str += '<option value="' + json.gradeName + '">' + json.gradeName + '</option>';
+                    $("#grade").append(str);
+                }
+                form.render('select');
+            }
+        });
+        $("#grade").val('${stuAllInfo.stuGradeName}');
 
         //从数据库异步获取学院数据填充到学院select框中
         $.ajax({
@@ -145,7 +170,7 @@
         });
 
 
-        $("#college").val('${stuCollegeName}');//根据父页面传来的model来预渲染联动select
+        $("#college").val('${stuAllInfo.stuCollegeName}');//根据父页面传来的model来预渲染联动select
         $("#major").empty();
         $("#major").append('<option value="">请选择专业</option>');
         var college_name = $("#college").val();
@@ -163,7 +188,7 @@
             }
         });
 
-        $("#major").val('${stuMajorName}');
+        $("#major").val('${stuAllInfo.stuMajorName}');
         $("#class").empty();
         $("#class").append('<option value="">请选择班级</option>');
         var major_name = $("#major").val();
@@ -181,7 +206,7 @@
             }
         });
 
-        $("#class").val('${stuClassName}');
+        $("#class").val('${stuAllInfo.stuClassName}');
         form.render('select');
 
         //联动监听select

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.springmvc.dao.TeacherMapper">
+    <resultMap id="BaseResultMap" type="com.springmvc.entity.Teacher">
+        <id column="tea_id" property="teaId" jdbcType="VARCHAR"/>
+        <result column="tea_major" property="teaMajor" jdbcType="INTEGER"/>
+        <result column="tea_num" property="teaNum" jdbcType="VARCHAR"/>
+        <result column="tea_name" property="teaName" jdbcType="VARCHAR"/>
+        <result column="tea_sex" property="teaSex" jdbcType="VARCHAR"/>
+        <result column="tea_birthday" property="teaBirthday" jdbcType="DATE"/>
+        <result column="tea_title" property="teaTitle" jdbcType="INTEGER"/>
+        <result column="tea_phone" property="teaPhone" jdbcType="VARCHAR"/>
+        <result column="tea_remark" property="teaRemark" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="TeacherWithTMCResultMap" type="com.springmvc.dto.teacher.TeacherWithTitleMajorCollegeDto"
+               extends="BaseResultMap">
+        <result column="tea_title_name" property="teaTitleName" jdbcType="VARCHAR"/>
+        <result column="tea_major_name" property="teaMajorName" jdbcType="VARCHAR"/>
+        <result column="tea_college_name" property="teaCollegeName" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <insert id="insertTeacher" parameterType="com.springmvc.dto.teacher.TeacherWithTitleMajorCollegeDto">
+        <selectKey keyProperty="teaId" resultType="string" order="BEFORE">
+            select replace(uuid(), '-', '') from dual
+        </selectKey>
+        insert into teacher
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="teaId != null and teaId != ''">
+                tea_id,
+            </if>
+            <if test="teaMajorName != null and teaMajorName != ''">
+                tea_major,
+            </if>
+            <if test="teaNum != null and teaNum != ''">
+                tea_num,
+            </if>
+            <if test="teaName != null and teaName != ''">
+                tea_name,
+            </if>
+            <if test="teaSex != null and teaSex != ''">
+                tea_sex,
+            </if>
+            tea_birthday,
+            <if test="teaTitleName != null and teaTitleName != ''">
+                tea_title,
+            </if>
+            tea_phone,tea_remark
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="teaId != null and teaId != ''">
+                #{teaId,jdbcType=VARCHAR},
+            </if>
+            <if test="teaMajorName != null and teaMajorName != ''">
+                (select major_id from major where major_name=#{teaMajorName,jdbcType=VARCHAR}),
+            </if>
+            <if test="teaNum != null and teaNum != ''">
+                #{teaNum,jdbcType=VARCHAR},
+            </if>
+            <if test="teaName != null and teaName != ''">
+                #{teaName,jdbcType=VARCHAR},
+            </if>
+            <if test="teaSex != null and teaSex != ''">
+                #{teaSex,jdbcType=VARCHAR},
+            </if>
+            #{teaBirthday,jdbcType=DATE},
+            <if test="teaTitleName != null and teaTitleName != ''">
+                (select title_id from title where title_name=#{teaTitleName,jdbcType=VARCHAR}),
+            </if>
+            #{teaPhone,jdbcType=VARCHAR},
+            #{teaRemark,jdbcType=VARCHAR}
+        </trim>
+    </insert>
+
+    <update id="updateTeacherInfo">
+        update teacher
+        <set>
+            <trim suffixOverrides=",">
+                <if test="teaWTMC.teaNum != null and teaWTMC.teaNum != ''">
+                    tea_num=#{teaWTMC.teaNum},
+                </if>
+                <if test="teaWTMC.teaMajorName != null and teaWTMC.teaMajorName != ''">
+                    tea_major=(select major_id from major where major_name=#{teaWTMC.teaMajorName}),
+                </if>
+                <if test="teaWTMC.teaName != null and teaWTMC.teaName != ''">
+                    tea_name=#{teaWTMC.teaName},
+                </if>
+                <if test="teaWTMC.teaSex != null and teaWTMC.teaSex != ''">
+                    tea_sex=#{teaWTMC.teaSex},
+                </if>
+                tea_birthday=#{teaWTMC.teaBirthday},
+                <if test="teaWTMC.teaTitleName != null and teaWTMC.teaTitleName != ''">
+                    tea_title=(select title_id from title where title_name=#{teaWTMC.teaTitleName}),
+                </if>
+                tea_phone=#{teaWTMC.teaPhone},tea_remark=#{teaWTMC.teaRemark}
+                where tea_num=#{teaOriNum}
+            </trim>
+        </set>
+    </update>
+    <delete id="deleteOneTeacher">
+        delete from teacher where tea_num=#{teaNum}
+    </delete>
+    <delete id="deleteManyTeachers" parameterType="java.util.List">
+        delete from teacher where tea_num in
+        <foreach collection="list" item="teaNum" open="(" separator="," close=")">
+            #{teaNum}
+        </foreach>
+    </delete>
+
+    <select id="selectAllTeacherInfo" resultMap="TeacherWithTMCResultMap"
+            parameterType="com.springmvc.dto.teacher.TeacherSearchDto">
+        select t1.*, t2.title_name as tea_title_name, m1.major_name as tea_major_name, c1.college_name as
+        tea_college_name,t1.tea_remark
+        from teacher t1 inner join title t2 on t1.tea_title = t2.title_id
+        <if test="teaNum != null and teaNum!=''">
+            <bind name="teaNumLike" value=" '%' + teaNum + '%' "/>
+            and t1.tea_num like #{teaNumLike}
+        </if>
+        <if test="teaName != null and teaName!=''">
+            <bind name="teaNameLike" value=" '%' + teaName + '%' "/>
+            and t1.tea_name like #{teaNameLike}
+        </if>
+        <if test="teaSex != null and teaSex!=''">
+            and t1.tea_sex=#{teaSex}
+        </if>
+        <if test="teaTitleName != null and teaTitleName !=''">
+            and t2.title_name=#{teaTitleName}
+        </if>
+        inner join major m1 on t1.tea_major=m1.major_id
+        <if test="teaMajorName != null and teaMajorName !=''">
+            <bind name="teaMajorLike" value=" '%' + teaMajorName + '%' "/>
+            and m1.major_name like #{teaMajorLike}
+        </if>
+        inner join college c1 on m1.major_college = c1.college_id
+        <if test="teaCollegeName != null and teaCollegeName !=''">
+            <bind name="teaCollegeLike" value=" '%' + teaCollegeName + '%' "/>
+            and c1.college_name like #{teaCollegeName}
+        </if>
+    </select>
+    <select id="selectTeacherOwnInfoByNum" resultMap="TeacherWithTMCResultMap">
+        select t1.*,t2.title_name as tea_title_name,m1.major_name as tea_major_name,c1.college_name as tea_college_name
+        from teacher t1 inner join title t2 on t1.tea_title=t2.title_id and t1.tea_num=#{teaNum}
+          inner join major m1 on t1.tea_major=m1.major_id
+            inner join college c1 on m1.major_college=c1.college_id
+    </select>
+    <select id="selectTeacherByNum" resultMap="BaseResultMap">
+        select * from teacher where tea_num=#{teaNum}
+    </select>
+</mapper>

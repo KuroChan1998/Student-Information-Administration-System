@@ -1,5 +1,7 @@
 package com.springmvc.entity;
 
+import java.io.Serializable;
+
 /**
  * @ClassName College
  * @Author JinZhiyun
@@ -7,26 +9,29 @@ package com.springmvc.entity;
  * @Date 2019/4/15 16:36
  * @Version 1.0
  **/
-public class College {
-    private String collegeId;
+public class College implements Serializable {
+    private static final long serialVersionUID = -8146386727582977319L;
 
+    //学院表代理主键
+    private Integer collegeId;
+
+    //学院名，唯一
     private String collegeName;
 
-    private Integer collegeStuNum;
-
-    private Integer collegeMajorNum;
-
+    //学院性质
     private String collegeProperty;
 
-    private String collegeTeaId;
+    //学院负责人工号
+    private String collegeTeaNum;
 
+    //学院备注
     private String collegeRemark;
 
-    public String getCollegeId() {
+    public Integer getCollegeId() {
         return collegeId;
     }
 
-    public void setCollegeId(String collegeId) {
+    public void setCollegeId(Integer collegeId) {
         this.collegeId = collegeId;
     }
 
@@ -38,22 +43,6 @@ public class College {
         this.collegeName = collegeName;
     }
 
-    public Integer getCollegeStuNum() {
-        return collegeStuNum;
-    }
-
-    public void setCollegeStuNum(Integer collegeStuNum) {
-        this.collegeStuNum = collegeStuNum;
-    }
-
-    public Integer getCollegeMajorNum() {
-        return collegeMajorNum;
-    }
-
-    public void setCollegeMajorNum(Integer collegeMajorNum) {
-        this.collegeMajorNum = collegeMajorNum;
-    }
-
     public String getCollegeProperty() {
         return collegeProperty;
     }
@@ -62,12 +51,12 @@ public class College {
         this.collegeProperty = collegeProperty;
     }
 
-    public String getCollegeTeaId() {
-        return collegeTeaId;
+    public String getCollegeTeaNum() {
+        return collegeTeaNum;
     }
 
-    public void setCollegeTeaId(String collegeTeaId) {
-        this.collegeTeaId = collegeTeaId;
+    public void setCollegeTeaNum(String collegeTeaNum) {
+        this.collegeTeaNum = collegeTeaNum;
     }
 
     public String getCollegeRemark() {
@@ -81,12 +70,10 @@ public class College {
     @Override
     public String toString() {
         return "College{" +
-                "collegeId='" + collegeId + '\'' +
+                "collegeId=" + collegeId +
                 ", collegeName='" + collegeName + '\'' +
-                ", collegeStuNum=" + collegeStuNum +
-                ", collegeMajorNum=" + collegeMajorNum +
                 ", collegeProperty='" + collegeProperty + '\'' +
-                ", collegeTeaId='" + collegeTeaId + '\'' +
+                ", collegeTeaNum='" + collegeTeaNum + '\'' +
                 ", collegeRemark='" + collegeRemark + '\'' +
                 '}';
     }

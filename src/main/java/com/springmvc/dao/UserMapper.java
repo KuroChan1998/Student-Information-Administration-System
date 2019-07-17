@@ -4,6 +4,13 @@ import com.springmvc.entity.User;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+/**
+ * @author JinZhiyun
+ * @IntefaceName UserMapper
+ * @Description 用户业务持久层接口
+ * @Date 2019/6/14 13:00
+ * @Version 1.0
+ **/
 @Repository
 public interface UserMapper {
     /**
@@ -13,16 +20,25 @@ public interface UserMapper {
      * @Date 9:40 2019/4/19
      * @Param [userId, userPassword]
      **/
-    int findByIdAndPassword(@Param("userId") String userId, @Param("userPassword") String userPassword);
+    User selectUserByNameAndPassword(@Param("userName") String userName, @Param("userPassword") String userPassword);
 
     /**
      * @return com.springmvc.entity.User
      * @Author JinZhiyun
-     * @Description 根据用户Id查询用户信息
+     * @Description 根据用户UUId查询用户信息
      * @Date 9:53 2019/4/19
      * @Param [userId]
      **/
     User selectUserById(@Param("userId") String userId);
+
+    /**
+     * @author JinZhiyun
+     * @Description 根据用户名查询用户信息
+     * @Date 8:09 2019/6/6
+     * @Param [userName]
+     * @return com.springmvc.entity.User
+     **/
+    User selectUserByName(@Param("userName") String userName);
 
     /**
      * @Author JinZhiyun
@@ -31,7 +47,7 @@ public interface UserMapper {
      * @Param [userEmail]
      * @return com.springmvc.entity.User
      **/
-    User selectUserByUserEmail(@Param("userEmail") String userEmail);
+    User selectUserByEmail(@Param("userEmail") String userEmail);
 
     /**
      * @return int
@@ -41,33 +57,6 @@ public interface UserMapper {
      * @Param [user]
      **/
     int insertUserRegInfo(User user);
-
-    /**
-     * @return int
-     * @Author JinZhiyun
-     * @Description 查询用户Id符合的数量
-     * @Date 9:41 2019/4/19
-     * @Param [userId]
-     **/
-    int findIfIdExist(@Param("userId") String userId);
-
-    /**
-     * @return int
-     * @Author JinZhiyun
-     * @Description 查询用户昵称符合的数量
-     * @Date 9:43 2019/4/19
-     * @Param [userNickname]
-     **/
-    int findIfNicknameExist(@Param("userNickname") String userNickname);
-
-    /**
-     * @return int
-     * @Author JinZhiyun
-     * @Description 查询用户邮箱符合的数量
-     * @Date 9:43 2019/4/19
-     * @Param [userEmail]
-     **/
-    int findIfEmailExist(@Param("userEmail") String userEmail);
 
     /**
      * @return void
@@ -104,5 +93,4 @@ public interface UserMapper {
      * @Param [userOldEmail, userNewEmail]
      **/
     void updateResetEmailByEmail(@Param("userOldEmail") String userOldEmail, @Param("userNewEmail") String userNewEmail);
-
 }

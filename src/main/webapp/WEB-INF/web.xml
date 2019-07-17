@@ -94,6 +94,16 @@
     <session-timeout>30</session-timeout>
   </session-config>
 
+  <error-page>
+    <error-code>404</error-code>
+    <location>/WEB-INF/page/tips/HTTP-404.jsp</location>
+  </error-page>
+
+  <error-page>
+    <error-code>500</error-code>
+    <location>/WEB-INF/page/tips/HTTP-500.jsp</location>
+  </error-page>
+
   <welcome-file-list>
     <welcome-file>/WEB-INF/page/user/login.jsp</welcome-file>
   </welcome-file-list>

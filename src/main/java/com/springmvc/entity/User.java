@@ -1,5 +1,7 @@
 package com.springmvc.entity;
 
+import java.io.Serializable;
+
 /**
  * @ClassName User
  * @Author JinZhiyun
@@ -7,20 +9,31 @@ package com.springmvc.entity;
  * @Date 2019/1/25 9:56
  * @Version 1.0
  **/
-public class User {
+public class User implements Serializable {
+    private static final long serialVersionUID = 6193927156543042624L;
 
+    //用户表代理主键uuid
     private String userId;
 
+    //用户名，唯一
+    private String userName;
+
+    //用户昵称
     private String userNickname;
 
+    //用户密码
     private String userPassword;
 
+    //用户身份
     private String userIdentity;
 
+    //用户头像存储相对路径
     private String userIcon;
 
+    //用户邮箱，唯一
     private String userEmail;
 
+    //用户手机
     private String userPhone;
 
     public String getUserId() {
@@ -29,6 +42,14 @@ public class User {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getUserNickname() {
@@ -83,6 +104,7 @@ public class User {
     public String toString() {
         return "User{" +
                 "userId='" + userId + '\'' +
+                ", userName='" + userName + '\'' +
                 ", userNickname='" + userNickname + '\'' +
                 ", userPassword='" + userPassword + '\'' +
                 ", userIdentity='" + userIdentity + '\'' +

@@ -107,10 +107,13 @@
         //查找cookie填充到表单
         var userId_cookie = getCookie('loginAccount');
         var userPassword_cookie = getCookie('loginPassword');
+        var remember_cookie = getCookie("remember");
         // console.log(userId_cookie);
         // console.log(userPassword_cookie);
         $("#LAY-user-login-username").val(userId_cookie);
         $("#LAY-user-login-password").val(userPassword_cookie);
+        if (remember_cookie == 'true'){$("#remember").prop("checked",true);}
+
 
 
         //初始化图形验证码
@@ -135,7 +138,7 @@
             $.ajax({
                 type: 'post'
                 , url: '${ctx}/loginTest' //实际使用请改成服务端真实接口
-                , data: {'userId': field.username, 'userPassword': field.password, 'remember': field.remember}
+                , data: {'userName': field.username, 'userPassword': field.password, 'remember': field.remember}
                 , success: function (res) {
                     // //请求成功后，写入 access_token
                     // layui.data(setter.tableName, {

@@ -35,7 +35,7 @@
                                 <label class="layui-form-label">学院</label>
                                 <div class="layui-input-inline">
                                     <select id="college" name="college" lay-search lay-filter="college">
-                                        <option value="">请选择学院</option>
+                                        <option value="">请输入或选择学院</option>
                                         <%--<option value="电子信息与电气工程学院">电子信息与电气工程学院</option>--%>
                                     </select>
                                 </div>
@@ -44,7 +44,7 @@
                                 <label class="layui-form-label">专业</label>
                                 <div class="layui-input-inline">
                                     <select id="major" name="major" lay-search lay-filter="major">
-                                        <option value="">请选择专业</option>
+                                        <option value="">请输入或选择专业</option>
                                     </select>
                                 </div>
                             </div>
@@ -52,7 +52,7 @@
                                 <label class="layui-form-label">班级</label>
                                 <div class="layui-input-inline">
                                     <select id="class" name="class" lay-search lay-filter="class">
-                                        <option value="">请选择班级</option>
+                                        <option value="">请输入或选择班级</option>
                                     </select>
                                 </div>
                             </div>
@@ -112,7 +112,7 @@
         });
 
         $("#major").empty();
-        $("#major").append('<option value="">请选择专业</option>');
+        $("#major").append('<option value="">请输入或选择专业</option>');
         var college_name = $("#college").val();
         $.ajax({
             async: false,
@@ -129,7 +129,7 @@
         });
 
         $("#class").empty();
-        $("#class").append('<option value="">请选择班级</option>');
+        $("#class").append('<option value="">请输入或选择班级</option>');
         var major_name = $("#major").val();
         $.ajax({
             async: false,
@@ -151,7 +151,7 @@
         form.on('select(college)', function (data) {
             //获取部门的ID通过异步查询子集
             $("#major").empty();
-            $("#major").append('<option value="">请选择专业</option>');
+            $("#major").append('<option value="">请输入或选择专业</option>');
             var college_name = $(this).attr("lay-value");
             $.ajax({
                 type: "get",
@@ -169,7 +169,7 @@
         form.on('select(major)', function (data) {
             //获取部门的ID通过异步查询子集
             $("#class").empty();
-            $("#class").append('<option value="">请选择班级</option>');
+            $("#class").append('<option value="">请输入或选择班级</option>');
             var major_name = $(this).attr("lay-value");
             $.ajax({
                 type: "get",
@@ -198,7 +198,7 @@
                 option = {
                     title: {
                         text: '全校男女比',
-                        subtext: '总人数:' + res.total,
+                        subtext: '总人数:' + res.studentPercent.total,
                         x: 'center'
                     },
                     tooltip: {
@@ -217,8 +217,8 @@
                             radius: '65%',
                             center: ['50%', '60%'],
                             data: [
-                                {value: res.male, name: '男'},
-                                {value: res.female, name: '女'}
+                                {value: res.studentPercent.male, name: '男'},
+                                {value: res.studentPercent.female, name: '女'}
                             ],
                             itemStyle: {
                                 emphasis: {
@@ -257,13 +257,13 @@
                     var option = myChart.getOption();
 
                     var hTsZ = [
-                        {value: res.male, name: '男'},
-                        {value: res.female, name: '女'}
+                        {value: res.studentPercent.male, name: '男'},
+                        {value: res.studentPercent.female, name: '女'}
                     ];
 
                     option.series[0].data = hTsZ;
                     option.title[0].text = myTitle + "男女比";
-                    option.title[0].subtext = '总人数:' + res.total;
+                    option.title[0].subtext = '总人数:' + res.studentPercent.total;
                     myChart.setOption(option, true);
                 }
             });

@@ -2,20 +2,16 @@ package com.springmvc.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.springmvc.dao.*;
-import com.springmvc.dto.ClassWithMajorCollegeDto;
-import com.springmvc.dto.MyPage;
+import com.springmvc.dto.classP.ClassSearchDto;
+import com.springmvc.dto.classP.ClassWithGradeMajorCollegeDto;
+import com.springmvc.dto.other.MyPage;
 import com.springmvc.entity.Class;
-import com.springmvc.entity.College;
-import com.springmvc.entity.Major;
 import com.springmvc.entity.User;
 import com.springmvc.service.ClassService;
-import com.springmvc.service.MajorService;
-import com.springmvc.service.impl.util.DoWithString;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,235 +23,108 @@ import java.util.List;
  **/
 @Service
 @Transactional
-public class ClassServiceImpl implements ClassService {
-    @Autowired
-    private ClassMapper classMapper;
-
-    @Autowired
-    private StudentMapper studentMapper;
-
-    @Autowired
-    private TeacherMapper teacherMapper;
-
-    @Autowired
-    private MajorMapper majorMapper;
-
-    @Autowired
-    private CollegeMapper collegeMapper;
-
-    @Autowired
-    private MajorService majorService;
+public class ClassServiceImpl extends BaseServiceImpl implements ClassService {
 
     @Override
-    public PageInfo<ClassWithMajorCollegeDto> queryAllClassInfo(MyPage myPage, String className, String classMajorName, String classCollegeName) {
-        PageHelper.startPage(myPage.getPageNum(), myPage.getPageSize());//第一个参数的意思为：当前页数，第二个参数的意思为：每页显示多少条记录
-        List<ClassWithMajorCollegeDto> classWMCDs = classMapper.queryAllClassInfo(className, classMajorName, classCollegeName);
-        return new PageInfo<>(classWMCDs);
+    public List<Class> selectClassByMajorName(String majorName) {
+        return classMapper.selectClassByMajorName(majorName);
     }
 
     @Override
-    public PageInfo<ClassWithMajorCollegeDto> findClassOwnInfoById(MyPage myPage, User user) {
-        List<ClassWithMajorCollegeDto> classWMCDs;
+    public PageInfo<ClassWithGradeMajorCollegeDto> selectAllClassInfo(MyPage myPage, ClassSearchDto classSearch) {
+        PageHelper.startPage(myPage.getPageNum(), myPage.getPageSize());//第一个参数的意思为：当前页数，第二个参数的意思为：每页显示多少条记录
+        List<ClassWithGradeMajorCollegeDto> classWGMCs = classMapper.selectAllClassInfo(classSearch);
+        return new PageInfo<>(classWGMCs);
+    }
+
+    @Override
+    public PageInfo<ClassWithGradeMajorCollegeDto> selectClassOwnInfoByNum(MyPage myPage, User user) {
+        List<ClassWithGradeMajorCollegeDto> classWGMCs = new ArrayList<>();
         if (user.getUserIdentity().equals("学生")) {
             PageHelper.startPage(myPage.getPageNum(), myPage.getPageSize());//第一个参数的意思为：当前页数，第二个参数的意思为：每页显示多少条记录
-            classWMCDs = classMapper.findStuClassOwnInfoById(user.getUserId());
-        } else {
+            classWGMCs.add(classMapper.selectStuClassOwnInfoByNum(user.getUserName()));
+        } else if (user.getUserIdentity().equals("教师")){
             PageHelper.startPage(myPage.getPageNum(), myPage.getPageSize());//第一个参数的意思为：当前页数，第二个参数的意思为：每页显示多少条记录
-            classWMCDs = classMapper.findTeaClassOwnInfoById(user.getUserId());
+            classWGMCs.add(classMapper.selectTeaClassOwnInfoByNum(user.getUserName()));
         }
-        return new PageInfo<>(classWMCDs);
+        return new PageInfo<>(classWGMCs);
     }
 
     @Override
-    public List<Class> findClassNameByMajor(String majorName) {
-        return classMapper.findClassNameByMajor(majorName);
-    }
-
-    @Override
-    public Class findClassById(String classId) {
-        return classMapper.findClassById(classId);
-    }
-
-    @Override
-    public Class findClassByName(String className) {
-        return classMapper.findClassByName(className);
-    }
-
-    @Override
-    public String updateMapDataResult(String classOriId, String classOriName, ClassWithMajorCollegeDto classWMCD) {
-        if (!classOriId.equals(classWMCD.getClassId())) { //如果班级编号修改过了
-            if (findClassById(classWMCD.getClassId()) != null) { //如果修改后的班级编号已存在
-                return "classIdExist";
-            }
-        }
-        if (!classOriName.equals(classWMCD.getClassName())) { //如果班级名称修改过了
-            if (findClassByName(classWMCD.getClassName()) != null) { //如果修改后的班级名称已存在
+    public String updateClassInfo(String classOriId, String classOriName, ClassWithGradeMajorCollegeDto classWGMC) {
+        if (!classOriName.equals(classWGMC.getClassName())) { //如果班级名称修改过了
+            if (classMapper.selectClassByName(classWGMC.getClassName()) != null) { //如果修改后的班级编号已存在
                 return "classNameExist";
             }
         }
-
-        if (!classWMCD.getClassMoniId().equals("")) { //如果该班级有班长
-            if (studentMapper.findStudentById(classWMCD.getClassMoniId()) == null) { //如果班长id不存在
-                return "classMoniIdNotExist";
+        if (!classWGMC.getClassStuNum().equals("")) { //如果该班级有班长
+            if (studentMapper.selectStudentByNum(classWGMC.getClassStuNum()) == null) { //如果班长学号不存在
+                return "classMoniNumNotExist";
             } else {
-                String classId = findClassIdByMoniId(classWMCD.getClassMoniId());
-                if (!(classId == null || classId.equals(classOriId))) { //若(classId==null|| classId.equals(classOriId)可以执行更新该班长
-                    return "classMoniIdRepeat";
+                Class mClass=classMapper.selectClassByStuNum(classWGMC.getClassStuNum());
+                if (!(mClass == null || mClass.getClassId().equals(classOriId))) { //若(classId==null|| classId.equals(classOriId)可以执行更新该班长
+                    return "classMoniNumRepeat";
                 }
             }
 
         }
-
-        if (!classWMCD.getClassTeaId().equals("")) { //如果该班级有班主任
-            if (teacherMapper.findTeacherById(classWMCD.getClassTeaId()) == null) { //如果班主任长id不存在
-                return "classTeaIdNotExist";
+        if (!classWGMC.getClassTeaNum().equals("")) { //如果该班级有班主任
+            if (teacherMapper.selectTeacherByNum(classWGMC.getClassTeaNum()) == null) { //如果班主任长id不存在
+                return "classTeaNumNotExist";
             } else {
-                String classId = findClassIdByTeaId(classWMCD.getClassTeaId());
-                if (!(classId == null || classId.equals(classOriId))) { //若(classId==null|| classId.equals(classOriId)可以执行更新该班主任
-                    return "classTeaIdRepeat";
+                Class mClass = classMapper.selectClassByTeaNum(classWGMC.getClassTeaNum());
+                if (!(mClass == null || mClass.getClassId().equals(classOriId))) { //若(classId==null|| classId.equals(classOriId)可以执行更新该班主任
+                    return "classTeaNumRepeat";
                 }
             }
         }
 
         //通过验证则update
-        updateInfo(classOriId, classWMCD);
+        classMapper.updateClassInfo(classOriId, classWGMC);
         return "updateSuccess";
     }
 
     @Override
-    public String findClassIdByMoniId(String classMoniId) {
-        Class myClass = classMapper.findClassByMoniId(classMoniId);
-        if (myClass == null) {
-            return null;
-        } else {
-            return myClass.getClassId();
-        }
-    }
-
-    @Override
-    public String findClassIdByTeaId(String classTeaId) {
-        Class myClass = classMapper.findClassByTeaId(classTeaId);
-        if (myClass == null) {
-            return null;
-        } else {
-            return myClass.getClassId();
-        }
-    }
-
-    @Override
-    public void updateInfo(String classOriId, ClassWithMajorCollegeDto classWMCD) {
-        //获取老班级专业学院信息
-        Class oldClass = classMapper.findClassById(classOriId);
-        Major oldMajor = majorMapper.findMajorById(oldClass.getClassMajorId());
-        College oldCollege = collegeMapper.findCollegeById(oldMajor.getMajorCollegeId());
-        //旧专业班级数-1
-        majorMapper.updateClassNumMinusOne(oldClass.getClassMajorId());
-
-        //原来班级所在专业学院的学生人数减去原来班级的学生人数
-        Integer oldMajorStuNum = oldMajor.getMajorStuNum() - oldClass.getClassStuNum();
-        Integer oldCollegeStuNum = oldCollege.getCollegeStuNum() - oldClass.getClassStuNum();
-        //设置
-        majorMapper.updateSetStuNum(oldMajorStuNum, oldMajor.getMajorId());
-        collegeMapper.updateSetStuNum(oldCollegeStuNum, oldCollege.getCollegeId());
-
-        //获取新班级专业学院信息
-        String majorId = majorMapper.findIdByMajorName(classWMCD.getClassMajorName());
-        Major newMajor = majorMapper.findMajorById(majorId);
-        College newCollege = collegeMapper.findCollegeById(newMajor.getMajorCollegeId());
-        //新专业班级数+1
-        majorMapper.updateClassNumAddOne(majorId);
-
-        //新班级所在专业学院的学生人数加上该班级班级的学生人数
-        Integer newMajorStuNum = newMajor.getMajorStuNum() + classWMCD.getClassStuNum();
-        Integer newCollegeStuNum = newCollege.getCollegeStuNum() + classWMCD.getClassStuNum();
-        //设置
-        majorMapper.updateSetStuNum(newMajorStuNum, newMajor.getMajorId());
-        collegeMapper.updateSetStuNum(newCollegeStuNum, newCollege.getCollegeId());
-
-        //更新班级所有信息
-        classMapper.updateInfo(classOriId, classWMCD);
-    }
-
-    @Override
-    public void insertClass(ClassWithMajorCollegeDto classWMCD) {
-        classMapper.insertClass(classWMCD);
-        majorMapper.updateClassNumAddOne(majorMapper.findIdByMajorName(classWMCD.getClassMajorName()));
-        //新班级人数为0，不用计算调整学生人数
-    }
-
-    @Override
-    public String insertMapDataResult(ClassWithMajorCollegeDto classWMCD) {
-        if (findClassById(classWMCD.getClassId()) != null) { //如果添加班级编号已存在
-            return "classIdExist";
-        }
-        if (findClassByName(classWMCD.getClassName()) != null) { //如果修改后的班级名称已存在
+    public String insertClass(ClassWithGradeMajorCollegeDto classWGMC) {
+        if (classMapper.selectClassByName(classWGMC.getClassName()) != null) { //如果添加的班级名称已存在
             return "classNameExist";
         }
-        if (!classWMCD.getClassMoniId().equals("")) { //如果该班级有班长
-            if (studentMapper.findStudentById(classWMCD.getClassMoniId()) == null) { //如果班长id不存在
-                return "classMoniIdNotExist";
+        if (!classWGMC.getClassStuNum().equals("")) { //如果该班级有班长
+            if (studentMapper.selectStudentByNum(classWGMC.getClassStuNum()) == null) { //如果班长学号不存在
+                return "classMoniNumNotExist";
             } else {
-                String classId = findClassIdByMoniId(classWMCD.getClassMoniId());
-                if (classId != null) { //若该学生还未担任其他班班长，可以执行添加该班长
-                    return "classMoniIdRepeat";
+                Class mClass=classMapper.selectClassByStuNum(classWGMC.getClassStuNum());
+                if (mClass != null) {
+                    return "classMoniNumRepeat";
+                }
+            }
+
+        }
+        if (!classWGMC.getClassTeaNum().equals("")) { //如果该班级有班主任
+            if (teacherMapper.selectTeacherByNum(classWGMC.getClassTeaNum()) == null) { //如果班主任长id不存在
+                return "classTeaNumNotExist";
+            } else {
+                Class mClass = classMapper.selectClassByTeaNum(classWGMC.getClassTeaNum());
+                if (mClass != null ) {
+                    return "classTeaNumRepeat";
                 }
             }
         }
 
-        if (!classWMCD.getClassTeaId().equals("")) { //如果该班级有班主任
-            if (teacherMapper.findTeacherById(classWMCD.getClassTeaId()) == null) { //如果班主任长id不存在
-                return "classTeaIdNotExist";
-            } else {
-                String classId = findClassIdByTeaId(classWMCD.getClassTeaId());
-                if (classId != null) { //若该教师还未担任其他班班主任，可以执行添加该教师长
-                    return "classTeaIdRepeat";
-                }
-            }
-        }
-        //通过验证则insert
-        insertClass(classWMCD);
+        classMapper.insertClass(classWGMC);
         return "insertSuccess";
     }
 
     @Override
-    public String findRecommendedClassId() {
-        String reId = classMapper.findMaxClassId();
-        return DoWithString.doWithReid(reId);
-    }
-
-    @Override
-    public void classStuNumAddOne(String stuClassName, String stuMajorName, String stuCollegeName) {
-        classMapper.updateStuNumAddOne(classMapper.findIdByClassName(stuClassName));
-        majorService.majorStuNumAddOne(stuMajorName, stuCollegeName);
-    }
-
-    @Override
-    public void classStuNumMinusOne(String stuClassName, String stuMajorName, String stuCollegeName) {
-        classMapper.updateStuNumMinusOne(classMapper.findIdByClassName(stuClassName));
-        majorService.majorStuNumMinusOne(stuMajorName, stuCollegeName);
-    }
-
-    @Override
-    public void deleteOneClass(ClassWithMajorCollegeDto classWMCD) {
-        //所在专业班级数-1
-        majorMapper.updateClassNumMinusOne(majorMapper.findIdByMajorName(classWMCD.getClassMajorName()));
-        //删除班级下的学生
-        studentMapper.deleteStudentsByClassId(classWMCD.getClassId());
-        //重置专业学院学生人数
-        Major major = majorMapper.findMajorById(majorMapper.findIdByMajorName(classWMCD.getClassMajorName()));
-        College college = collegeMapper.findCollegeById(collegeMapper.findIdByCollegeName(classWMCD.getClassCollegeName()));
-        Integer newMajorStuNum = major.getMajorStuNum() - classWMCD.getClassStuNum();
-        Integer newCollegeStuNum = college.getCollegeStuNum() - classWMCD.getClassStuNum();
-        majorMapper.updateSetStuNum(newMajorStuNum, major.getMajorId());
-        collegeMapper.updateSetStuNum(newCollegeStuNum, college.getCollegeId());
+    public void deleteOneClass(String className) {
         //删除该班级
-        classMapper.deleteOneClass(classWMCD.getClassId());
+        classMapper.deleteOneClass(className);
     }
 
     @Override
-    public void deleteManyClasses(List<ClassWithMajorCollegeDto> classWMCDs) {
-        for (ClassWithMajorCollegeDto classWMCD : classWMCDs) {
-            deleteOneClass(classWMCD);
+    public void deleteManyClasses(List<String> classNames) {
+        for (String className:classNames){
+            deleteOneClass(className);
         }
     }
 }

@@ -170,7 +170,7 @@
                         /*****************************************************/
                         //验证码正确后重置密码的ajax请求
                         $.ajax({
-                            url: '${ctx}/resetPasswordAfterLogin' //实际使用请改成服务端真实接口
+                            url: '${ctx}/user/resetPasswordAfterLogin' //实际使用请改成服务端真实接口
                             , type: 'post'
                             ,
                             data: {
@@ -189,7 +189,7 @@
                                         icon: 1
                                         , time: 1000
                                     }, function () {
-                                        location.href = '${ctx}/password';
+                                        location.href = '${ctx}/user/password';
                                     });
                                 } else {
                                     return layer.msg('未知错误', {

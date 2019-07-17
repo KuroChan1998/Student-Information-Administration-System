@@ -18,6 +18,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="icon" href="${ctx}/static/custom/img/others/favicon-20190714032159399.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="${ctx}/static/custom/img/others/favicon-20190714032159399.ico" type="image/x-icon">
     <link rel="stylesheet" href="${ctx}/static/plugins/layuiadmin/layui/css/layui.css" media="all">
     <link rel="stylesheet" href="${ctx}/static/plugins/layuiadmin/style/admin.css" media="all">
 
@@ -57,18 +59,19 @@
                 <li class="layui-nav-item" lay-unselect>
                     <a href="javascript:;">
                         <img src="${ctx}${userInfo.userIcon}" class="layui-nav-img">
-                        ${userInfo.userId}
+                        ${userInfo.userName}
                     </a>
                     <dl class="layui-nav-child">
-                        <dd><a lay-href="${ctx}/info">基本资料</a></dd>
-                        <dd><a lay-href="${ctx}/password">修改密码</a></dd>
-                        <dd><a lay-href="${ctx}/email">修改绑定邮箱</a></dd>
+                        <dd><a lay-href="${ctx}/user/info">基本资料</a></dd>
+                        <dd><a lay-href="${ctx}/user/password">修改密码</a></dd>
+                        <dd><a lay-href="${ctx}/user/email">修改绑定邮箱</a></dd>
                         <hr>
                         <dd style="text-align: center;"><a href="${ctx}/logout">退出</a></dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item layui-hide-xs" lay-unselect>
-                    <a href="javascript:;" layadmin-event="about"><i class="layui-icon layui-icon-more-vertical"></i></a>
+                    <a href="javascript:;" layadmin-event="about"><i
+                            class="layui-icon layui-icon-more-vertical"></i></a>
                 </li>
             </ul>
         </div>
@@ -76,7 +79,7 @@
         <!-- 侧边菜单 -->
         <div class="layui-side layui-side-menu">
             <div class="layui-side-scroll">
-                <div class="layui-logo" lay-href="home/console.html">
+                <div class="layui-logo" lay-href="${ctx}/console">
                     <span>StuInfoAdmin</span>
                 </div>
 
@@ -92,7 +95,7 @@
                                 <a lay-href="${ctx}/console">控制台</a>
                             </dd>
                             <%--<dd data-name="console">--%>
-                                <%--<a href="${ctx}/static/plugins/myPersonalProject/index.html" target="_blank">酷乐的个人主页</a>--%>
+                            <%--<a href="${ctx}/static/plugins/myPersonalProject/index.html" target="_blank">酷乐的个人主页</a>--%>
                             <%--</dd>--%>
                             <%--<dd data-name="console">--%>
                             <%--<a lay-href="home/homepage2.html">主页二</a>--%>
@@ -149,9 +152,9 @@
                             <dd class="layui-nav-itemed">
                                 <a href="javascript:;">我的设置</a>
                                 <dl class="layui-nav-child">
-                                    <dd><a lay-href="${ctx}/info">基本资料</a></dd>
-                                    <dd><a lay-href="${ctx}/password">修改密码</a></dd>
-                                    <dd><a lay-href="${ctx}/email">修改绑定邮箱</a></dd>
+                                    <dd><a lay-href="${ctx}/user/info">基本资料</a></dd>
+                                    <dd><a lay-href="${ctx}/user/password">修改密码</a></dd>
+                                    <dd><a lay-href="${ctx}/user/email">修改绑定邮箱</a></dd>
                                 </dl>
                             </dd>
                         </dl>

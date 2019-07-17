@@ -27,50 +27,25 @@
 <div class="layui-form" lay-filter="layuiadmin-app-form-list" id="layuiadmin-app-form-list"
      style="padding: 20px 30px 0 0;">
     <div class="layui-form-item">
-        <label class="layui-form-label">学院编号</label>
-        <div class="layui-input-inline">
-            <input type="text" name="id" value="" class="layui-input" lay-verify="CMCid" disabled>
-        </div>
-        <div class="layui-form-mid layui-word-aux">此项暂不可修改，数据库中编号，创建时确定</div>
-        <input type="text" name="oriId" value="${collegeId}" class="layui-input" style="display:none;">
-    </div>
-    <div class="layui-form-item">
         <label class="layui-form-label">学院名称</label>
         <div class="layui-input-inline">
             <input type="text" name="name" value="" class="layui-input" lay-verify="name">
-            <input type="text" name="oriName" value="${collegeName}" class="layui-input" style="display:none;">
+            <input type="text" name="oriId" value="${collegeAllInfo.collegeId}" class="layui-input" style="display:none;">
+            <input type="text" name="oriName" value="${collegeAllInfo.collegeName}" class="layui-input" style="display:none;">
         </div>
-    </div>
-    <%--<div class="layui-form-item">--%>
-    <%--<label class="layui-form-label">性别</label>--%>
-    <%--<div class="layui-input-inline">--%>
-    <%--<input type="text" name="sex" value="" class="layui-input">--%>
-    <%--</div>--%>
-    <%--</div>--%>
-    <div class="layui-form-item">
-        <label class="layui-form-label">学院人数</label>
-        <div class="layui-input-inline">
-            <input type="text" name="stuNum" value="" class="layui-input" lay-verify="required" disabled>
-        </div>
-        <div class="layui-form-mid layui-word-aux">此项暂不可修改，因为参与计算</div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">专业专业数</label>
-        <div class="layui-input-inline">
-            <input type="text" name="majorNum" value="" class="layui-input" lay-verify="required" disabled>
-        </div>
-        <div class="layui-form-mid layui-word-aux">此项暂不可修改，因为参与计算</div>
+        <div class="layui-form-mid " style="color:red">*必填项</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">性质</label>
         <div class="layui-input-inline">
-            <select id="property" name="property" lay-search lay-filter="property" lay-verify="required">
+            <select id="property" name="property" lay-filter="property" lay-verify="required">
                 <option value="">请选择学院性质</option>
                 <option value="理科">理科</option>
                 <option value="文科">文科</option>
                 <option value="工科">工科</option>
             </select>
         </div>
+        <div class="layui-form-mid " style="color:red">*必填项</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">专业负责人工号</label>
@@ -110,7 +85,7 @@
             layer.open({
                 type: 2
                 , title: '查看教师'
-                , content: '/teacher/teaInfo?teaId=' + $("#teaId").val()
+                , content: '/teacher/teaInfo?teaNum=' + $("#teaId").val()
                 , maxmin: true
                 , area: ['550px', '550px']
                 , yes: function (index, layero) {

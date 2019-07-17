@@ -2,24 +2,21 @@ package com.springmvc.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
-import com.springmvc.dto.CollegeDto;
-import com.springmvc.dto.MyPage;
-import com.springmvc.dto.ResultMap;
+import com.springmvc.dto.college.CollegeDto;
+import com.springmvc.dto.other.MyPage;
+import com.springmvc.dto.other.ResultMap;
 import com.springmvc.entity.College;
 import com.springmvc.entity.User;
-import com.springmvc.service.CollegeService;
-import com.springmvc.service.UserService;
+import com.springmvc.util.Constants;
 import net.sf.json.JSONArray;
-import org.apache.commons.collections.map.HashedMap;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,13 +29,7 @@ import java.util.Map;
  **/
 @Controller
 @RequestMapping("/college")
-public class CollegeController {
-    @Autowired
-    private CollegeService collegeService;
-
-    @Autowired
-    private UserService userService;
-
+public class CollegeController extends BaseController{
     /**
      * @return java.lang.Object
      * @Author JinZhiyun
@@ -50,8 +41,8 @@ public class CollegeController {
     //注意这里只要加了ResponseBody这个注解就可以直接返回 List<College>，springmvc会自动将其解析成JSON数据格式，
     //但若用jsonArray.toString()会中文乱码，需要在@RequestMapping中设定编码
     @ResponseBody
-    public Object findCollegeName() {
-        List<College> colleges = collegeService.findAllCollege();
+    public Object getCollegeName() {
+        List<College> colleges = collegeService.selectAllCollege();
         JSONArray jsonArray = new JSONArray();
         for (College college : colleges) {
             jsonArray.add(college);
@@ -60,7 +51,7 @@ public class CollegeController {
     }
 
     /**
-     * @return com.springmvc.dto.ResultMap<java.util.List   <   com.springmvc.dto.CollegeDto>>
+     * @return com.springmvc.dto.other.ResultMap<java.util.List   <   com.springmvc.dto.college.CollegeDto>>
      * @Author JinZhiyun
      * @Description 查询所有学院信息的ajax交互
      * @Date 22:51 2019/4/18
@@ -68,13 +59,14 @@ public class CollegeController {
      **/
     @RequestMapping("/showAllCollegeInfo")
     @ResponseBody
-    public ResultMap<List<CollegeDto>> showAllCollegeInfo(MyPage myPage, @RequestParam(value = "collegeName", required = false) String collegeName) {
-        PageInfo<CollegeDto> pageInfo = collegeService.queryAllCollegeInfo(myPage, collegeName);
+    public ResultMap<List<CollegeDto>> showAllCollegeInfo(MyPage myPage, CollegeDto collegeDto) {
+        System.out.println(collegeDto);
+        PageInfo<CollegeDto> pageInfo = collegeService.selectAllCollegeInfo(myPage, collegeDto);
         return new ResultMap<>(0, "", (int) pageInfo.getTotal(), pageInfo.getList());
     }
 
     /**
-     * @return com.springmvc.dto.ResultMap<java.util.List   <   com.springmvc.dto.CollegeDto>>
+     * @return com.springmvc.dto.other.ResultMap<java.util.List   <   com.springmvc.dto.college.CollegeDto>>
      * @Author JinZhiyun
      * @Description 查询用户班级信息的ajax交互
      * @Date 13:32 2019/5/3
@@ -82,9 +74,9 @@ public class CollegeController {
      **/
     @RequestMapping("/myOwnInfo")
     @ResponseBody
-    public ResultMap<List<CollegeDto>> myOwnInfo(MyPage myPage, HttpSession session, HttpServletRequest request) {
-        User user = userService.updateUserSession(session, request);
-        PageInfo<CollegeDto> pageInfo = collegeService.findCollegeOwnInfoById(myPage, user);
+    public ResultMap<List<CollegeDto>> myOwnInfo(MyPage myPage) {
+        User user = (User) session.getAttribute(Constants.USERINFO_SESSION);
+        PageInfo<CollegeDto> pageInfo = collegeService.selectCollegeOwnInfoByNum(myPage, user);
         return new ResultMap<>(0, "", (int) pageInfo.getTotal(), pageInfo.getList());
     }
 
@@ -96,12 +88,11 @@ public class CollegeController {
      * @Param [model, collegeId, collegeName]
      **/
     @RequestMapping("/edit")
-    public String collegeEdit(Model model, @RequestParam(value = "collegeId", required = false) String collegeId
-            , @RequestParam(value = "collegeName", required = false) String collegeName) {
-        model.addAttribute("collegeName", collegeName);
-        model.addAttribute("collegeId", collegeId);
+    public String collegeEdit(Model model, CollegeDto collegeDto) {
+        model.addAttribute(Constants.COLLEGE_ALL_INFO_MODEL, collegeDto);
         return "app/modify/collegeForm";
     }
+
 
     /**
      * @return java.util.Map<java.lang.String   ,   java.lang.Object>
@@ -113,23 +104,22 @@ public class CollegeController {
     @RequestMapping("/updateInfo")
     @ResponseBody
     public Map<String, Object> updateInfo(@RequestParam("collegeOriId") String collegeOriId, @RequestParam("collegeOriName") String collegeOriName, CollegeDto collegeDto) {
-        Map<String, Object> map = new HashedMap();
+        Map<String, Object> map = new HashMap();
 
-        map.put("data", collegeService.updateMapDataResult(collegeOriId, collegeOriName, collegeDto));
+        map.put("data", collegeService.updateCollegeInfo(collegeOriId, collegeOriName, collegeDto));
         return map;
     }
 
     /**
-     * @return java.lang.String
-     * @Author JinZhiyun
+     * @author JinZhiyun
      * @Description 重定向到添加学院iframe子页面并返回相应model
-     * @Date 17:20 2019/5/2
-     * @Param [model]
+     * @Date 15:04 2019/7/14
+     * @Param []
+     * @return java.lang.String
      **/
     @RequestMapping("/add")
-    public String add(Model model) {
-        model.addAttribute("collegeIdRec", collegeService.findRecommendedMajorId());
-        return "app/modify/collegeFormAdd";
+    public String add() {
+        return "app/modify/collegeForm";
     }
 
     /**
@@ -142,28 +132,23 @@ public class CollegeController {
     @RequestMapping("/insert")
     @ResponseBody
     public Map<String, Object> insertCollege(CollegeDto collegeDto) {
-        Map<String, Object> map = new HashedMap();
-
-        System.out.println(collegeDto);
-        map.put("data", collegeService.insertMapDataResult(collegeDto));
-
+        Map<String, Object> map = new HashMap();
+        map.put("data", collegeService.insertCollege(collegeDto));
         return map;
     }
 
     /**
-     * @return java.util.Map<java.lang.String   ,   java.lang.Object>
-     * @Author JinZhiyun
+     * @author JinZhiyun
      * @Description 删除一个学院ajax交互
-     * @Date 19:50 2019/5/2
-     * @Param [collegeDto]
+     * @Date 15:57 2019/7/14
+     * @Param [collegeName]
+     * @return java.util.Map<java.lang.String,java.lang.Object>
      **/
     @RequestMapping("/deleteOne")
     @ResponseBody
-    public Map<String, Object> deleteOneCollege(CollegeDto collegeDto) {
-        System.out.println(collegeDto);
-        Map<String, Object> map = new HashedMap();
-
-        collegeService.deleteOneCollege(collegeDto);
+    public Map<String, Object> deleteOneCollege(@RequestParam("collegeName") String collegeName) {
+        Map<String, Object> map = new HashMap();
+        collegeService.deleteOneCollege(collegeName);
         map.put("data", "deleteSuccess");
         return map;
     }
@@ -178,11 +163,14 @@ public class CollegeController {
     @RequestMapping("/deleteMany")
     @ResponseBody
     public Map<String, Object> deleteManyMajors(@RequestParam("colleges") String colleges) {
-        Map<String, Object> map = new HashedMap();
+        Map<String, Object> map = new HashMap();
 
         List<CollegeDto> collegeDtos = JSON.parseArray(colleges, CollegeDto.class);
-
-        collegeService.deleteManyColleges(collegeDtos);
+        List<String> collegeNames=new ArrayList<>();
+        for (CollegeDto collegeDto:collegeDtos){
+            collegeNames.add(collegeDto.getCollegeName());
+        }
+        collegeService.deleteManyColleges(collegeNames);
 
         map.put("data", "deleteSuccess");
         return map;

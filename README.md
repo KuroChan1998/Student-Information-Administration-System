@@ -1,8 +1,23 @@
-# Student-Information-Administration-System
+Student-Information-Administration-System
 
 ## 简介
 
-这个项目是一个大学生信息查询系统，提供用户级别的登录注册资料管理，信息查询，信息修改（管理员权利），简单的数据可视化分析等功能，也有基本的安全性保障。
+​	这个项目是一个大学生信息查询系统，提供用户级别的登录注册资料管理，信息查询，信息修改（管理员权利），简单的数据可视化分析等功能，也有基本的安全性保障。
+
+​	后续将持续优化，并在未来更新项目的ssh实现。
+
+## 更新公告
+
+大学生信息管理系统1.1.0版本上线啦！
+
+更新如下内容：
+
+* 优化了数据表结构，对原有的表的部分字段进行了修改，并增加了title和grade两个表
+* 优化了sql语句效率
+* 优化了前端查询界面及查询方式，使其更加全面，对用户友好
+* 更新了登录界面记住密码的cookie设置
+* 更新了邮箱验证码服务，增加了验证码有效时间
+* 优化了源代码结构，增强了规范性和可拓展性
 
 
 
@@ -24,57 +39,38 @@
 
 
 ## 目录结构描述
-├── README.md                   // help
-
-├── git_screenshot                       // 存放README.md 中的图片
-
-├── sql                     // 数据库初始化sql脚本
-
-├── src                     // 项目源代码目录
-
-│   ├──main           //源代码目录
-
-│   │   ├──java.com.springmvc               // java代码目录
-
-│   │   │   ├──controller               // 控制层
-
-│   │   │   │   └──interceptor     //拦截器
-
-│   │   │   ├──dao               // 持久层
-
-│   │   │   ├──dto               // 传输对象
-
-│   │   │   ├──entity               // 实体类
-
-│   │   │   └──service              // 服务层
-
-│   │   │   │   └──impl     //服务层接口实现
-
-│   │   │   │   │   ├──log               // spring事务管理
-
-│   │   │   │   │   └──util              // 工具方法
-
-│   │   ├──resources               // 资源文件目录
-
-│   │   │   └──com.springmvc.mapper         //mybatis对dao接口的xml实现
-
-│   │   ├──webapp               // tomcat前端文件目录
-
-│   │   │   ├──static               // 静态资源
-
-│   │   │   │   ├──custom      //自定义静态资源
-
-│   │   │   │   └──plugins         // 插件类静态资源
-
-│   │   │   └──WEB-INF
-
-│   │   │   │   └──page         // jsp页面目录              
-
-│   ├── test                // 测试代码目录
-
-│   │   ├── java.com.springmvc
-
-├── pom.xml   //maven依赖
+├─database           // 数据库相关文件
+│  ├─design				// 数据库设计
+│  │  └─1
+│  └─sql          // 数据库初始化脚本文件
+├─git_screenshot           // 存放README.md 中的图片
+├─src                  // 项目源代码目录
+│  ├─main        //源代码目录
+│  │  ├─java
+│  │  │  └─com
+│  │  │      └─springmvc            // java代码目录
+│  │  │          ├─controller        // 控制层
+│  │  │          ├─dao             // 持久层
+│  │  │          ├─dto          // 传输对象
+│  │  │          ├─entity          // 实体类
+│  │  │          ├─interceptor       //拦截器
+│  │  │          ├─log        //日志管理
+│  │  │          ├─service        // 服务层
+│  │  │          │  └─impl         //服务层接口实现
+│  │  │          └─util       // 工具方法
+│  │  ├─resources      // 资源文件目录
+│  │  │  └─com
+│  │  │      └─springmvc
+│  │  │          └─mapper         //mybatis对dao接口的xml实现
+│  │  └─webapp        // tomcat前端文件目录
+│  │      ├─static        // 静态资源
+│  │      │  ├─custom         //自定义静态资源
+│  │      │  └─plugins        // 插件类静态资源
+│  │      └─WEB-INF
+│  │          └─page        // jsp页面目录 
+│  └─test       // 测试代码目录
+├─README.md                   // help
+└─pom.xml       //maven依赖
 
 
 
@@ -82,39 +78,39 @@
 
 ### 1、运行环境和所需工具
 
-- ide：IntelliJ IDEA
+- ide：IntelliJ IDEA 2018.1.7
 - 项目构建工具：Maven 3.x
 - 数据库：Mysql 8.0.13
-- JDK版本：>=jdk 1.8
-- Tomcat版本：>=Tomcat 7.x
+- JDK版本：jdk 1.8
+- Tomcat版本：Tomcat 8.x
 
 ### 2、初始化项目
 
-- 在你的Mysql中，创建一个数据库名称为mydatabse的数据库，并导入我提供的 sql/init.sql 文件, 成功会创建user、student、teacher、class、major、college六个表。
+- 在你的Mysql中，运行我提供的database/ sql/init.sql 文件（注意mysql版本与sql脚本中部分代码的兼容性）, 成功会创建名为database2的数据库，以及user、student、teacher、class、major、college、title、grade八个表。
 
   数据库物理模型如下：
 
-  ![Snipaste_2019-05-17_09-47-48](git_screenshot/Snipaste_2019-05-17_09-47-48.jpg)
-
-  ![Snipaste_2019-05-17_09-48-36](git_screenshot/Snipaste_2019-05-17_09-48-36.jpg)
+  ![Snipaste_2019-07-17_09-48-36](git_screenshot/Snipaste_2019-07-17_09-48-36.jpg)
 
 - 进入src/main/resources修改dbconfig.properties配置文件,把数据库登录名和密码，改为你本地的
 
 - 进入src/main/resources查看log4j.properties，如果有必要可以修改日志输出路径，目前在D盘下，你可选择不修改跳过此步。
 
-- 使用 IntelliJ IDEA 导入项目，选择Maven项目选项，一路点击next，然后将我的pom.xml中的依赖引入代码复制到你的pom.xml中，从下图红线处开始。若有无法引入的依赖，可能是因为maven版本不同或是该依赖已过时不存在于现有maven仓库中，请前往maven官网映入最新的该类型依赖。
+- 使用 IntelliJ IDEA 导入项目，选择Maven项目选项，一路点击next，即可将项目所需依赖导入。若有无法引入的依赖，可能是因为maven版本不同或是该依赖已过时不存在于现有maven仓库中，请前往maven官网映入最新的该类型依赖。
 
-  ![Snipaste_2019-05-04_07-57-51](git_screenshot/Snipaste_2019-05-04_07-57-51.jpg)
+  ![Snipaste_2019-07-17_08-47-37](git_screenshot/Snipaste_2019-07-17_08-47-37.jpg)
 
-- 在 IntelliJ IDEA 中，配置我们的 Tomcat， 然后把使用Maven构建好的项目添加到Tomcat中
+  ![Snipaste_2019-07-17_08-49-48](git_screenshot/Snipaste_2019-07-17_08-49-48.jpg)
+
+- 在 IntelliJ IDEA 中，配置我们的 Tomcat， 然后把使用Maven构建好的项目添加到Tomcat中，相关方法可以参考百度。
 
 - 运行
   ![Snipaste_2019-05-04_08-02-50](git_screenshot/Snipaste_2019-05-04_08-02-50.jpg)
 
 - 登录账户/密码
 
-  - 管理员账户：admin1/admin1
-  - 学生账户：516030910428/123456
+  - 管理员账户：000000000000/admin1
+  - 学生账户：516030910429/123456
   - 教师账户：1000000001/123456
 
   你也可以自行注册一个账户登录
@@ -135,19 +131,17 @@
 
 * 登录进入主页
 
-  ![Snipaste_2019-05-05_22-48-34](git_screenshot/Snipaste_2019-05-05_22-48-34.jpg)
+  ![Snipaste_2019-07-17_09-19-18](git_screenshot/Snipaste_2019-07-17_09-19-18.jpg)
 
 * 修改基本资料
 
-  ![Snipaste_2019-05-04_08-15-43](git_screenshot/Snipaste_2019-05-04_08-15-43.jpg)
+  ![Snipaste_2019-07-04_08-19-12](git_screenshot/Snipaste_2019-07-04_08-19-12.jpg)
 
-* 修改密码
-
-  ![Snipaste_2019-05-04_08-19-12](git_screenshot/Snipaste_2019-05-04_08-19-12.jpg)
+* 修改密码![Snipaste_2019-07-17_09-23-03](git_screenshot/Snipaste_2019-07-17_09-23-03.jpg)
 
 * 修改绑定邮箱
 
-  ![Snipaste_2019-05-04_08-21-05](git_screenshot/Snipaste_2019-05-04_08-21-05.jpg)
+  ![Snipaste_2019-07-17_09-30-38](git_screenshot/Snipaste_2019-07-17_09-30-38.jpg)
 
 ### 信息查询
 
@@ -155,15 +149,15 @@
 
   * 查询所有信息
 
-    ![Snipaste_2019-05-04_08-22-48](git_screenshot/Snipaste_2019-05-04_08-22-48.jpg)
+    ![Snipaste_2019-07-17_09-31-05](git_screenshot/Snipaste_2019-07-17_09-31-05.jpg)
 
   * 根据登录用户的用户名（应以学号注册）查询当前个人的学籍信息，若注册时未以真实学号注册，则无法查询到。
 
-    ![Snipaste_2019-05-04_08-29-37](git_screenshot/Snipaste_2019-05-04_08-29-37.jpg)
+    ![Snipaste_2019-07-17_09-32-12](git_screenshot/Snipaste_2019-07-17_09-32-12.jpg)
 
   * 模糊查询搜索
 
-    ![Snipaste_2019-05-04_08-30-57](git_screenshot/Snipaste_2019-05-04_08-30-57.jpg)
+    ![Snipaste_2019-07-17_09-32-47](git_screenshot/Snipaste_2019-07-17_09-32-47.jpg)
 
 * 教师信息查询：类似学生信息查询，图略
 
@@ -181,15 +175,15 @@
 
   * 编辑信息
 
-    ![Snipaste_2019-05-04_08-35-33](git_screenshot/Snipaste_2019-05-04_08-35-33.jpg)
+    ![Snipaste_2019-07-17_09-33-51](git_screenshot/Snipaste_2019-07-17_09-33-51.jpg)
 
   * 添加
 
-    ![Snipaste_2019-05-04_08-36-39](git_screenshot/Snipaste_2019-05-04_08-36-39.jpg)
+    ![Snipaste_2019-07-17_09-34-24](git_screenshot/Snipaste_2019-07-17_09-34-24.jpg)
 
   * 单条、多条删除
 
-    ![Snipaste_2019-05-04_08-38-02](git_screenshot/Snipaste_2019-05-04_08-38-02.jpg)
+    ![Snipaste_2019-07-17_09-34-56](git_screenshot\Snipaste_2019-07-17_09-34-56.jpg)
 
 * 教师信息修改：类似学生信息修改，图略
 
@@ -199,15 +193,11 @@
 
 ### 拓展功能
 
-* 学生男女比可视化
-
-  ![Snipaste_2019-05-05_22-51-18](git_screenshot/Snipaste_2019-05-05_22-51-18.jpg)
+* 学生男女比可视化![Snipaste_2019-07-17_09-36-37](git_screenshot/Snipaste_2019-07-17_09-36-37.jpg)
 
 * 学生人数比可视化
 
-  ![Snipaste_2019-05-05_22-52-20](git_screenshot/Snipaste_2019-05-05_22-52-20.jpg)
-
-
+  ![Snipaste_2019-07-17_09-37-17](git_screenshot/Snipaste_2019-07-17_09-37-17.jpg)
 
 
 

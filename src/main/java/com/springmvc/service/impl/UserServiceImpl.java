@@ -1,29 +1,15 @@
 package com.springmvc.service.impl;
 
-import com.springmvc.dao.UserMapper;
 import com.springmvc.entity.User;
 import com.springmvc.service.UserService;
-import com.springmvc.service.impl.util.Constants;
-import com.springmvc.service.impl.util.MySecurity;
-import com.springmvc.service.impl.util.SendEmailUtil;
-import com.springmvc.service.impl.util.VerifyCode;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.springmvc.util.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @ClassName UserServiceImpl
@@ -34,67 +20,81 @@ import java.util.List;
  **/
 @Service
 @Transactional
-public class UserServiceImpl implements UserService {
-
-//    @Resource(name = "111")
-//    private UserMapper userMapper;
-
-    @Autowired
-    private UserMapper userMapper;
-
-    private final static Logger logger = Logger.getLogger(UserServiceImpl.class);
-
+public class UserServiceImpl extends BaseServiceImpl implements UserService {
+    @Override
+    public User selectUserByNameAndPassword(String userName, String userPassword) {
+        User userTmp=userMapper.selectUserByName(userName);
+        if (userTmp == null){
+            return null;
+        } else {
+            if (userTmp.getUserPassword().equals(MySecurity.encryptUserPassword(userPassword, userTmp.getUserId()))){
+                return userTmp;
+            } else {
+                return null;
+            }
+        }
+    }
 
     @Override
-    public int findUserByIdAndPassword(String userId, String userPassword) {
-        userPassword=MySecurity.encryptUserPassword(userPassword,userId);
-        return userMapper.findByIdAndPassword(userId, userPassword);
+    public User updateUserSession(HttpSession session) {
+        //获得代理主键，更新当前用户信息至session
+        String userId = ((User) session.getAttribute(Constants.USERINFO_SESSION)).getUserId();
+        User user = this.selectUserById(userId);
+        session.setAttribute(Constants.USERINFO_SESSION, user);
+        return user;
+    }
+
+    @Override
+    public User selectUserById(String userId) {
+        return userMapper.selectUserById(userId);
+    }
+
+    @Override
+    public User selectUserByName(String userName) {
+        return userMapper.selectUserByName(userName);
+    }
+
+    @Override
+    public User selectUserByEmail(String userEmail) {
+        return userMapper.selectUserByEmail(userEmail);
     }
 
     @Override
     public String insertUserRegInfo(User user) {
-        if (userMapper.findIfIdExist(user.getUserId()) != 0) {
-            return "regIdExist"; //regIdExist表示用户名已被注册
+        if (userMapper.selectUserByName(user.getUserName()) != null) {
+            return "regNameExist"; //regNameExist表示用户名已被注册
         }
-//        if (userMapper.findIfNicknameExist(user.getUserNickname()) != 0) {
-//            return "regNicknameExist"; //regNicknameExist表示昵称已被注册
-//        }
-        if (userMapper.findIfEmailExist(user.getUserEmail()) != 0) {
+        if (userMapper.selectUserByEmail(user.getUserEmail()) != null) {
             return "regEmailExist"; //regEmailExist表示邮箱已被注册
         }
+        //服务端设置用户uuid
+        user.setUserId(UUID.randomUUID().toString().replaceAll("-",""));
+        //用户密码md5加密
         user.setUserPassword(MySecurity.encryptUserPassword(user.getUserPassword(),user.getUserId()));
+        //设置默认头像
         user.setUserIcon(Constants.USER_DEFAULT_ICON_PATH);
         userMapper.insertUserRegInfo(user);
         return "regSuccess";//return "regSuccess"表示注册成功
     }
 
     @Override
-    public String sendVerifyCodeToEmail(String userEmail) {
-        // 获取前端传入的参数
-        String emailAddress = userEmail;
-        String verifyCode = VerifyCode.randomCode();
-        String emailMsg = "收到来自StuInfoAdmin--大学生学籍信息管理系统的验证码：\n" + verifyCode;
-
-        try {
-
-            // 邮件发送处理
-            SendEmailUtil.sendMail(emailAddress, emailMsg);
-
-            return verifyCode;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-
+    public void deleteUserSession(HttpSession session) {
+        session.removeAttribute(Constants.USERINFO_SESSION);
     }
 
     @Override
-    public List<String> elseIdentityList(String identity) {
+    public void updateResetPasswordByEmail(String userEmail, String userPassword) {
+        userPassword=MySecurity.encryptUserPassword(userPassword,userMapper.selectUserByEmail(userEmail).getUserId());
+        userMapper.updateResetPasswordByEmail(userEmail, userPassword);
+    }
+
+    @Override
+    public List<String> findElseIdentityList(String userIdentity) {
         List<String> list = new ArrayList<>();
-        if (identity.equals("学生")) {
+        if (userIdentity.equals("学生")) {
             list.add("教师");
             list.add("管理员");
-        } else if (identity.equals("教师")) {
+        } else if (userIdentity.equals("教师")) {
             list.add("学生");
             list.add("管理员");
         } else {
@@ -105,58 +105,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String uploadUserIcon(MultipartFile file, HttpServletRequest request, String userId) {
-        String prefix = "";
-
-        String uploadDir = Constants.USER_DEFAULT_ICON_DIR;
-        String absoluFilePath = "";
-        String relaFilePath = "";
-
-        DateFormat format1 = new SimpleDateFormat("yyyy_MM_dd_hh_mm_ss");
-        String dateStr = format1.format(new Date());
-
-        //保存上传
-        OutputStream out = null;
-        InputStream fileInput = null;
-        try {
-            if (file != null) {
-                String originalName = file.getOriginalFilename();
-                prefix = originalName.substring(originalName.lastIndexOf(".") + 1);
-                String filepath = request.getServletContext().getRealPath(uploadDir); //文件存放文件夹路径名
-                filepath = filepath.replace("\\", "/");
-                String fileName = userId + "_icon_" + dateStr + "." + prefix; //文件名
-                absoluFilePath = filepath + "/" + fileName;//绝对路径
-                relaFilePath = uploadDir + "/" + fileName;
-                System.out.println(relaFilePath);
-
-                File files = new File(absoluFilePath);
-                //打印查看上传路径
-                System.out.println(filepath);
-                if (!files.getParentFile().exists()) {
-                    files.getParentFile().mkdirs();
-                }
-                file.transferTo(files);
-            }
-        } catch (Exception e) {
-        } finally {
-            try {
-                if (out != null) {
-                    out.close();
-                }
-                if (fileInput != null) {
-                    fileInput.close();
-                }
-            } catch (IOException e) {
-            }
-        }
-
-        return relaFilePath;
-    }
-
-    @Override
     public String updateResetUserInfo(User user) {
-        userMapper.updateResetUserInfo(user);
-        return "updateSuccess"; //updateSuccess表示昵注册成功
+        User tmpUser = userMapper.selectUserByName(user.getUserName());
+        if (tmpUser == null || tmpUser.getUserId().equals(user.getUserId())) { //如果用户名为被修改过或者新的用户名未被注册，执行update
+            userMapper.updateResetUserInfo(user);
+            return "updateSuccess"; //updateSuccess表示昵注册成功
+        } else {
+            return "updateNameExist";
+        }
     }
 
     @Override
@@ -166,52 +122,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUserSession(HttpSession session, HttpServletRequest request) {
-        session = request.getSession();
-        String userId = (String) session.getAttribute(Constants.USERID_SESSION);
-        User user = this.selectUserById(userId);
-        session.setAttribute(Constants.USERINFO_SESSION, user);
-        return user;
-    }
-
-    @Override
     public void updateResetEmailByEmail(String userOldEmail, String userNewEmail) {
         userMapper.updateResetEmailByEmail(userOldEmail, userNewEmail);
     }
-
-    @Override
-    public void destroyUserSession(HttpSession session, HttpServletRequest request) {
-        session = request.getSession();
-        session.removeAttribute(Constants.USERID_SESSION);
-    }
-
-    @Override
-    public boolean ifAdmin(HttpSession session, HttpServletRequest request) {
-        User user = updateUserSession(session, request);
-        if (user.getUserIdentity().equals("管理员")) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-
-    @Override
-    public void updateResetPasswordByEmail(String userEmail, String userPassword) {
-        String userId=userMapper.selectUserByUserEmail(userEmail).getUserId();
-        userPassword=MySecurity.encryptUserPassword(userPassword,userId);
-        userMapper.updateResetPasswordByEmail(userEmail, userPassword);
-    }
-
-    @Override
-    public int findUserByEmail(String userEmail) {
-        return userMapper.findIfEmailExist(userEmail);
-    }
-
-    @Override
-    public User selectUserById(String userId) {
-        return userMapper.selectUserById(userId);
-    }
-
-
 }

@@ -1,5 +1,7 @@
 package com.springmvc.entity;
 
+import java.io.Serializable;
+
 /**
  * @ClassName Major
  * @Author JinZhiyun
@@ -7,35 +9,38 @@ package com.springmvc.entity;
  * @Date 2019/4/15 16:40
  * @Version 1.0
  **/
-public class Major {
-    private String majorId;
+public class Major implements Serializable {
+    private static final long serialVersionUID = -4708169816587928752L;
 
-    private String majorCollegeId;
+    //专业表代理主键，自增
+    private Integer majorId;
 
+    //专业所属学院，外键，参照college.college_id
+    private Integer majorCollege;
+
+    //专业名，唯一
     private String majorName;
 
-    private Integer majorStuNum;
+    //专业负责人工号
+    private String majorTeaNum;
 
-    private Integer majorClassNum;
-
-    private String majorTeaId;
-
+    //专业备注
     private String majorRemark;
 
-    public String getMajorId() {
+    public Integer getMajorId() {
         return majorId;
     }
 
-    public void setMajorId(String majorId) {
+    public void setMajorId(Integer majorId) {
         this.majorId = majorId;
     }
 
-    public String getMajorCollegeId() {
-        return majorCollegeId;
+    public Integer getMajorCollege() {
+        return majorCollege;
     }
 
-    public void setMajorCollegeId(String majorCollegeId) {
-        this.majorCollegeId = majorCollegeId;
+    public void setMajorCollege(Integer majorCollege) {
+        this.majorCollege = majorCollege;
     }
 
     public String getMajorName() {
@@ -46,28 +51,12 @@ public class Major {
         this.majorName = majorName;
     }
 
-    public Integer getMajorStuNum() {
-        return majorStuNum;
+    public String getMajorTeaNum() {
+        return majorTeaNum;
     }
 
-    public void setMajorStuNum(Integer majorStuNum) {
-        this.majorStuNum = majorStuNum;
-    }
-
-    public Integer getMajorClassNum() {
-        return majorClassNum;
-    }
-
-    public void setMajorClassNum(Integer majorClassNum) {
-        this.majorClassNum = majorClassNum;
-    }
-
-    public String getMajorTeaId() {
-        return majorTeaId;
-    }
-
-    public void setMajorTeaId(String majorTeaId) {
-        this.majorTeaId = majorTeaId;
+    public void setMajorTeaNum(String majorTeaNum) {
+        this.majorTeaNum = majorTeaNum;
     }
 
     public String getMajorRemark() {
@@ -81,12 +70,10 @@ public class Major {
     @Override
     public String toString() {
         return "Major{" +
-                "majorId='" + majorId + '\'' +
-                ", majorCollegeId='" + majorCollegeId + '\'' +
+                "majorId=" + majorId +
+                ", majorCollege=" + majorCollege +
                 ", majorName='" + majorName + '\'' +
-                ", majorStuNum=" + majorStuNum +
-                ", majorClassNum=" + majorClassNum +
-                ", majorTeaId='" + majorTeaId + '\'' +
+                ", majorTeaNum='" + majorTeaNum + '\'' +
                 ", majorRemark='" + majorRemark + '\'' +
                 '}';
     }

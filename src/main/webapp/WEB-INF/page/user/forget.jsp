@@ -45,7 +45,7 @@
                     <input type="password" name="repass" id="LAY-user-login-repass" lay-verify="required"
                            placeholder="确认密码" class="layui-input">
                 </div>
-                <input  name="token" type="hidden" value="${token}"/>
+                <input name="token" type="hidden" value="${token}"/>
                 <div class="layui-form-item">
                     <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="LAY-user-forget-resetpass">重置新密码
                     </button>
@@ -147,6 +147,7 @@
                 dataType: "json"
             });
         });
+
         //timer处理函数
         function SetRemainTime() {
             if (curCount == 0) {//超时重新获取验证码
@@ -155,11 +156,12 @@
                 $("#send-email-code").html("重获验证码");
                 // document.getElementById("send-email-code").removeAttribute("disabled");//移除禁用状态改为可用
                 // document.getElementById("send-email-code").value="重获验证码";
-            }else {
+            } else {
                 curCount--;
                 $("#send-email-code").html(curCount + "秒后重获");
             }
         }
+
         /*****************************************************/
 
 
@@ -171,7 +173,7 @@
             //请求接口
             $.ajax({
                 url: '${ctx}/emailVerifyCodeTest' //实际使用请改成服务端真实接口
-                , data: {"emailVerifyCode": field.emailcode,"userEmail":field.email}
+                , data: {"emailVerifyCode": field.emailcode, "userEmail": field.email}
                 , success: function (res) {
                     if (res.data == "verifyCodeCorrect") {
                         location.hash = '/type=resetpass';
@@ -211,18 +213,25 @@
 
             //请求接口
             $.ajax({
-                url: '${ctx}/resetPassword?token='+field.token //实际使用请改成服务端真实接口
+                url: '${ctx}/resetPassword?token=' + field.token //实际使用请改成服务端真实接口
                 ,
-                type:'post'
-                ,data: {"userPassword": field.password}
+                type: 'post'
+                , data: {"userPassword": field.password}
                 , success: function (res) {
-                    layer.msg('密码已成功重置', {
-                        offset: '15px'
-                        , icon: 1
-                        , time: 1000
-                    }, function () {
-                        location.href = '${ctx}/login'; //跳转到登入页
-                    });
+                    if (res.data == "resetPasswordSuccess") {
+                        layer.msg('密码已成功重置', {
+                            offset: '15px'
+                            , icon: 1
+                            , time: 1000
+                        }, function () {
+                            location.href = '${ctx}/login'; //跳转到登入页
+                        });
+                    } else {
+                        layer.msg('未知错误', {
+                            icon: 5,
+                            anim: 6
+                        });
+                    }
                 }
             });
 

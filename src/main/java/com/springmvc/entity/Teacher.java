@@ -1,5 +1,10 @@
 package com.springmvc.entity;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.io.Serializable;
+import java.util.Date;
+
 /**
  * @ClassName Teacher
  * @Author JinZhiyun
@@ -7,21 +12,35 @@ package com.springmvc.entity;
  * @Date 2019/4/15 16:33
  * @Version 1.0
  **/
-public class Teacher {
+public class Teacher implements Serializable {
+    private static final long serialVersionUID = -2347825422391904371L;
+
+    //教师表代理主键uuid
     private String teaId;
 
-    private String teaMajorId;
+    //教师所属专业id，外键，参照major.major_id
+    private Integer teaMajor;
 
+    //教师学号，唯一
+    private String teaNum;
+
+    //教师姓名
     private String teaName;
 
+    //教师性别
     private String teaSex;
 
-    private Integer teaAge;
+    //教师出生日期
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    private Date teaBirthday;
 
+    //教师电话
     private String teaPhone;
 
+    //教师职称id，外键，参照title.title_id
     private String teaTitle;
 
+    //教师备注
     private String teaRemark;
 
     public String getTeaId() {
@@ -32,12 +51,20 @@ public class Teacher {
         this.teaId = teaId;
     }
 
-    public String getTeaMajorId() {
-        return teaMajorId;
+    public Integer getTeaMajor() {
+        return teaMajor;
     }
 
-    public void setTeaMajorId(String teaMajorId) {
-        this.teaMajorId = teaMajorId;
+    public void setTeaMajor(Integer teaMajor) {
+        this.teaMajor = teaMajor;
+    }
+
+    public String getTeaNum() {
+        return teaNum;
+    }
+
+    public void setTeaNum(String teaNum) {
+        this.teaNum = teaNum;
     }
 
     public String getTeaName() {
@@ -56,12 +83,12 @@ public class Teacher {
         this.teaSex = teaSex;
     }
 
-    public Integer getTeaAge() {
-        return teaAge;
+    public Date getTeaBirthday() {
+        return teaBirthday;
     }
 
-    public void setTeaAge(Integer teaAge) {
-        this.teaAge = teaAge;
+    public void setTeaBirthday(Date teaBirthday) {
+        this.teaBirthday = teaBirthday;
     }
 
     public String getTeaPhone() {
@@ -92,10 +119,11 @@ public class Teacher {
     public String toString() {
         return "Teacher{" +
                 "teaId='" + teaId + '\'' +
-                ", teaMajorId='" + teaMajorId + '\'' +
+                ", teaMajor=" + teaMajor +
+                ", teaNum='" + teaNum + '\'' +
                 ", teaName='" + teaName + '\'' +
                 ", teaSex='" + teaSex + '\'' +
-                ", teaAge=" + teaAge +
+                ", teaBirthday=" + teaBirthday +
                 ", teaPhone='" + teaPhone + '\'' +
                 ", teaTitle='" + teaTitle + '\'' +
                 ", teaRemark='" + teaRemark + '\'' +

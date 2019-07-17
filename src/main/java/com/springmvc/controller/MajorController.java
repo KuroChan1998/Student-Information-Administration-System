@@ -2,22 +2,20 @@ package com.springmvc.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
-import com.springmvc.dto.MajorWithCollegeDto;
-import com.springmvc.dto.MyPage;
-import com.springmvc.dto.ResultMap;
+import com.springmvc.dto.major.MajorSearchDto;
+import com.springmvc.dto.major.MajorWithCollegeDto;
+import com.springmvc.dto.other.MyPage;
+import com.springmvc.dto.other.ResultMap;
 import com.springmvc.entity.User;
-import com.springmvc.service.MajorService;
-import com.springmvc.service.UserService;
-import org.apache.commons.collections.map.HashedMap;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.springmvc.util.Constants;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -30,13 +28,7 @@ import java.util.Map;
  **/
 @Controller
 @RequestMapping("/major")
-public class MajorController {
-    @Autowired
-    private MajorService majorService;
-
-    @Autowired
-    private UserService userService;
-
+public class MajorController extends BaseController {
     /**
      * @return java.lang.Object
      * @Author JinZhiyun
@@ -46,8 +38,8 @@ public class MajorController {
      **/
     @RequestMapping("/getMajorNameByCollege")
     @ResponseBody
-    public Object findMajorNameByCollege(@RequestParam(value = "collegeName", required = false) String collegeName) {
-        return majorService.findMajorByCollegeName(collegeName);
+    public Object getMajorNameByCollege(@RequestParam(value = "collegeName", required = false) String collegeName) {
+        return majorService.selectMajorByCollegeName(collegeName);
     }
 
     /**
@@ -63,41 +55,39 @@ public class MajorController {
     }
 
     /**
-     * @return com.springmvc.dto.ResultMap<java.util.List   <   com.springmvc.dto.MajorWithCollegeDto>>
-     * @Author JinZhiyun
+     * @return com.springmvc.dto.other.ResultMap<java.util.List   <   com.springmvc.dto.major.MajorWithCollegeDto>>
+     * @author JinZhiyun
      * @Description 查询所有专业信息的ajax交互
-     * @Date 22:59 2019/4/18
-     * @Param [myPage, majorName, majorCollegeName]
+     * @Date 9:22 2019/7/11
+     * @Param [myPage, majorSearch]
      **/
     @RequestMapping("/showAllMajorInfo")
     @ResponseBody
-    public ResultMap<List<MajorWithCollegeDto>> showAllMajorInfo(MyPage myPage
-            , @RequestParam(value = "majorName", required = false) String majorName
-            , @RequestParam(value = "majorCollegeName", required = false) String majorCollegeName) {
-        PageInfo<MajorWithCollegeDto> pageInfo = majorService.queryAllMajorInfo(myPage, majorCollegeName, majorName);//从数据库中获取查询所需的数据，在此之前，你不需要在sql语句中编写分页语句，该插件会在查询时直接将分页语句添加到数据库后
+    public ResultMap<List<MajorWithCollegeDto>> showAllMajorInfo(MyPage myPage, MajorSearchDto majorSearch) {
+        PageInfo<MajorWithCollegeDto> pageInfo = majorService.selectAllMajorInfo(myPage, majorSearch);//从数据库中获取查询所需的数据，在此之前，你不需要在sql语句中编写分页语句，该插件会在查询时直接将分页语句添加到数据库后
         return new ResultMap<>(0, "", (int) pageInfo.getTotal(), pageInfo.getList());
     }
 
     /**
-     * @return com.springmvc.dto.ResultMap<java.util.List   <   com.springmvc.dto.MajorWithCollegeDto>>
-     * @Author JinZhiyun
+     * @return com.springmvc.dto.other.ResultMap<java.util.List   <   com.springmvc.dto.major.MajorWithCollegeDto>>
+     * @author JinZhiyun
      * @Description 查询用户专业信息的ajax交互
-     * @Date 17:33 2019/4/19
-     * @Param [myPage, session, request]
+     * @Date 9:22 2019/7/11
+     * @Param [myPage]
      **/
     @RequestMapping("/myOwnInfo")
     @ResponseBody
-    public ResultMap<List<MajorWithCollegeDto>> myOwnInfo(MyPage myPage, HttpSession session, HttpServletRequest request) {
-        User user = userService.updateUserSession(session, request);
-        PageInfo<MajorWithCollegeDto> pageInfo = majorService.findMajorOwnInfoById(myPage, user);
+    public ResultMap<List<MajorWithCollegeDto>> myOwnInfo(MyPage myPage) {
+        User user = (User) session.getAttribute(Constants.USERINFO_SESSION);
+        PageInfo<MajorWithCollegeDto> pageInfo = majorService.selectMajorOwnInfoByNum(myPage, user);
         return new ResultMap<>(0, "", (int) pageInfo.getTotal(), pageInfo.getList());
     }
 
     /**
      * @return java.lang.String
-     * @Author JinZhiyun
+     * @author JinZhiyun
      * @Description 定向到专业学院信息修改页面majorAndCollegeInfoModify.jsp
-     * @Date 9:51 2019/5/2
+     * @Date 9:22 2019/7/11
      * @Param []
      **/
     @RequestMapping("/modify")
@@ -114,28 +104,23 @@ public class MajorController {
      * @Param [model, majorId, majorCollegeName, majorName]
      **/
     @RequestMapping("/edit")
-    public String majorEdit(Model model, @RequestParam(value = "majorId", required = false) String majorId
-            , @RequestParam(value = "majorCollegeName", required = false) String majorCollegeName
-            , @RequestParam(value = "majorName", required = false) String majorName) {
-        model.addAttribute("majorId", majorId);
-        model.addAttribute("majorCollegeName", majorCollegeName);
-        model.addAttribute("majorName", majorName);
+    public String majorEdit(Model model, MajorWithCollegeDto majorWC) {
+        model.addAttribute(Constants.MAJOR_ALL_INFO_MODEL, majorWC);
         return "app/modify/majorForm";
     }
 
     /**
-     * @return java.util.Map<java.lang.String   ,   java.lang.Object>
+     * @return java.util.Map<java.lang.String       ,       java.lang.Object>
      * @Author JinZhiyun
      * @Description 更新专业信息
      * @Date 11:07 2019/5/2
-     * @Param [majorOriId, majorOriName, majorWCD]
+     * @Param [majorOriId, majorOriName, majorWC]
      **/
     @RequestMapping("/updateInfo")
     @ResponseBody
-    public Map<String, Object> updateInfo(@RequestParam("majorOriId") String majorOriId, @RequestParam("majorOriName") String majorOriName, MajorWithCollegeDto majorWCD) {
-        Map<String, Object> map = new HashedMap();
-
-        map.put("data", majorService.updateMapDataResult(majorOriId, majorOriName, majorWCD));
+    public Map<String, Object> updateInfo(@RequestParam("majorOriId") String majorOriId, @RequestParam("majorOriName") String majorOriName, MajorWithCollegeDto majorWC) {
+        Map<String, Object> map = new HashMap();
+        map.put("data", majorService.updateMajorInfo(majorOriId, majorOriName, majorWC));
         return map;
     }
 
@@ -144,12 +129,11 @@ public class MajorController {
      * @Author JinZhiyun
      * @Description 重定向到添加专业iframe子页面并返回相应model
      * @Date 12:49 2019/5/2
-     * @Param [model]
+     * @Param []
      **/
     @RequestMapping("/add")
-    public String add(Model model) {
-        model.addAttribute("majorIdRec", majorService.findRecommendedClassId());
-        return "app/modify/majorFormAdd";
+    public String add() {
+        return "app/modify/majorForm";
     }
 
     /**
@@ -157,33 +141,33 @@ public class MajorController {
      * @Author JinZhiyun
      * @Description 更新专业信息
      * @Date 13:01 2019/5/2
-     * @Param [majorWCD]
+     * @Param [majorWC]
      **/
     @RequestMapping("/insert")
     @ResponseBody
-    public Map<String, Object> insertMajor(MajorWithCollegeDto majorWCD) {
-        Map<String, Object> map = new HashedMap();
+    public Map<String, Object> insertMajor(MajorWithCollegeDto majorWC) {
+        Map<String, Object> map = new HashMap();
 
-        System.out.println(majorWCD);
-        map.put("data", majorService.insertMapDataResult(majorWCD));
+        System.out.println(majorWC);
+        map.put("data", majorService.insertMajor(majorWC));
 
         return map;
     }
 
     /**
-     * @return java.util.Map<java.lang.String   ,   java.lang.Object>
-     * @Author JinZhiyun
+     * @author JinZhiyun
      * @Description 删除一个专业ajax交互
-     * @Date 13:40 2019/5/2
-     * @Param [majorWCD]
+     * @Date 9:16 2019/7/14
+     * @Param [majorName]
+     * @return java.util.Map<java.lang.String,java.lang.Object>
      **/
     @RequestMapping("/deleteOne")
     @ResponseBody
-    public Map<String, Object> deleteOneMajor(MajorWithCollegeDto majorWCD) {
-        System.out.println(majorWCD);
-        Map<String, Object> map = new HashedMap();
+    public Map<String, Object> deleteOneMajor(@RequestParam("majorName") String majorName) {
+        System.out.println(majorName);
+        Map<String, Object> map = new HashMap();
 
-        majorService.deleteOneMajor(majorWCD);
+        majorService.deleteOneMajor(majorName);
         map.put("data", "deleteSuccess");
         return map;
     }
@@ -198,11 +182,14 @@ public class MajorController {
     @RequestMapping("/deleteMany")
     @ResponseBody
     public Map<String, Object> deleteManyMajors(@RequestParam("majors") String majors) {
-        Map<String, Object> map = new HashedMap();
+        Map<String, Object> map = new HashMap();
 
         List<MajorWithCollegeDto> majorWCDs = JSON.parseArray(majors, MajorWithCollegeDto.class);
-
-        majorService.deleteManyMajors(majorWCDs);
+        List<String> majorNames=new ArrayList<>();
+        for (MajorWithCollegeDto majorWCD:majorWCDs){
+            majorNames.add(majorWCD.getMajorName());
+        }
+        majorService.deleteManyMajors(majorNames);
         map.put("data", "deleteSuccess");
         return map;
     }

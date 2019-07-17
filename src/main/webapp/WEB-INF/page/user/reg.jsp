@@ -102,7 +102,7 @@
 
 <script src="${ctx}/static/plugins/layuiadmin/layui/layui.js"></script>
 <script src="${ctx}/static/custom/js/myLayVerify.js"></script>
-<script src="${ctx}/static/custom/js/verifyCode.js"></script>
+<script src="${ctx}/static/custom/js/myValidity.js"></script>
 <script>
     layui.config({
         base: '${ctx}/static/plugins/layuiadmin/' //静态资源所在路径
@@ -164,7 +164,7 @@
                 type: 'post'
                 ,
                 data: {
-                    "userId": field.id,
+                    "userName": field.id,
                     "userNickname": field.nickname,
                     "userPassword": field.password,
                     "userIdentity": field.identity,
@@ -181,7 +181,7 @@
                         }, function () {
                             location.href = '${ctx}/login'; //跳转到登入页
                         });
-                    } else if (res.data == "regIdExist") {
+                    } else if (res.data == "regNameExist") {
                         layer.msg('用户名已被注册', {
                             icon: 5,
                             anim: 6

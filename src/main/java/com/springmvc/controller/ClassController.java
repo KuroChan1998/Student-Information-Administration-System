@@ -2,22 +2,20 @@ package com.springmvc.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
-import com.springmvc.dto.ClassWithMajorCollegeDto;
-import com.springmvc.dto.MyPage;
-import com.springmvc.dto.ResultMap;
+import com.springmvc.dto.classP.ClassSearchDto;
+import com.springmvc.dto.classP.ClassWithGradeMajorCollegeDto;
+import com.springmvc.dto.other.MyPage;
+import com.springmvc.dto.other.ResultMap;
 import com.springmvc.entity.User;
-import com.springmvc.service.ClassService;
-import com.springmvc.service.UserService;
-import org.apache.commons.collections.map.HashedMap;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.springmvc.util.Constants;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -30,12 +28,19 @@ import java.util.Map;
  **/
 @Controller
 @RequestMapping("/class")
-public class ClassController {
-    @Autowired
-    private ClassService classService;
-
-    @Autowired
-    private UserService userService;
+public class ClassController extends BaseController{
+    /**
+     * @return java.lang.Object
+     * @Author JinZhiyun
+     * @Description 联动渲染班级select栏的ajax交互
+     * @Date 22:30 2019/4/23
+     * @Param [majorName]
+     **/
+    @RequestMapping("/getClassNameByMajor")
+    @ResponseBody
+    public Object findClassNameByMajor(@RequestParam(value = "majorName", required = false) String majorName) {
+        return classService.selectClassByMajorName(majorName);
+    }
 
     /**
      * @return java.lang.String
@@ -50,48 +55,32 @@ public class ClassController {
     }
 
     /**
-     * @return com.springmvc.dto.ResultMap<java.util.List       <       com.springmvc.dto.ClassWithMajorCollegeDto>>
-     * @Author JinZhiyun
+     * @author JinZhiyun
      * @Description 班级信息查询的ajax交互
-     * @Date 22:49 2019/4/18
-     * @Param [myPage, className, classMajorName, classCollegeName]
+     * @Date 9:33 2019/7/7
+     * @Param [myPage, classSearch]
+     * @return com.springmvc.dto.other.ResultMap<java.util.List<com.springmvc.dto.classP.ClassWithGradeMajorCollegeDto>>
      **/
     @RequestMapping("/showAllClassInfo")
     @ResponseBody
-    public ResultMap<List<ClassWithMajorCollegeDto>> showAllStuInfo(MyPage myPage
-            , @RequestParam(value = "className", required = false) String className
-            , @RequestParam(value = "classMajorName", required = false) String classMajorName
-            , @RequestParam(value = "classCollegeName", required = false) String classCollegeName) {
-        PageInfo<ClassWithMajorCollegeDto> pageInfo = classService.queryAllClassInfo(myPage, className, classMajorName, classCollegeName);//从数据库中获取查询所需的数据，在此之前，你不需要在sql语句中编写分页语句，该插件会在查询时直接将分页语句添加到数据库后
+    public ResultMap<List<ClassWithGradeMajorCollegeDto>> showAllStuInfo(MyPage myPage, ClassSearchDto classSearch) {
+        PageInfo<ClassWithGradeMajorCollegeDto> pageInfo = classService.selectAllClassInfo(myPage, classSearch);//从数据库中获取查询所需的数据，在此之前，你不需要在sql语句中编写分页语句，该插件会在查询时直接将分页语句添加到数据库后
         return new ResultMap<>(0, "", (int) pageInfo.getTotal(), pageInfo.getList());
     }
 
     /**
-     * @return com.springmvc.dto.ResultMap<java.util.List       <       com.springmvc.dto.ClassWithMajorCollegeDto>>
-     * @Author JinZhiyun
+     * @author JinZhiyun
      * @Description 查询用户班级信息的ajax交互
-     * @Date 17:33 2019/4/19
-     * @Param [myPage, session, request]
+     * @Date 11:43 2019/7/7
+     * @Param [myPage]
+     * @return com.springmvc.dto.other.ResultMap<java.util.List<com.springmvc.dto.classP.ClassWithGradeMajorCollegeDto>>
      **/
     @RequestMapping("/myOwnInfo")
     @ResponseBody
-    public ResultMap<List<ClassWithMajorCollegeDto>> myOwnInfo(MyPage myPage, HttpSession session, HttpServletRequest request) {
-        User user = userService.updateUserSession(session, request);
-        PageInfo<ClassWithMajorCollegeDto> pageInfo = classService.findClassOwnInfoById(myPage, user);
+    public ResultMap<List<ClassWithGradeMajorCollegeDto>> myOwnInfo(MyPage myPage) {
+        User user = (User) session.getAttribute(Constants.USERINFO_SESSION);
+        PageInfo<ClassWithGradeMajorCollegeDto> pageInfo = classService.selectClassOwnInfoByNum(myPage, user);
         return new ResultMap<>(0, "", (int) pageInfo.getTotal(), pageInfo.getList());
-    }
-
-    /**
-     * @return java.lang.Object
-     * @Author JinZhiyun
-     * @Description 联动渲染班级select栏的ajax交互
-     * @Date 22:30 2019/4/23
-     * @Param [majorName]
-     **/
-    @RequestMapping("/getClassNameByMajor")
-    @ResponseBody
-    public Object findClassNameByMajor(@RequestParam(value = "majorName", required = false) String majorName) {
-        return classService.findClassNameByMajor(majorName);
     }
 
     /**
@@ -115,14 +104,8 @@ public class ClassController {
      * @Param [model, classId, classCollegeName, classMajorName]
      **/
     @RequestMapping("/edit")
-    public String classEdit(Model model, @RequestParam(value = "classId", required = false) String classId
-            , @RequestParam(value = "className", required = false) String className
-            , @RequestParam(value = "classCollegeName", required = false) String classCollegeName
-            , @RequestParam(value = "classMajorName", required = false) String classMajorName) {
-        model.addAttribute("classId", classId);
-        model.addAttribute("className", className);
-        model.addAttribute("classCollegeName", classCollegeName);
-        model.addAttribute("classMajorName", classMajorName);
+    public String classEdit(Model model, ClassWithGradeMajorCollegeDto classWGMC) {
+        model.addAttribute(Constants.CLASS_ALL_INFO_MODEL,classWGMC);
         return "app/modify/classForm";
     }
 
@@ -135,24 +118,23 @@ public class ClassController {
      **/
     @RequestMapping("/updateInfo")
     @ResponseBody
-    public Map<String, Object> updateInfo(@RequestParam("classOriId") String classOriId, @RequestParam("classOriName") String classOriName, ClassWithMajorCollegeDto classWMCD) {
-        Map<String, Object> map = new HashedMap();
-
-        map.put("data", classService.updateMapDataResult(classOriId, classOriName, classWMCD));
+    public Map<String, Object> updateInfo(@RequestParam("classOriName") String classOriName, @RequestParam("classOriId") String classOriId,ClassWithGradeMajorCollegeDto classWGMC) {
+        Map<String, Object> map = new HashMap();
+        System.out.println(classWGMC);
+        map.put("data", classService.updateClassInfo(classOriId, classOriName, classWGMC));
         return map;
     }
 
     /**
-     * @return java.lang.String
-     * @Author JinZhiyun
+     * @author JinZhiyun
      * @Description 重定向到添加班级iframe子页面并返回相应model
-     * @Date 10:11 2019/4/29
-     * @Param [model]
+     * @Date 18:24 2019/7/7
+     * @Param []
+     * @return java.lang.String
      **/
     @RequestMapping("/add")
-    public String add(Model model) {
-        model.addAttribute("classIdRec", classService.findRecommendedClassId());
-        return "app/modify/classFormAdd";
+    public String add() {
+        return "app/modify/classForm";
     }
 
     /**
@@ -164,10 +146,10 @@ public class ClassController {
      **/
     @RequestMapping("/insert")
     @ResponseBody
-    public Map<String, Object> insertClass(ClassWithMajorCollegeDto classWMCD) {
-        Map<String, Object> map = new HashedMap();
+    public Map<String, Object> insertClass(ClassWithGradeMajorCollegeDto classWGMC) {
+        Map<String, Object> map = new HashMap();
 
-        map.put("data", classService.insertMapDataResult(classWMCD));
+        map.put("data", classService.insertClass(classWGMC));
 
         return map;
     }
@@ -181,11 +163,11 @@ public class ClassController {
      **/
     @RequestMapping("/deleteOne")
     @ResponseBody
-    public Map<String, Object> deleteOneClass(ClassWithMajorCollegeDto classWMCD) {
-        System.out.println(classWMCD);
-        Map<String, Object> map = new HashedMap();
+    public Map<String, Object> deleteOneClass(@RequestParam("className") String className) {
+        System.out.println(className);
+        Map<String, Object> map = new HashMap();
 
-        classService.deleteOneClass(classWMCD);
+        classService.deleteOneClass(className);
         map.put("data", "deleteSuccess");
         return map;
     }
@@ -200,11 +182,15 @@ public class ClassController {
     @RequestMapping("/deleteMany")
     @ResponseBody
     public Map<String, Object> deleteManyClasses(@RequestParam("classes") String classes) {
-        Map<String, Object> map = new HashedMap();
+        Map<String, Object> map = new HashMap();
 
-        List<ClassWithMajorCollegeDto> classWMCDs = JSON.parseArray(classes, ClassWithMajorCollegeDto.class);
+        List<ClassWithGradeMajorCollegeDto> classWMCDs = JSON.parseArray(classes, ClassWithGradeMajorCollegeDto.class);
 
-        classService.deleteManyClasses(classWMCDs);
+        List<String> classNames=new ArrayList<>();
+        for (ClassWithGradeMajorCollegeDto classWGMC:classWMCDs){
+            classNames.add(classWGMC.getClassName());
+        }
+        classService.deleteManyClasses(classNames);
 
         map.put("data", "deleteSuccess");
         return map;

@@ -1,28 +1,62 @@
 package com.springmvc.service;
 
 import com.springmvc.entity.User;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
- * @Author JinZhiyun
- * @Description //TODO
- * @Date 10:43 2019/4/8
- * @Param
- * @return
+ * @author JinZhiyun
+ * @IntefaceName UserService
+ * @Description 用户业务接口
+ * @Date 2019/6/14 12:52
+ * @Version 1.0
  **/
 public interface UserService {
     /**
-     * @return int
-     * @Author JinZhiyun
+     * @author JinZhiyun
      * @Description 用户登录验证服务
-     * @Date 10:10 2019/4/8
-     * @Param [userId, userPassword]
+     * @Date 16:54 2019/6/5
+     * @Param [userName, userPassword]
+     * @return com.springmvc.entity.User
      **/
-    int findUserByIdAndPassword(String userId, String userPassword);
+    User selectUserByNameAndPassword(String userName, String userPassword);
+
+    /**
+     * @author JinZhiyun
+     * @Description 更新当前用户的Session
+     * @Date 16:54 2019/6/5
+     * @Param [session]
+     * @return com.springmvc.entity.User
+     **/
+    User updateUserSession(HttpSession session);
+
+    /**
+     * @return com.springmvc.entity.User
+     * @Author JinZhiyun
+     * @Description 根据用户id查询用户的全部信息
+     * @Date 23:18 2019/4/10
+     * @Param [userId]
+     **/
+    User selectUserById(String userId);
+
+    /**
+     * @author JinZhiyun
+     * @Description 根据用户名查询用户信息
+     * @Date 8:09 2019/6/6
+     * @Param [userName]
+     * @return com.springmvc.entity.User
+     **/
+    User selectUserByName(String userName);
+
+    /**
+     * @Author JinZhiyun
+     * @Description 根据用户邮箱查询用户信息
+     * @Date 11:21 2019/5/12
+     * @Param [userEmail]
+     * @return com.springmvc.entity.User
+     **/
+    User selectUserByEmail(String userEmail);
 
     /**
      * @return java.lang.String
@@ -34,6 +68,15 @@ public interface UserService {
     String insertUserRegInfo(User user);
 
     /**
+     * @author JinZhiyun
+     * @Description 注销登录用户session
+     * @Date 8:30 2019/6/6
+     * @Param [session]
+     * @return void
+     **/
+    void deleteUserSession(HttpSession session);
+
+    /**
      * @return void
      * @Author JinZhiyun
      * @Description 忘记密码时由邮箱重置密码服务
@@ -43,49 +86,13 @@ public interface UserService {
     void updateResetPasswordByEmail(String userEmail, String userPassword);
 
     /**
-     * @return int
      * @author JinZhiyun
-     * @Description 返回邮箱符合的用户个数
-     * @Date 20:21 2019/5/25
-     * @Param [userEmail]
-     **/
-    int findUserByEmail(String userEmail);
-
-    /**
-     * @return com.springmvc.entity.User
-     * @Author JinZhiyun
-     * @Description 根据用户名查询用户的全部信息
-     * @Date 23:18 2019/4/10
-     * @Param [userId]
-     **/
-    User selectUserById(String userId);
-
-    /**
-     * @return java.lang.String 返回验证码
-     * @Author JinZhiyun
-     * @Description 发送邮箱验证码业务
-     * @Date 14:44 2019/4/8
-     * @Param [userEmail]
-     **/
-    String sendVerifyCodeToEmail(String userEmail);
-
-    /**
-     * @return java.util.List<java.lang.String>
-     * @Author JinZhiyun
      * @Description 返回当前身份相对所有身份的补集
-     * @Date 23:19 2019/4/10
-     * @Param [identity]
+     * @Date 13:43 2019/6/6
+     * @Param [userIdentity]
+     * @return java.util.List<java.lang.String>
      **/
-    List<String> elseIdentityList(String identity);
-
-    /**
-     * @return java.lang.String 返回上传的图片存储的相对路径
-     * @Author JinZhiyun
-     * @Description 头像上传业务
-     * @Date 15:33 2019/4/10
-     * @Param [file, request, UserId]
-     **/
-    String uploadUserIcon(MultipartFile file, HttpServletRequest request, String UserId);
+    List<String> findElseIdentityList(String userIdentity);
 
     /**
      * @return java.lang.String
@@ -106,15 +113,6 @@ public interface UserService {
     void updateResetPasswordByUserId(String userPassword, String userId);
 
     /**
-     * @return com.springmvc.entity.User
-     * @Author JinZhiyun
-     * @Description 更新当前用户的Session
-     * @Date 23:21 2019/4/10
-     * @Param [session, request]
-     **/
-    User updateUserSession(HttpSession session, HttpServletRequest request);
-
-    /**
      * @return void
      * @Author JinZhiyun
      * @Description 更改绑定邮箱
@@ -122,23 +120,4 @@ public interface UserService {
      * @Param [userOldEmail, userNewEmail]
      **/
     void updateResetEmailByEmail(String userOldEmail, String userNewEmail);
-
-    /**
-     * @return void
-     * @Author JinZhiyun
-     * @Description 注销登录用户session
-     * @Date 9:24 2019/4/19
-     * @Param [session, request]
-     **/
-    void destroyUserSession(HttpSession session, HttpServletRequest request);
-
-    /**
-     * @return boolean
-     * @Author JinZhiyun
-     * @Description 判断当前登录的用户是否为管理员
-     * @Date 10:15 2019/4/20
-     * @Param [session, request]
-     **/
-    boolean ifAdmin(HttpSession session, HttpServletRequest request);
-
 }

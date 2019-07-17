@@ -1,75 +1,82 @@
 package com.springmvc.dao;
 
-import com.springmvc.dto.TeacherInfoSearchDto;
-import com.springmvc.dto.TeacherWithMajorCollegeDto;
+import com.springmvc.dto.teacher.TeacherSearchDto;
+import com.springmvc.dto.teacher.TeacherWithTitleMajorCollegeDto;
 import com.springmvc.entity.Teacher;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ * @author JinZhiyun
+ * @IntefaceName TeacherMapper
+ * @Description 教师业务持久层接口
+ * @Date 2019/6/14 13:00
+ * @Version 1.0
+ **/
 @Repository
 public interface TeacherMapper {
     /**
-     * @Author JinZhiyun
+     * @return java.util.List<com.springmvc.dto.teacher.TeacherWithTitleMajorCollegeDto>
+     * @author JinZhiyun
      * @Description 查询所有符合条件的教师及其附带信息
-     * @Date 9:20 2019/4/19
-     * @Param [teaISD]
-     * @return java.util.List<com.springmvc.dto.TeacherWithMajorCollegeDto>
+     * @Date 8:24 2019/6/30
+     * @Param [teacherSearch]
      **/
-    List<TeacherWithMajorCollegeDto> queryAllTeaInfo(TeacherInfoSearchDto teaISD);
+    List<TeacherWithTitleMajorCollegeDto> selectAllTeacherInfo(TeacherSearchDto teacherSearch);
 
     /**
-     * @Author JinZhiyun
-     * @Description 查询工号对应的教师
-     * @Date 9:23 2019/4/19
-     * @Param [teaId]
+     * @author JinZhiyun
+     * @Description 查询用户名对应的教师及其附带信息
+     * @Date 12:39 2019/7/7
+     * @Param [teaNum]
+     * @return com.springmvc.dto.teacher.TeacherWithTitleMajorCollegeDto
+     **/
+    TeacherWithTitleMajorCollegeDto selectTeacherOwnInfoByNum(@Param("teaNum") String teaNum);
+
+    /**
      * @return com.springmvc.entity.Teacher
+     * @author JinZhiyun
+     * @Description 查询工号对应的教师
+     * @Date 12:32 2019/6/30
+     * @Param [teaNum]
      **/
-    Teacher findTeacherById(@Param("teaId") String teaId);
+    Teacher selectTeacherByNum(@Param("teaNum") String teaNum);
 
     /**
-     * @Author JinZhiyun
-     * @Description 查询用户Id对应的教师及其附带信息
-     * @Date 11:00 2019/4/19
-     * @Param [teaId]
-     * @return java.util.List<com.springmvc.dto.TeacherWithMajorCollegeDto>
-     **/
-    List<TeacherWithMajorCollegeDto> findTeacherOwnInfoById(@Param("teaId")String teaId);
-
-    /**
-     * @Author JinZhiyun
+     * @return void
+     * @author JinZhiyun
      * @Description 修改教师信息
-     * @Date 22:11 2019/4/27
-     * @Param [stuOriId, stuWMCD]
-     * @return void
+     * @Date 12:57 2019/6/30
+     * @Param [teaOriNum, teaWTMC]
      **/
-    void updateInfo(@Param("teaOriId") String teaOriId, @Param("teaWMCD") TeacherWithMajorCollegeDto teaWMCD);
+    void updateTeacherInfo(@Param("teaOriNum") String teaOriNum, @Param("teaWTMC") TeacherWithTitleMajorCollegeDto teaWTMC);
 
     /**
-     * @Author JinZhiyun
+     * @return void
+     * @author JinZhiyun
      * @Description 向教师表插入一个教师
-     * @Date 22:41 2019/4/27
-     * @Param [teaWmCD]
-     * @return void
+     * @Date 16:20 2019/6/30
+     * @Param [teaWTMC]
      **/
-    void insertTeacher(TeacherWithMajorCollegeDto teaWMCD);
+    void insertTeacher(TeacherWithTitleMajorCollegeDto teaWTMC);
 
     /**
-     * @Author JinZhiyun
-     * @Description 删除一个教师
-     * @Date 22:59 2019/4/27
-     * @Param [teaId]
      * @return void
+     * @author JinZhiyun
+     * @Description 删除一个学生
+     * @Date 16:48 2019/6/30
+     * @Param [teaNum]
      **/
-    void deleteOneTeacher(@Param("teaId")String teaId);
+    void deleteOneTeacher(@Param("teaNum") String teaNum);
 
     /**
-     * @Author JinZhiyun
-     * @Description 根据专业id删除教师
-     * @Date 13:46 2019/5/2
-     * @Param [majorId]
+     * @author JinZhiyun
+     * @Description 删除多个教师
+     * @Date 18:28 2019/6/30
+     * @Param [teaNums]
      * @return void
      **/
-    void deleteTeachersByMajorId(@Param("majorId") String majorId);
+    void deleteManyTeachers(List<String> teaNums);
 }
