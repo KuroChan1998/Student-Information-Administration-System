@@ -39,6 +39,7 @@ Student-Information-Administration-System
 
 
 ## 目录结构描述
+```
 ├─database           // 数据库相关文件
 │  ├─design				// 数据库设计
 │  │  └─1
@@ -71,7 +72,7 @@ Student-Information-Administration-System
 │  └─test       // 测试代码目录
 ├─README.md                   // help
 └─pom.xml       //maven依赖
-
+```
 
 
 ## 快速上手
@@ -336,6 +337,3 @@ public class MySecurity {
     }
 }
 ```
-
-
-
