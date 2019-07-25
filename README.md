@@ -86,7 +86,7 @@ Student-Information-Administration-System
 
 ### 2、初始化项目
 
-- 在你的Mysql中，运行我提供的database/ sql/init.sql 文件（注意mysql版本与sql脚本中部分代码的兼容性）, 成功会创建名为database2的数据库，以及user、student、teacher、class、major、college、title、grade八个表。
+- 在你的Mysql中，运行我提供的database/sql/init.sql 文件（注意mysql版本与sql脚本中部分代码的兼容性）, 成功会创建名为mydatabase2的数据库，以及user、student、teacher、class、major、college、title、grade八个表。
 
   数据库物理模型如下：
 
