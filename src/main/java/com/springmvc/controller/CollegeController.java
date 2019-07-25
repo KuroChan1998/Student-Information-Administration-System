@@ -3,6 +3,7 @@ package com.springmvc.controller;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
 import com.springmvc.dto.college.CollegeDto;
+import com.springmvc.dto.college.CollegeSearchDto;
 import com.springmvc.dto.other.MyPage;
 import com.springmvc.dto.other.ResultMap;
 import com.springmvc.entity.College;
@@ -51,26 +52,25 @@ public class CollegeController extends BaseController{
     }
 
     /**
-     * @return com.springmvc.dto.other.ResultMap<java.util.List   <   com.springmvc.dto.college.CollegeDto>>
-     * @Author JinZhiyun
+     * @author JinZhiyun
      * @Description 查询所有学院信息的ajax交互
-     * @Date 22:51 2019/4/18
-     * @Param [myPage, collegeName]
+     * @Date 16:43 2019/7/25
+     * @Param [myPage, collegeSearchDto]
+     * @return com.springmvc.dto.other.ResultMap<java.util.List<com.springmvc.dto.college.CollegeDto>>
      **/
     @RequestMapping("/showAllCollegeInfo")
     @ResponseBody
-    public ResultMap<List<CollegeDto>> showAllCollegeInfo(MyPage myPage, CollegeDto collegeDto) {
-        System.out.println(collegeDto);
-        PageInfo<CollegeDto> pageInfo = collegeService.selectAllCollegeInfo(myPage, collegeDto);
+    public ResultMap<List<CollegeDto>> showAllCollegeInfo(MyPage myPage, CollegeSearchDto collegeSearchDto) {
+        PageInfo<CollegeDto> pageInfo = collegeService.selectAllCollegeInfo(myPage, collegeSearchDto);
         return new ResultMap<>(0, "", (int) pageInfo.getTotal(), pageInfo.getList());
     }
 
     /**
-     * @return com.springmvc.dto.other.ResultMap<java.util.List   <   com.springmvc.dto.college.CollegeDto>>
-     * @Author JinZhiyun
-     * @Description 查询用户班级信息的ajax交互
-     * @Date 13:32 2019/5/3
-     * @Param [myPage, session, request]
+     * @author JinZhiyun
+     * @Description 查询用户学院信息的ajax交互
+     * @Date 16:44 2019/7/25
+     * @Param [myPage]
+     * @return com.springmvc.dto.other.ResultMap<java.util.List<com.springmvc.dto.college.CollegeDto>>
      **/
     @RequestMapping("/myOwnInfo")
     @ResponseBody
@@ -81,11 +81,11 @@ public class CollegeController extends BaseController{
     }
 
     /**
-     * @return java.lang.String
-     * @Author JinZhiyun
+     * @author JinZhiyun
      * @Description 重定向到编辑学院iframe子页面并返回相应model
-     * @Date 16:44 2019/5/2
-     * @Param [model, collegeId, collegeName]
+     * @Date 16:44 2019/7/25
+     * @Param [model, collegeDto]
+     * @return java.lang.String
      **/
     @RequestMapping("/edit")
     public String collegeEdit(Model model, CollegeDto collegeDto) {

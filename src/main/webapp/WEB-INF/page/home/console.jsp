@@ -119,7 +119,17 @@
                 </div>
                 <div class="layui-col-md12">
                     <div class="layui-card">
-                        <div class="layui-card-header">男女比概览</div>
+                        <div class="layui-card-header">所有学院师资力量对比</div>
+                        <div class="layui-card-body">
+                            <div id="container3" class="layui-carousel layadmin-carousel layadmin-dataview"
+                                 style="height: 100%">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-md12">
+                    <div class="layui-card">
+                        <div class="layui-card-header">学生男女比概览</div>
                         <div class="layui-card-body">
                             <div id="container" class="layui-carousel layadmin-carousel layadmin-dataview"
                                  style="height: 100%">
@@ -129,7 +139,7 @@
                 </div>
                 <div class="layui-col-md12">
                     <div class="layui-card">
-                        <div class="layui-card-header">学院人数比概览</div>
+                        <div class="layui-card-header">学院学生人数比概览</div>
                         <div class="layui-card-body">
                             <div id="container2" class="layui-carousel layadmin-carousel layadmin-dataview"
                                  style="height: 100%">
@@ -304,7 +314,7 @@
                         repeat: 'repeat'
                     },
                     title: {
-                        text: '全校男女比',
+                        text: '全校学生男女比',
                         subtext: '总人数:' + res.studentPercent.total,
                         textStyle: {
                             color: '#235894'
@@ -349,7 +359,7 @@
         $.ajax({
             async: false,
             type: "get",
-            data:{
+            data: {
                 type: "allCollege"
             },
             url: "${ctx}/findPersonTotalPercentByCommonName",
@@ -403,6 +413,45 @@
                     myChart.setOption(option, true);
                 }
 
+            }
+        });
+
+        $.ajax({
+            async: false,
+            type: "get",
+            data: {
+                type: "allCollegeByTeaTitle"
+            },
+            url: "${ctx}/findTeaTotalGroupByTitle",
+            success: function (res) {
+                var dom = document.getElementById("container3");
+                var myChart = echarts.init(dom);
+                var app = {};
+                option = null;
+                option = {
+                    legend: {},
+                    tooltip: {},
+                    dataset: {
+                        source: res.source
+                    },
+                    xAxis: [
+                        {type: 'category', gridIndex: 0},
+                        {type: 'category', gridIndex: 1}
+                    ],
+                    yAxis: [
+                        {gridIndex: 0},
+                        {gridIndex: 1}
+                    ],
+                    grid: [
+                        {bottom: '55%'},
+                        {top: '55%'}
+                    ],
+                    series: res.series
+                };
+                ;
+                if (option && typeof option === "object") {
+                    myChart.setOption(option, true);
+                }
             }
         });
 

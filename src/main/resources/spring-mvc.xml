@@ -58,8 +58,8 @@
         </mvc:interceptor>
 
         <mvc:interceptor>
-            <mvc:mapping path="/**" />
-            <bean class="com.springmvc.interceptor.TokenInterceptor" />
+            <mvc:mapping path="/**"/>
+            <bean class="com.springmvc.interceptor.TokenInterceptor"/>
         </mvc:interceptor>
 
         <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor"/>

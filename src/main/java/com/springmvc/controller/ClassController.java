@@ -23,16 +23,18 @@ import java.util.Map;
  * @ClassName ClassController
  * @Author JinZhiyun
  * @Description 班级业务控制器
+ * 处理班级相关的页面跳转、增删改查ajax请求。
+ * 该控制类都有根请求路径/class
  * @Date 2019/4/16 15:26
  * @Version 1.0
  **/
 @Controller
 @RequestMapping("/class")
-public class ClassController extends BaseController{
+public class ClassController extends BaseController {
     /**
      * @return java.lang.Object
      * @Author JinZhiyun
-     * @Description 联动渲染班级select栏的ajax交互
+     * @Description 联动渲染班级select栏的ajax交互，接收majorName参数，返回该majorName下的所有班级构成的list作为JSON
      * @Date 22:30 2019/4/23
      * @Param [majorName]
      **/
@@ -55,11 +57,11 @@ public class ClassController extends BaseController{
     }
 
     /**
+     * @return com.springmvc.dto.other.ResultMap<java.util.List   <   com.springmvc.dto.classP.ClassWithGradeMajorCollegeDto>>
      * @author JinZhiyun
-     * @Description 班级信息查询的ajax交互
+     * @Description 班级信息查询的ajax交互，返回符合layui表格要求的JSON
      * @Date 9:33 2019/7/7
      * @Param [myPage, classSearch]
-     * @return com.springmvc.dto.other.ResultMap<java.util.List<com.springmvc.dto.classP.ClassWithGradeMajorCollegeDto>>
      **/
     @RequestMapping("/showAllClassInfo")
     @ResponseBody
@@ -69,11 +71,11 @@ public class ClassController extends BaseController{
     }
 
     /**
+     * @return com.springmvc.dto.other.ResultMap<java.util.List   <   com.springmvc.dto.classP.ClassWithGradeMajorCollegeDto>>
      * @author JinZhiyun
-     * @Description 查询用户班级信息的ajax交互
+     * @Description 查询用户个人的班级信息的ajax交互，返回符合layui表格要求的JSON
      * @Date 11:43 2019/7/7
      * @Param [myPage]
-     * @return com.springmvc.dto.other.ResultMap<java.util.List<com.springmvc.dto.classP.ClassWithGradeMajorCollegeDto>>
      **/
     @RequestMapping("/myOwnInfo")
     @ResponseBody
@@ -97,40 +99,39 @@ public class ClassController extends BaseController{
     }
 
     /**
-     * @return java.lang.String
-     * @Author JinZhiyun
+     * @author JinZhiyun
      * @Description 重定向到编辑班级iframe子页面并返回相应model
-     * @Date 18:30 2019/4/28
-     * @Param [model, classId, classCollegeName, classMajorName]
+     * @Date 16:38 2019/7/25
+     * @Param [model, classWGMC]
+     * @return java.lang.String
      **/
     @RequestMapping("/edit")
     public String classEdit(Model model, ClassWithGradeMajorCollegeDto classWGMC) {
-        model.addAttribute(Constants.CLASS_ALL_INFO_MODEL,classWGMC);
+        model.addAttribute(Constants.CLASS_ALL_INFO_MODEL, classWGMC);
         return "app/modify/classForm";
     }
 
     /**
-     * @return java.util.Map<java.lang.String   ,   java.lang.Object>
+     * @return java.util.Map<java.lang.String       ,       java.lang.Object>
      * @Author JinZhiyun
-     * @Description 更新班级信息
+     * @Description 更新班级信息的ajax交互，返回字符串表示更新成功与否结果
      * @Date 10:10 2019/4/29
      * @Param [classOriId, classOriName, classWMCD]
      **/
     @RequestMapping("/updateInfo")
     @ResponseBody
-    public Map<String, Object> updateInfo(@RequestParam("classOriName") String classOriName, @RequestParam("classOriId") String classOriId,ClassWithGradeMajorCollegeDto classWGMC) {
+    public Map<String, Object> updateInfo(@RequestParam("classOriName") String classOriName, @RequestParam("classOriId") String classOriId, ClassWithGradeMajorCollegeDto classWGMC) {
         Map<String, Object> map = new HashMap();
-        System.out.println(classWGMC);
         map.put("data", classService.updateClassInfo(classOriId, classOriName, classWGMC));
         return map;
     }
 
     /**
+     * @return java.lang.String
      * @author JinZhiyun
      * @Description 重定向到添加班级iframe子页面并返回相应model
      * @Date 18:24 2019/7/7
      * @Param []
-     * @return java.lang.String
      **/
     @RequestMapping("/add")
     public String add() {
@@ -138,7 +139,7 @@ public class ClassController extends BaseController{
     }
 
     /**
-     * @return java.util.Map<java.lang.String   ,   java.lang.Object>
+     * @return java.util.Map<java.lang.String       ,       java.lang.Object>
      * @Author JinZhiyun
      * @Description 更新教师信息
      * @Date 10:55 2019/4/29
@@ -155,7 +156,7 @@ public class ClassController extends BaseController{
     }
 
     /**
-     * @return java.util.Map<java.lang.String   ,   java.lang.Object>
+     * @return java.util.Map<java.lang.String       ,       java.lang.Object>
      * @Author JinZhiyun
      * @Description 删除一个班级ajax交互
      * @Date 15:08 2019/4/29
@@ -173,11 +174,11 @@ public class ClassController extends BaseController{
     }
 
     /**
-     * @return
-     * @Author JinZhiyun
+     * @author JinZhiyun
      * @Description 删除多个班级ajax交互
-     * @Date 9:36 2019/5/2
-     * @Param
+     * @Date 16:43 2019/7/25
+     * @Param [classes]
+     * @return java.util.Map<java.lang.String,java.lang.Object>
      **/
     @RequestMapping("/deleteMany")
     @ResponseBody
@@ -186,8 +187,8 @@ public class ClassController extends BaseController{
 
         List<ClassWithGradeMajorCollegeDto> classWMCDs = JSON.parseArray(classes, ClassWithGradeMajorCollegeDto.class);
 
-        List<String> classNames=new ArrayList<>();
-        for (ClassWithGradeMajorCollegeDto classWGMC:classWMCDs){
+        List<String> classNames = new ArrayList<>();
+        for (ClassWithGradeMajorCollegeDto classWGMC : classWMCDs) {
             classNames.add(classWGMC.getClassName());
         }
         classService.deleteManyClasses(classNames);

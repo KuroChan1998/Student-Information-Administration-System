@@ -56,11 +56,11 @@ public class StudentController extends BaseController{
     }
 
     /**
-     * @return com.springmvc.dto.other.ResultMap<java.util.List   <   com.springmvc.dto.StudentWithMajorCollegeDto>>
-     * @Author JinZhiyun
+     * @author JinZhiyun
      * @Description 查询学生个人信息的ajax交互
-     * @Date 11:10 2019/4/19
-     * @Param [myPage, session, request]
+     * @Date 16:51 2019/7/25
+     * @Param [myPage]
+     * @return com.springmvc.dto.other.ResultMap<java.util.List<com.springmvc.dto.student.StudentWithGradeClassMajorCollegeDto>>
      **/
     @RequestMapping("/myOwnInfo")
     @ResponseBody
@@ -97,11 +97,11 @@ public class StudentController extends BaseController{
     }
 
     /**
-     * @return java.util.Map<java.lang.String   ,   java.lang.Object>
-     * @Author JinZhiyun
+     * @author JinZhiyun
      * @Description 更新学生信息
-     * @Date 22:14 2019/4/25
-     * @Param [stuOriId, stuWCD]
+     * @Date 16:52 2019/7/25
+     * @Param [stuOriNum, stuWGCMC]
+     * @return java.util.Map<java.lang.String,java.lang.Object>
      **/
     @RequestMapping("/updateInfo")
     @ResponseBody

@@ -8,6 +8,9 @@
     </resultMap>
 
     <select id="selectAllTitle" resultMap="BaseResultMap">
-        select * from  title;
+        select * from title;
+    </select>
+    <select id="selectAllTitleName" resultType="string">
+        select title_name from title;
     </select>
 </mapper>

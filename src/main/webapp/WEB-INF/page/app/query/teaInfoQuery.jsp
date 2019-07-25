@@ -26,7 +26,7 @@
 <div class="layui-fluid">
     <div class="layui-card">
         <div class="layui-form layui-card-header layuiadmin-card-header-auto">
-            <div class="layui-form-item">
+            <div class="layui-form-item" id="form">
                 <div class="layui-inline">
                     <label class="layui-form-label">工号</label>
                     <div class="layui-input-inline">
@@ -74,9 +74,31 @@
                     </div>
                 </div>
                 <div class="layui-inline">
+                    <label class="layui-form-label">筛选排序</label>
+                    <div class="layui-input-inline">
+                        <select id="condition1" name="condition1" lay-filter="condition1">
+                            <option value="">请选择要排序的类别</option>
+                            <option value="teaNum">按工号排序</option>
+                            <option value="teaBirthday">按年龄排序</option>
+                            <option value="teaTitle">按职称排序</option>
+                        </select>
+                    </div>
+                    <div class="layui-input-inline">
+                        <select id="condition2" name="condition2" lay-filter="condition2">
+                            <option value="">请选择要排序方式</option>
+                            <option value="asc">从低到高</option>
+                            <option value="desc">从高到低</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
                     <button class="layui-btn layuiadmin-btn-comm" data-type="reload" lay-submit
                             lay-filter="LAY-app-contcomm-search">
                         <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                    <button class="layui-btn layuiadmin-btn-comm" data-type="reload"
+                            id="clear">
+                        清空
                     </button>
                 </div>
             </div>
@@ -178,7 +200,7 @@
                 {field: 'teaNum', title: '工号', sort: true, fixed: true}
                 , {field: 'teaName', title: '姓名'}
                 , {field: 'teaSex', title: '性别', sort: true}
-                , {field: 'teaAge', title: '年龄',sort: true}
+                , {field: 'teaAge', title: '年龄', sort: true}
                 , {field: 'teaTitleName', title: '职称', sort: true}
                 , {field: 'teaMajorName', title: '专业', sort: true}
                 , {field: 'teaCollegeName', title: '学院', sort: true}
@@ -217,10 +239,12 @@
                 , where: { //设定异步数据接口的额外参数，任意设
                     teaNum: field.teaNum
                     , teaName: field.teaName
-                    , teaSex : field.teaSex
+                    , teaSex: field.teaSex
                     , teaTitleName: field.teaTitle
                     , teaCollegeName: field.teaCollege
-                    , teaMajorName : field.teaMajor
+                    , teaMajorName: field.teaMajor
+                    , condition1: field.condition1
+                    , condition2: field.condition2
                 }
                 , request: {
                     pageName: 'pageNum',
@@ -232,6 +256,16 @@
             });
         });
 
+        form.on('select(condition1)', function (data) {
+            //获取部门的ID通过异步查询子集
+            $("#condition2").val("");
+            form.render('select');
+        });
+
+        $("#clear").click(function () {
+            $("#form input").val("");
+            $("#form select").val("");
+        });
 
         $("#query-my-info").click(function () {
             table.reload('teaInfoQuery', {
@@ -256,10 +290,10 @@
                 , where: { //设定异步数据接口的额外参数，任意设
                     teaNum: ''
                     , teaName: ''
-                    , teaSex : ''
+                    , teaSex: ''
                     , teaTitleName: ''
                     , teaCollegeName: ''
-                    , teaMajorName : ''
+                    , teaMajorName: ''
                 }
                 , page: {
                     curr: 1 //重新从第 1 页开始

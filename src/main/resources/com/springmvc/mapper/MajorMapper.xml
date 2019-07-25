@@ -85,6 +85,15 @@
             and c1.college_property=#{majorCollegeProperty}
         </if>
         left join teacher t1 on m1.major_tea_num = t1.tea_num
+        <if test="condition1 == 'majorCollegeProperty'">
+            order by c1.college_property
+            <if test="condition2 == 'asc'">
+                asc
+            </if>
+            <if test="condition2 == 'desc'">
+                desc
+            </if>
+        </if>
     </select>
     <select id="selectStuMajorOwnInfoByNum" resultMap="MajorWithCollegeResultMap">
          select m1.*,c2.college_name as major_college_name, c2.college_property as major_college_property, t1.tea_name as major_tea_name

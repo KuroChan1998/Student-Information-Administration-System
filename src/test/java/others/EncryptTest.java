@@ -1,12 +1,5 @@
 package others;
 
-/**
- * @ClassName EncryptTest
- * @Author JinZhiyun
- * @Description //TODO
- * @Date 2019/5/12 10:36
- * @Version 1.0
- **/
 import org.apache.shiro.codec.Base64;
 import org.apache.shiro.codec.Hex;
 import org.apache.shiro.crypto.AesCipherService;
@@ -16,10 +9,12 @@ import org.junit.Test;
 import java.security.Key;
 
 /**
- * @author 大宇
- * @create 2018/12/10 21:12
- * Description 加密、解密
- */
+ * @author JinZhiyun
+ * @Description //TODO 
+ * @Date 17:16 2019/7/25
+ * @Param 
+ * @return 
+ **/
 public class EncryptTest {
 
     //加密内容

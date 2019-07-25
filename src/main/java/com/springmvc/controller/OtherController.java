@@ -2,6 +2,7 @@ package com.springmvc.controller;
 
 import com.springmvc.dto.other.EmailVerifyCode;
 import com.springmvc.dto.other.senior.StudentPercentBySex;
+import com.springmvc.entity.College;
 import com.springmvc.entity.User;
 import com.springmvc.interceptor.Token;
 import com.springmvc.util.Constants;
@@ -20,18 +21,18 @@ import java.util.Map;
 /**
  * @author JinZhiyun
  * @ClassName OtherController
- * @Description //TODO
+ * @Description 其他一些请求的控制类
  * @Date 2019/6/6 13:09
  * @Version 1.0
  **/
 @Controller
 public class OtherController extends BaseController {
     /**
-     * @return org.springframework.web.servlet.ModelAndView
-     * @Author JinZhiyun
+     * @author JinZhiyun
      * @Description 定向到主页index.jsp，并返回用户model
-     * @Date 9:23 2019/4/19
-     * @Param [session, request]
+     * @Date 16:48 2019/7/25
+     * @Param []
+     * @return org.springframework.web.servlet.ModelAndView
      **/
     @RequestMapping("/index")
     public ModelAndView index() {
@@ -68,11 +69,11 @@ public class OtherController extends BaseController {
     }
 
     /**
-     * @return java.util.Map<java.lang.String               ,               java.lang.Object>
-     * @Author JinZhiyun
+     * @author JinZhiyun
      * @Description 测试登录成功与否的ajax交互
-     * @Date 9:38 2019/4/19
-     * @Param [userId, userPassword, remember, session, request, response]
+     * @Date 16:49 2019/7/25
+     * @Param [user, remember]
+     * @return java.util.Map<java.lang.String,java.lang.Object>
      **/
     @RequestMapping("/loginTest")
     @ResponseBody //直接返回 json 数据
@@ -85,7 +86,6 @@ public class OtherController extends BaseController {
             map.put("data", "resultSuccess");
             //登录成功设置session
             session.setAttribute(Constants.USERINFO_SESSION, userSessionInfo);
-            System.out.println(remember);
             //记住密码存cookie
             SetCookie.setUserLoginCookie(user.getUserName(), user.getUserPassword(), remember, request, response);
         }
@@ -105,7 +105,7 @@ public class OtherController extends BaseController {
     }
 
     /**
-     * @return java.util.Map<java.lang.String               ,               java.lang.Object>
+     * @return java.util.Map<java.lang.String                               ,                               java.lang.Object>
      * @Author JinZhiyun
      * @Description 判断注册成功与否的ajax交互
      * @Date 9:39 2019/4/19
@@ -133,7 +133,7 @@ public class OtherController extends BaseController {
     }
 
     /**
-     * @return java.util.Map<java.lang.String   ,   java.lang.Object>
+     * @return java.util.Map<java.lang.String       ,       java.lang.Object>
      * @author JinZhiyun
      * @Description 发送验证码的ajax交互
      * @Date 8:46 2019/6/6
@@ -150,7 +150,7 @@ public class OtherController extends BaseController {
     }
 
     /**
-     * @return java.util.Map<java.lang.String   ,   java.lang.Object>
+     * @return java.util.Map<java.lang.String       ,       java.lang.Object>
      * @author JinZhiyun
      * @Description 检测验证码是否正确的ajax交互
      * @Date 8:58 2019/6/6
@@ -174,7 +174,7 @@ public class OtherController extends BaseController {
     }
 
     /**
-     * @return java.util.Map<java.lang.String               ,               java.lang.Object>
+     * @return java.util.Map<java.lang.String                               ,                               java.lang.Object>
      * @Author JinZhiyun
      * @Description 重置密码的ajax交互
      * @Date 9:46 2019/4/19
@@ -222,7 +222,7 @@ public class OtherController extends BaseController {
     }
 
     /**
-     * @return java.util.Map<java.lang.String       ,       java.lang.Object>
+     * @return java.util.Map<java.lang.String               ,               java.lang.Object>
      * @Author JinZhiyun
      * @Description 性别比可视化ajax
      * @Date 18:54 2019/5/5
@@ -246,9 +246,9 @@ public class OtherController extends BaseController {
      * @Date 12:18 2019/5/5
      * @Param []
      **/
-    @RequestMapping("/senior/sex")
+    @RequestMapping("/senior/stuSex")
     public String sex() {
-        return "senior/sex";
+        return "senior/student/stuSex";
     }
 
     /**
@@ -260,24 +260,73 @@ public class OtherController extends BaseController {
      **/
     @RequestMapping("/senior/stuNum")
     public String stuNum() {
-        return "senior/stuNum";
+        return "senior/student/stuNum";
     }
 
     /**
      * @return java.util.Map<java.lang.String   ,   java.lang.Object>
-     * @Author JinZhiyun
-     * @Description 学院人数比可视化ajax
-     * @Date 21:39 2019/5/5
-     * @Param []
+     * @author JinZhiyun
+     * @Description 学生人数比可视化ajax
+     * @Date 19:00 2019/7/21
+     * @Param [collegeName, majorName, type]
      **/
     @RequestMapping("/findPersonTotalPercentByCommonName")
     @ResponseBody
-    public Map<String, Object> findCollegeStuNumPercent(@RequestParam(value = "college", required = false) String collegeName
+    public Map<String, Object> findPersonTotalPercentByCommonName(@RequestParam(value = "college", required = false) String collegeName
             , @RequestParam(value = "major", required = false) String majorName, @RequestParam(value = "type", required = false) String type) {
         Map<String, Object> map = new HashMap<>();
-        List<List<Object>> list=otherService.proSelectStuTotalByCollegeOrMajorName(type, collegeName,majorName);
-        map.put("commonName",list.get(0));
-        map.put("total",list.get(1));
+        List<List<Object>> list = otherService.proSelectStuTotalByCollegeOrMajorName(type, collegeName, majorName);
+        map.put("commonName", list.get(0));
+        map.put("total", list.get(1));
         return map;
+    }
+
+    /**
+     * @author JinZhiyun
+     * @Description 本硕博比可视化ajax
+     * @Date 17:40 2019/7/23
+     * @Param [collegeName, type]
+     * @return java.util.Map<java.lang.String,java.lang.Object>
+     **/
+    @RequestMapping("/findStuTotalByDegreeAndCollege")
+    @ResponseBody
+    public Map<String, Object> findStuTotalByDegreeAndCollege(@RequestParam(value = "college", required = false) String collegeName, @RequestParam(value = "type", required = false) String type) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("dimensions", new ArrayList<Object>() {//这个大括号 就相当于我们  new 接口
+                    {//这个大括号 就是 构造代码块 会在构造函数前 调用
+                        this.add("product");
+                        this.addAll(Constants.stuDegrees);
+                    }
+                }
+        );
+        List<Map<String, Object>> list = otherService.transferStuTotalToValidJSON(type,collegeName);
+        map.put("source", list);
+        return map;
+    }
+
+    /**
+     * @author JinZhiyun
+     * @Description 重定向到师资力量echarts可视化
+     * @Date 17:42 2019/7/23
+     * @Param []
+     * @return java.lang.String
+     **/
+    @RequestMapping("/senior/teaPower")
+    public String teaPower() {
+        return "senior/teacher/teaPower";
+    }
+
+    /**
+     * @author JinZhiyun
+     * @Description 师资力量可视化ajax
+     * @Date 18:45 2019/7/24
+     * @Param [collegeName, majorName, type]
+     * @return java.util.Map<java.lang.String,java.lang.Object>
+     **/
+    @RequestMapping("/findTeaTotalGroupByTitle")
+    @ResponseBody
+    public Map<String, Object> findTeaTotalGroupByTitle(@RequestParam(value = "college", required = false) String collegeName
+            , @RequestParam(value = "major", required = false) String majorName,@RequestParam(value = "type", required = false) String type) {
+        return otherService.transTeaTotalToValidJSON(type,collegeName,majorName);
     }
 }

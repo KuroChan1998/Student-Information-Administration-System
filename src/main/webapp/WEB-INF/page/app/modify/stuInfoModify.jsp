@@ -26,7 +26,7 @@
 <div class="layui-fluid">
     <div class="layui-card">
         <div class="layui-form layui-card-header layuiadmin-card-header-auto">
-            <div class="layui-form-item">
+            <div class="layui-form-item" id="form">
                 <div class="layui-inline">
                     <label class="layui-form-label">学号</label>
                     <div class="layui-input-inline">
@@ -93,9 +93,32 @@
                     </div>
                 </div>
                 <div class="layui-inline">
+                    <label class="layui-form-label">筛选排序</label>
+                    <div class="layui-input-inline">
+                        <select id="condition1" name="condition1" lay-filter="condition1">
+                            <option value="">请选择要排序的类别</option>
+                            <option value="stuNum">按学号排序</option>
+                            <option value="stuBirthday">按年龄排序</option>
+                            <option value="stuGrade">按年级排序</option>
+                            <option value="stuDegree">按学位排序</option>
+                        </select>
+                    </div>
+                    <div class="layui-input-inline">
+                        <select id="condition2" name="condition2" lay-filter="condition2">
+                            <option value="">请选择要排序方式</option>
+                            <option value="asc">从低到高</option>
+                            <option value="desc">从高到低</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
                     <button class="layui-btn layuiadmin-btn-comm" data-type="reload" lay-submit
                             lay-filter="LAY-app-contcomm-search">
                         <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                    <button class="layui-btn layuiadmin-btn-comm" data-type="reload"
+                            id="clear">
+                        清空
                     </button>
                 </div>
             </div>
@@ -190,6 +213,7 @@
 
         //联动监听select
         form.on('select(stuCollege)', function (data) {
+            $("#stuClass").val("");
             //获取部门的ID通过异步查询子集
             $("#stuMajor").empty();
             $("#stuMajor").append('<option value="">请选择专业</option>');
@@ -226,13 +250,20 @@
             });
         });
 
+        //联动监听select
+        form.on('select(condition1)', function (data) {
+            //获取部门的ID通过异步查询子集
+            $("#condition2").val("");
+            form.render('select');
+        });
+
         //方法级渲染
         table.render({
             elem: '#stuInfoQuery'
             , url: '${ctx}/student/showAllStuInfo' //向后端默认传page和limit
             , cols: [[
                 {type: 'checkbox', fixed: 'left'}
-                , {field: 'stuId', title: '学生id', sort: true,  hide: true}
+                , {field: 'stuId', title: '学生id', sort: true, hide: true}
                 , {field: 'stuNum', title: '学号', sort: true, fixed: true}
                 , {field: 'stuName', title: '姓名'}
                 , {field: 'stuSex', title: '性别', sort: true}
@@ -265,6 +296,11 @@
                 //console.log(count);
             }
 
+        });
+
+        $("#clear").click(function () {
+            $("#form input").val("");
+            $("#form select").val("");
         });
 
         $("#query-all-info").click(function () {
@@ -305,6 +341,8 @@
                     , stuCollegeName: field.stuCollege
                     , stuMajorName: field.stuMajor
                     , stuClassName: field.stuClass
+                    , condition1: field.condition1
+                    , condition2: field.condition2
                 }
                 , request: {
                     pageName: 'pageNum',
@@ -455,7 +493,7 @@
                     ,
                     title: '编辑学生'
                     ,
-                    content: '${ctx}/student/edit?stuNum=' + data.stuNum + '&stuCollegeName=' + data.stuCollegeName + '&stuMajorName=' + data.stuMajorName + '&stuClassName=' + data.stuClassName+ '&stuGradeName=' + data.stuGradeName
+                    content: '${ctx}/student/edit?stuNum=' + data.stuNum + '&stuCollegeName=' + data.stuCollegeName + '&stuMajorName=' + data.stuMajorName + '&stuClassName=' + data.stuClassName + '&stuGradeName=' + data.stuGradeName
                     ,
                     maxmin: true
                     ,
@@ -471,7 +509,7 @@
                         iframeWindow.layui.form.on('submit(layuiadmin-app-form-edit)', function (data) {
                             var field = data.field; //获取提交的字段
                             var json = {
-                                stuOriNum:  field.oriId
+                                stuOriNum: field.oriId
                                 , stuNum: field.id
                                 , stuName: field.name
                                 , stuSex: field.sex

@@ -110,7 +110,7 @@
 
     <insert id="insertUserRegInfo" parameterType="com.springmvc.entity.User">
         <!--<selectKey keyProperty="userId" resultType="string" order="BEFORE">-->
-            <!--select replace(uuid(), '-', '') from dual-->
+        <!--select replace(uuid(), '-', '') from dual-->
         <!--</selectKey>-->
         insert into user
         <trim prefix="(" suffix=")" suffixOverrides=",">

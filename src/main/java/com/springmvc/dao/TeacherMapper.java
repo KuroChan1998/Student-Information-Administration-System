@@ -1,5 +1,6 @@
 package com.springmvc.dao;
 
+import com.springmvc.dto.other.senior.ObjectTotalGroupByCommonName;
 import com.springmvc.dto.teacher.TeacherSearchDto;
 import com.springmvc.dto.teacher.TeacherWithTitleMajorCollegeDto;
 import com.springmvc.entity.Teacher;
@@ -79,4 +80,30 @@ public interface TeacherMapper {
      * @return void
      **/
     void deleteManyTeachers(List<String> teaNums);
+
+    /**
+     * @author JinZhiyun
+     * @Description 查找符合条件的对应类别名称的教师数的封装对象，这里用mysql存储过程实现
+     * type为查询的类型：
+     *      allCollegeByTeaTitle：查询某学院下的不同职称教师人数
+     *      wholeSchoolByTeaTitle： 查询全校的不同职称教师人数
+     *      allMajorByTeaTitle： 查询某专业下的不同职称教师人数
+     * CREATE DEFINER=`root`@`localhost` PROCEDURE `count_tea_percent`(IN type_ varchar(50), IN college_name_ varchar(50), IN major_name_ varchar(50))
+     * begin
+     * 	case type_
+     * 		when 'allCollegeByTeaTitle' then
+     * 			select count(*) as total,t2.title_name as commonName from teacher t1 inner join title t2 on t1.tea_title=t2.title_id inner join major m1 on t1.tea_major=m1.major_id inner join college c1 on m1.major_college=c1.college_id and c1.college_name=college_name_ group by t1.tea_title;
+     * 		when 'wholeSchoolByTeaTitle' then
+     * 			select count(*) as total,t2.title_name as commonName from teacher t1 inner join title t2 on t1.tea_title=t2.title_id group by t1.tea_title;
+     * 		when 'allMajorByTeaTitle' then
+     * 			select count(*) as total,t2.title_name as commonName from teacher t1 inner join title t2 on t1.tea_title=t2.title_id inner join major m1 on t1.tea_major=m1.major_id and m1.major_name=major_name_ group by t1.tea_title;
+     *      else
+     * 			select 0 as total,'' as commonName;
+     *  end case;
+     * end
+     * @Date 17:06 2019/7/24
+     * @Param [type, collegeName, majorName]
+     * @return java.util.List<com.springmvc.dto.other.senior.ObjectTotalGroupByCommonName>
+     **/
+    List<ObjectTotalGroupByCommonName> selectTeaTotalByCommonName(@Param("type") String type, @Param("collegeName") String collegeName, @Param("majorName") String majorName);
 }

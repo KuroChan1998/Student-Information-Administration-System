@@ -2,6 +2,7 @@ package com.springmvc.service;
 
 import com.github.pagehelper.PageInfo;
 import com.springmvc.dto.college.CollegeDto;
+import com.springmvc.dto.college.CollegeSearchDto;
 import com.springmvc.dto.other.MyPage;
 import com.springmvc.entity.College;
 import com.springmvc.entity.User;
@@ -28,11 +29,11 @@ public interface CollegeService {
     /**
      * @author JinZhiyun
      * @Description 返回符合的学院信息的分页结果
-     * @Date 19:20 2019/7/10
-     * @Param [myPage, collegeDto]
+     * @Date 13:21 2019/7/25
+     * @Param [myPage, collegeSearchDto]
      * @return com.github.pagehelper.PageInfo<com.springmvc.dto.college.CollegeDto>
      **/
-    PageInfo<CollegeDto> selectAllCollegeInfo(MyPage myPage, CollegeDto collegeDto);
+    PageInfo<CollegeDto> selectAllCollegeInfo(MyPage myPage, CollegeSearchDto collegeSearchDto);
 
     /**
      * @author JinZhiyun

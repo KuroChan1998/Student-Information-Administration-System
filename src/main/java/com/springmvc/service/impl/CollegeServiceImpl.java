@@ -3,6 +3,7 @@ package com.springmvc.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.springmvc.dto.college.CollegeDto;
+import com.springmvc.dto.college.CollegeSearchDto;
 import com.springmvc.dto.other.MyPage;
 import com.springmvc.dto.other.senior.ObjectTotalGroupByCommonName;
 import com.springmvc.entity.College;
@@ -30,15 +31,15 @@ public class CollegeServiceImpl extends BaseServiceImpl implements CollegeServic
     }
 
     @Override
-    public PageInfo<CollegeDto> selectAllCollegeInfo(MyPage myPage, CollegeDto collegeDto) {
+    public PageInfo<CollegeDto> selectAllCollegeInfo(MyPage myPage, CollegeSearchDto collegeSearchDto) {
         PageHelper.startPage(myPage.getPageNum(), myPage.getPageSize());//第一个参数的意思为：当前页数，第二个参数的意思为：每页显示多少条记录
-        List<CollegeDto> collegeDtos = collegeMapper.selectAllCollegeInfo(collegeDto);
+        List<CollegeDto> collegeDtos = collegeMapper.selectAllCollegeInfo(collegeSearchDto);
         return new PageInfo<>(collegeDtos);
     }
 
     @Override
     public PageInfo<CollegeDto> selectCollegeOwnInfoByNum(MyPage myPage, User user) {
-        List<CollegeDto> collegeDtos=new ArrayList<>();
+        List<CollegeDto> collegeDtos = new ArrayList<>();
         if (user.getUserIdentity().equals("学生")) {
             PageHelper.startPage(myPage.getPageNum(), myPage.getPageSize());//第一个参数的意思为：当前页数，第二个参数的意思为：每页显示多少条记录
             collegeDtos.add(collegeMapper.selectStuCollegeOwnInfoByNum(user.getUserName()));
@@ -100,7 +101,7 @@ public class CollegeServiceImpl extends BaseServiceImpl implements CollegeServic
 
     @Override
     public void deleteManyColleges(List<String> collegeNames) {
-        for (String collegeName:collegeNames){
+        for (String collegeName : collegeNames) {
             deleteOneCollege(collegeName);
         }
     }

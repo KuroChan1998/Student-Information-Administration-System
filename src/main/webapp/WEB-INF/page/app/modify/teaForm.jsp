@@ -108,16 +108,16 @@
         base: '${ctx}/static/plugins/layuiadmin/' //静态资源所在路径
     }).extend({
         index: 'lib/index' //主入口模块
-    }).use(['index', 'form','laydate'], function () {
+    }).use(['index', 'form', 'laydate'], function () {
         var $ = layui.$
             , form = layui.form
             , laydate = layui.laydate;
         laydate.render({
             elem: '#birthday' //指定元素
-            ,value: '1980-1-1'
-            ,isInitValue: false //是否允许填充初始值，默认为 true'
-            ,min: '1920-1-1'
-            ,max: '2018-12-31'
+            , value: '1980-1-1'
+            , isInitValue: false //是否允许填充初始值，默认为 true'
+            , min: '1920-1-1'
+            , max: '2018-12-31'
         });
 
         //从数据库异步获取职称数据填充到职称select框中

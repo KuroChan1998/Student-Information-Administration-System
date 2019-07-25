@@ -120,6 +120,15 @@
         </if>
         left join student s1 on c1.class_stu_num = s1.stu_num
         left join teacher t1 on c1.class_tea_num = t1.tea_num
+        <if test="condition1 == 'classGrade'">
+            order by c1.class_grade
+            <if test="condition2 == 'asc'">
+                desc
+            </if>
+            <if test="condition2 == 'desc'">
+                asc
+            </if>
+        </if>
     </select>
     <select id="selectStuClassOwnInfoByNum" resultMap="ClassWithGMCResultMap">
         select c1.*,g1.grade_name as class_grade_name, m1.major_name as class_major_name, c2.college_name as class_college_name,

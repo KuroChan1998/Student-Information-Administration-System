@@ -57,11 +57,11 @@ public class TeacherController extends BaseController{
 
 
     /**
-     * @return com.springmvc.dto.other.ResultMap<java.util.List   <   com.springmvc.dto.TeacherWithMajorCollegeDto>>
-     * @Author JinZhiyun
+     * @author JinZhiyun
      * @Description 查询教师个人信息的ajax交互
-     * @Date 11:09 2019/4/19
-     * @Param [myPage, session, request]
+     * @Date 16:53 2019/7/25
+     * @Param [myPage]
+     * @return com.springmvc.dto.other.ResultMap<java.util.List<com.springmvc.dto.teacher.TeacherWithTitleMajorCollegeDto>>
      **/
     @RequestMapping("/myOwnInfo")
     @ResponseBody
@@ -84,25 +84,24 @@ public class TeacherController extends BaseController{
         return "app/modify/teaInfoModify";
     }
     /**
-     * @return java.lang.String
-     * @Author JinZhiyun
+     * @author JinZhiyun
      * @Description 重定向到编辑教师iframe子页面并返回相应model
-     * @Date 22:04 2019/4/27
-     * @Param [model, teaId, teaCollegeName, teaMajorName]
+     * @Date 16:53 2019/7/25
+     * @Param [model, teaWTMC]
+     * @return java.lang.String
      **/
     @RequestMapping("/edit")
     public String teaEdit(Model model, TeacherWithTitleMajorCollegeDto teaWTMC) {
-        System.out.println(teaWTMC);
         model.addAttribute(Constants.TEACHER_ALL_INFO_MODEL, teaWTMC);
         return "app/modify/teaForm";
     }
 
     /**
-     * @return java.util.Map<java.lang.String   ,   java.lang.Object>
-     * @Author JinZhiyun
+     * @author JinZhiyun
      * @Description 更新教师信息
-     * @Date 22:03 2019/4/27
-     * @Param [teaOriId, teaWMCD]
+     * @Date 16:53 2019/7/25
+     * @Param [teaOriNum, teaWTMC]
+     * @return java.util.Map<java.lang.String,java.lang.Object>
      **/
     @RequestMapping("/updateInfo")
     @ResponseBody
@@ -129,7 +128,6 @@ public class TeacherController extends BaseController{
     @RequestMapping("/insert")
     @ResponseBody
     public Map<String, Object> insertTeacher(TeacherWithTitleMajorCollegeDto teaWTMC) {
-        System.out.println(teaWTMC);
         Map<String, Object> map = new HashMap();
         if (teacherService.selectTeacherByNum(teaWTMC.getTeaNum()) != null) {
             map.put("data", "teaNumExist");
@@ -150,9 +148,7 @@ public class TeacherController extends BaseController{
     @RequestMapping("/deleteOne")
     @ResponseBody
     public Map<String, Object> deleteOneTeacher(@RequestParam("teaNum") String teaNum) {
-        System.out.println(teaNum);
         Map<String, Object> map = new HashMap();
-
         teacherService.deleteOneTeacher(teaNum);
         map.put("data", "deleteSuccess");
         return map;
@@ -169,14 +165,12 @@ public class TeacherController extends BaseController{
     @ResponseBody
     public Map<String, Object> deleteManyTeachers(@RequestParam("teachers") String teachers) {
         Map<String, Object> map = new HashMap();
-
         List<TeacherWithTitleMajorCollegeDto> teaWMCDs = JSON.parseArray(teachers, TeacherWithTitleMajorCollegeDto.class);
         List<String> teaNums=new ArrayList<>();
         for (TeacherWithTitleMajorCollegeDto teaWMCD:teaWMCDs) {
             teaNums.add(teaWMCD.getTeaNum());
         }
         teacherService.deleteManyTeachers(teaNums);
-
         map.put("data", "deleteSuccess");
         return map;
     }

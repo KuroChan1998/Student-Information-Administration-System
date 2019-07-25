@@ -149,7 +149,7 @@
             var field = obj.field;
 
             // console.log(field);
-            if (field.oldEmail == field.newEmail){
+            if (field.oldEmail == field.newEmail) {
                 return layer.msg('您未对绑定邮箱做任何修改！');
             }
 

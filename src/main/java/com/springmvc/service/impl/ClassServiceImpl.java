@@ -43,7 +43,7 @@ public class ClassServiceImpl extends BaseServiceImpl implements ClassService {
         if (user.getUserIdentity().equals("学生")) {
             PageHelper.startPage(myPage.getPageNum(), myPage.getPageSize());//第一个参数的意思为：当前页数，第二个参数的意思为：每页显示多少条记录
             classWGMCs.add(classMapper.selectStuClassOwnInfoByNum(user.getUserName()));
-        } else if (user.getUserIdentity().equals("教师")){
+        } else if (user.getUserIdentity().equals("教师")) {
             PageHelper.startPage(myPage.getPageNum(), myPage.getPageSize());//第一个参数的意思为：当前页数，第二个参数的意思为：每页显示多少条记录
             classWGMCs.add(classMapper.selectTeaClassOwnInfoByNum(user.getUserName()));
         }
@@ -61,7 +61,7 @@ public class ClassServiceImpl extends BaseServiceImpl implements ClassService {
             if (studentMapper.selectStudentByNum(classWGMC.getClassStuNum()) == null) { //如果班长学号不存在
                 return "classMoniNumNotExist";
             } else {
-                Class mClass=classMapper.selectClassByStuNum(classWGMC.getClassStuNum());
+                Class mClass = classMapper.selectClassByStuNum(classWGMC.getClassStuNum());
                 if (!(mClass == null || mClass.getClassId().equals(classOriId))) { //若(classId==null|| classId.equals(classOriId)可以执行更新该班长
                     return "classMoniNumRepeat";
                 }
@@ -93,7 +93,7 @@ public class ClassServiceImpl extends BaseServiceImpl implements ClassService {
             if (studentMapper.selectStudentByNum(classWGMC.getClassStuNum()) == null) { //如果班长学号不存在
                 return "classMoniNumNotExist";
             } else {
-                Class mClass=classMapper.selectClassByStuNum(classWGMC.getClassStuNum());
+                Class mClass = classMapper.selectClassByStuNum(classWGMC.getClassStuNum());
                 if (mClass != null) {
                     return "classMoniNumRepeat";
                 }
@@ -105,7 +105,7 @@ public class ClassServiceImpl extends BaseServiceImpl implements ClassService {
                 return "classTeaNumNotExist";
             } else {
                 Class mClass = classMapper.selectClassByTeaNum(classWGMC.getClassTeaNum());
-                if (mClass != null ) {
+                if (mClass != null) {
                     return "classTeaNumRepeat";
                 }
             }
@@ -123,7 +123,7 @@ public class ClassServiceImpl extends BaseServiceImpl implements ClassService {
 
     @Override
     public void deleteManyClasses(List<String> classNames) {
-        for (String className:classNames){
+        for (String className : classNames) {
             deleteOneClass(className);
         }
     }

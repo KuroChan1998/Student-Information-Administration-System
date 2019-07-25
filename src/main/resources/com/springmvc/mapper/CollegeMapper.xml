@@ -64,8 +64,8 @@
         select * from college;
     </select>
     <select id="selectAllCollegeInfo" resultMap="CollegeWithResultMap"
-            parameterType="com.springmvc.dto.college.CollegeDto">
-        select  c1.*, t1.tea_name as college_tea_name
+            parameterType="com.springmvc.dto.college.CollegeSearchDto">
+        select c1.*, t1.tea_name as college_tea_name
         from college c1 left join teacher t1 on c1.college_tea_num = t1.tea_num
         <where>
             <if test="collegeName != null and collegeName!=''">
@@ -76,6 +76,15 @@
                 and c1.college_property=#{collegeProperty}
             </if>
         </where>
+        <if test="condition1 == 'collegeProperty'">
+            order by c1.college_property
+            <if test="condition2 == 'asc'">
+                asc
+            </if>
+            <if test="condition2 == 'desc'">
+                desc
+            </if>
+        </if>
     </select>
     <select id="selectStuCollegeOwnInfoByNum" resultMap="CollegeWithResultMap">
         select c2.*, t1.tea_name as college_tea_name

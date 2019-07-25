@@ -94,21 +94,40 @@ public interface StudentMapper {
     /**
      * @author JinZhiyun
      * @Description 查找符合条件的对应类别名称的学生数的封装对象，这里用mysql存储过程实现
-     * CREATE DEFINER=`root`@`%` PROCEDURE `count_stu_percent`(IN type_ varchar(20), IN college_name_ varchar(50), IN major_name_ varchar(50))
+     * type为查询的类型：
+     *      allCollege：查询全部学院的学生人数比
+     *      allMajor: 查询全部专业的学生人数比
+     *      allClass：查询全部班级的学生人数比
+     *      majorUnderCollege：查询特定学院下专业的学生人数比
+     *      classUnderMajor：查询特定专业下班级的学生人数比
+     *      grade：查询全部全部的学生人数比
+     *      wholeSchoolByStuDegree：查询全校的本硕博人数比
+     *      allCollegeByStuDegree: 查询全部学院的本硕博人数比
+     *      majorUnderCollegeByStuDegree：查询特定学院下专业的本硕博人数比
+     * CREATE DEFINER=`root`@`%` PROCEDURE `count_stu_percent`(IN type_ varchar(50), IN college_name_ varchar(50), IN major_name_ varchar(50))
      * BEGIN
-     * 	if (type_ = 'allCollege') then
-     * 		select count(*) as total,c2.college_name as commonName from student s1 inner join class c1 on s1.stu_class=c1.class_id inner join major m1 on c1.class_major=m1.major_id inner join college c2 on c2.college_id=m1.major_college group by c2.college_id;
-     * 	elseif (type_ = 'majorUnderCollege') then
-     * 		select count(*) as total,m1.major_name as commonName from student s1 inner join class c1 on s1.stu_class=c1.class_id inner join major m1 on c1.class_major=m1.major_id inner join college c2 on c2.college_id=m1.major_college and c2.college_name=college_name_ group by m1.major_id;
-     * 	elseif (type_ = 'allMajor') then
-     * 		select count(*) as total,m1.major_name as commonName from student s1 inner join class c1 on s1.stu_class=c1.class_id inner join major m1 on c1.class_major=m1.major_id group by m1.major_id;
-     * 	elseif (type_ = 'classUnderMajor') then
-     * 		select count(*) as total,c1.class_name as commonName from student s1 inner join class c1 on s1.stu_class=c1.class_id inner join major m1 on c1.class_major=m1.major_id and m1.major_name=major_name_ group by c1.class_id;
-     * 	elseif (type_ = 'allClass') then
-     * 		select count(*) as total,c1.class_name as commonName from student s1 inner join class c1 on s1.stu_class=c1.class_id group by c1.class_id;
-     * 	elseif (type_ = 'grade') then
-     * 		select count(*) as total,g1.grade_name as commonName from student s1 inner join grade g1 on s1.stu_grade=g1.grade_id group by g1.grade_id;
-     * 	end if;
+     * 	case type_
+     * 		when 'allCollege' then
+     * 			select count(*) as total,c2.college_name as commonName from student s1 inner join class c1 on s1.stu_class=c1.class_id inner join major m1 on c1.class_major=m1.major_id inner join college c2 on c2.college_id=m1.major_college group by c2.college_id;
+     * 		when 'majorUnderCollege' then
+     * 			select count(*) as total,m1.major_name as commonName from student s1 inner join class c1 on s1.stu_class=c1.class_id inner join major m1 on c1.class_major=m1.major_id inner join college c2 on c2.college_id=m1.major_college and c2.college_name=college_name_ group by m1.major_id;
+     * 		when 'allMajor' then
+     * 			select count(*) as total,m1.major_name as commonName from student s1 inner join class c1 on s1.stu_class=c1.class_id inner join major m1 on c1.class_major=m1.major_id group by m1.major_id;
+     * 		when 'classUnderMajor' then
+     * 			select count(*) as total,c1.class_name as commonName from student s1 inner join class c1 on s1.stu_class=c1.class_id inner join major m1 on c1.class_major=m1.major_id and m1.major_name=major_name_ group by c1.class_id;
+     * 		when 'allClass' then
+     * 			select count(*) as total,c1.class_name as commonName from student s1 inner join class c1 on s1.stu_class=c1.class_id group by c1.class_id;
+     * 		when 'grade' then
+     * 			select count(*) as total,g1.grade_name as commonName from student s1 inner join grade g1 on s1.stu_grade=g1.grade_id group by g1.grade_id;
+     * 		when 'allCollegeByStuDegree' then
+     * 			select count(*) as total,s1.stu_degree as commonName from student s1 inner join class c1 on s1.stu_class=c1.class_id inner join major m1 on c1.class_major=m1.major_id inner join college c2 on c2.college_id=m1.major_college and c2.college_name=college_name_ group by s1.stu_degree;
+     * 		when 'majorUnderCollegeByStuDegree' then
+     * 			select count(*) as total,s1.stu_degree as commonName from student s1 inner join class c1 on s1.stu_class=c1.class_id inner join major m1 on c1.class_major=m1.major_id and m1.major_name=major_name_ group by s1.stu_degree;
+     *      when 'wholeSchoolByStuDegree' then
+     * 			select count(*) as total,s1.stu_degree as commonName from student s1 group by s1.stu_degree;
+     *      else
+     * 			select 0 as total,'' as commonName;
+     *   end case;
      * END
      * @Date 9:05 2019/7/16
      * @Param [type, collegeName, majorName]

@@ -125,17 +125,17 @@
         base: '${ctx}/static/plugins/layuiadmin/' //静态资源所在路径
     }).extend({
         index: 'lib/index' //主入口模块
-    }).use(['index', 'form','laydate'], function () {
+    }).use(['index', 'form', 'laydate'], function () {
         var $ = layui.$
             , form = layui.form
             , laydate = layui.laydate;
 
         laydate.render({
             elem: '#birthday' //指定元素
-            ,value: '2000-1-1'
-            ,isInitValue: false //是否允许填充初始值，默认为 true'
-            ,min: '1920-1-1'
-            ,max: '2018-12-31'
+            , value: '2000-1-1'
+            , isInitValue: false //是否允许填充初始值，默认为 true'
+            , min: '1920-1-1'
+            , max: '2018-12-31'
         });
 
         //从数据库异步获取年级数据填充到年级select框中
@@ -211,6 +211,7 @@
 
         //联动监听select
         form.on('select(college)', function (data) {
+            $("#class").val("");
             //获取部门的ID通过异步查询子集
             $("#major").empty();
             $("#major").append('<option value="">请选择专业</option>');

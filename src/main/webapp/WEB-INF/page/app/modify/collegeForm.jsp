@@ -30,8 +30,10 @@
         <label class="layui-form-label">学院名称</label>
         <div class="layui-input-inline">
             <input type="text" name="name" value="" class="layui-input" lay-verify="name">
-            <input type="text" name="oriId" value="${collegeAllInfo.collegeId}" class="layui-input" style="display:none;">
-            <input type="text" name="oriName" value="${collegeAllInfo.collegeName}" class="layui-input" style="display:none;">
+            <input type="text" name="oriId" value="${collegeAllInfo.collegeId}" class="layui-input"
+                   style="display:none;">
+            <input type="text" name="oriName" value="${collegeAllInfo.collegeName}" class="layui-input"
+                   style="display:none;">
         </div>
         <div class="layui-form-mid " style="color:red">*必填项</div>
     </div>

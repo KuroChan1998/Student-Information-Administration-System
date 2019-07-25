@@ -1,5 +1,8 @@
 package com.springmvc.util;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * @ClassName Constants
  * @Author JinZhiyun
@@ -39,4 +42,6 @@ public class Constants {
     public static final String COLLEGE_ALL_INFO_MODEL = "collegeAllInfo";
 
     public static final String STUDENT_PERCENT_BY_SEX = "studentPercent";
+
+    public static final List<String> stuDegrees= Arrays.asList("本科","硕士","博士");
 }

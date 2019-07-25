@@ -36,8 +36,8 @@ public class StudentServiceImpl extends BaseServiceImpl implements StudentServic
     public PageInfo<StudentWithGradeClassMajorCollegeDto> selectAllStudentInfo(MyPage myPage, StudentSearchDto studentSearch) {
         PageHelper.startPage(myPage.getPageNum(), myPage.getPageSize());//第一个参数的意思为：当前页数，第二个参数的意思为：每页显示多少条记录
         List<StudentWithGradeClassMajorCollegeDto> stuWGCMCs = studentMapper.selectAllStudentInfo(studentSearch);
-        for (StudentWithGradeClassMajorCollegeDto stuWGCMC:stuWGCMCs){
-            if (stuWGCMC.getStuBirthday()!=null) {
+        for (StudentWithGradeClassMajorCollegeDto stuWGCMC : stuWGCMCs) {
+            if (stuWGCMC.getStuBirthday() != null) {
                 //date字符串
                 stuWGCMC.setStuBirthdayToString(MyTimeUtil.dateToStr(stuWGCMC.getStuBirthday()));
                 //由生日计算年龄
@@ -51,8 +51,8 @@ public class StudentServiceImpl extends BaseServiceImpl implements StudentServic
     public PageInfo<StudentWithGradeClassMajorCollegeDto> selectStudentOwnInfoByNum(MyPage myPage, String stuNum) {
         PageHelper.startPage(myPage.getPageNum(), myPage.getPageSize());//第一个参数的意思为：当前页数，第二个参数的意思为：每页显示多少条记录
         List<StudentWithGradeClassMajorCollegeDto> stuWGCMCs = new ArrayList<>();
-        StudentWithGradeClassMajorCollegeDto stuWGCMC0=studentMapper.selectStudentOwnInfoByNum(stuNum);
-        if (stuWGCMC0 !=null) {
+        StudentWithGradeClassMajorCollegeDto stuWGCMC0 = studentMapper.selectStudentOwnInfoByNum(stuNum);
+        if (stuWGCMC0 != null) {
             stuWGCMCs.add(stuWGCMC0);
             for (StudentWithGradeClassMajorCollegeDto stuWGCMC : stuWGCMCs) {
                 if (stuWGCMC.getStuBirthday() != null) {
@@ -75,7 +75,7 @@ public class StudentServiceImpl extends BaseServiceImpl implements StudentServic
             gradeMapper.updateGradeStuNum(stuOriNum, stuWGCMC.getStuNum());
         }
 
-        if (stuWGCMC.getStuBirthdayToString()!=null) {
+        if (stuWGCMC.getStuBirthdayToString() != null) {
             stuWGCMC.setStuBirthday(MyTimeUtil.strToDate(stuWGCMC.getStuBirthdayToString()));
         } else {
             stuWGCMC.setStuBirthday(null);
@@ -85,7 +85,7 @@ public class StudentServiceImpl extends BaseServiceImpl implements StudentServic
 
     @Override
     public void insertStudent(StudentWithGradeClassMajorCollegeDto stuWGCMC) {
-        if (stuWGCMC.getStuBirthdayToString()!=null) {
+        if (stuWGCMC.getStuBirthdayToString() != null) {
             stuWGCMC.setStuBirthday(MyTimeUtil.strToDate(stuWGCMC.getStuBirthdayToString()));
         } else {
             stuWGCMC.setStuBirthday(null);
@@ -95,8 +95,8 @@ public class StudentServiceImpl extends BaseServiceImpl implements StudentServic
 
     @Override
     public void deleteOneStudent(String stuNum) {
-        gradeMapper.updateGradeStuNum(stuNum,null); //若是年级学生负责人，该年级学生负责人学号置null
-        classMapper.updateClassStuNum(stuNum,null); //若是班长，该班班长学号置null
+        gradeMapper.updateGradeStuNum(stuNum, null); //若是年级学生负责人，该年级学生负责人学号置null
+        classMapper.updateClassStuNum(stuNum, null); //若是班长，该班班长学号置null
         studentMapper.deleteOneStudent(stuNum);
     }
 

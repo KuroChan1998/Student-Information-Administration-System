@@ -23,11 +23,11 @@ import java.util.UUID;
 public class UserServiceImpl extends BaseServiceImpl implements UserService {
     @Override
     public User selectUserByNameAndPassword(String userName, String userPassword) {
-        User userTmp=userMapper.selectUserByName(userName);
-        if (userTmp == null){
+        User userTmp = userMapper.selectUserByName(userName);
+        if (userTmp == null) {
             return null;
         } else {
-            if (userTmp.getUserPassword().equals(MySecurity.encryptUserPassword(userPassword, userTmp.getUserId()))){
+            if (userTmp.getUserPassword().equals(MySecurity.encryptUserPassword(userPassword, userTmp.getUserId()))) {
                 return userTmp;
             } else {
                 return null;
@@ -68,9 +68,9 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService {
             return "regEmailExist"; //regEmailExist表示邮箱已被注册
         }
         //服务端设置用户uuid
-        user.setUserId(UUID.randomUUID().toString().replaceAll("-",""));
+        user.setUserId(UUID.randomUUID().toString().replaceAll("-", ""));
         //用户密码md5加密
-        user.setUserPassword(MySecurity.encryptUserPassword(user.getUserPassword(),user.getUserId()));
+        user.setUserPassword(MySecurity.encryptUserPassword(user.getUserPassword(), user.getUserId()));
         //设置默认头像
         user.setUserIcon(Constants.USER_DEFAULT_ICON_PATH);
         userMapper.insertUserRegInfo(user);
@@ -84,7 +84,7 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService {
 
     @Override
     public void updateResetPasswordByEmail(String userEmail, String userPassword) {
-        userPassword=MySecurity.encryptUserPassword(userPassword,userMapper.selectUserByEmail(userEmail).getUserId());
+        userPassword = MySecurity.encryptUserPassword(userPassword, userMapper.selectUserByEmail(userEmail).getUserId());
         userMapper.updateResetPasswordByEmail(userEmail, userPassword);
     }
 
@@ -117,7 +117,7 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService {
 
     @Override
     public void updateResetPasswordByUserId(String userPassword, String userId) {
-        userPassword=MySecurity.encryptUserPassword(userPassword,userId);
+        userPassword = MySecurity.encryptUserPassword(userPassword, userId);
         userMapper.updateResetPasswordByUserId(userPassword, userId);
     }
 

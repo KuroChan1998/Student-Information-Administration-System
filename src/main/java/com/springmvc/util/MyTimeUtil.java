@@ -50,13 +50,13 @@ public class MyTimeUtil {
     }
 
     /**
+     * @return int
      * @author JinZhiyun
      * @Description 根据生日计算年龄
      * @Date 22:48 2019/6/19
      * @Param [birthDay]
-     * @return int
      **/
-    public static int getAgeByBirth(Date birthDay){
+    public static int getAgeByBirth(Date birthDay) {
         int age = 0;
         Calendar cal = Calendar.getInstance();
         if (cal.before(birthDay)) { //出生日期晚于当前时间，无法计算
@@ -82,11 +82,11 @@ public class MyTimeUtil {
     }
 
     /**
+     * @return java.lang.String
      * @author JinZhiyun
      * @Description 将短时间格式时间转换为字符串 yyyy-MM-dd
      * @Date 17:26 2019/6/23
      * @Param [dateDate]
-     * @return java.lang.String
      **/
     public static String dateToStr(Date dateDate) {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -95,11 +95,11 @@ public class MyTimeUtil {
     }
 
     /**
+     * @return java.util.Date
      * @author JinZhiyun
      * @Description 将短时间格式字符串转换为时间 yyyy-MM-dd
      * @Date 17:27 2019/6/23
      * @Param [strDate]
-     * @return java.util.Date
      **/
     public static Date strToDate(String strDate) {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");

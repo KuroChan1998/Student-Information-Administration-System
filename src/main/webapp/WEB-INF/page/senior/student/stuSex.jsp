@@ -27,7 +27,7 @@
     <div class="layui-row layui-col-space15">
         <div class="layui-col-sm12">
             <div class="layui-card">
-                <div class="layui-card-header">查询相应学院、专业、班级的男女比</div>
+                <div class="layui-card-header">查询相应学院、专业、班级的学生男女比</div>
                 <div class="layui-card-body">
                     <div class="layui-form layui-card-header layuiadmin-card-header-auto">
                         <div class="layui-form-item">
@@ -149,6 +149,7 @@
 
         //联动监听select
         form.on('select(college)', function (data) {
+            $("#class").val("");
             //获取部门的ID通过异步查询子集
             $("#major").empty();
             $("#major").append('<option value="">请输入或选择专业</option>');
@@ -197,7 +198,7 @@
                 option = null;
                 option = {
                     title: {
-                        text: '全校男女比',
+                        text: '全校学生男女比',
                         subtext: '总人数:' + res.studentPercent.total,
                         x: 'center'
                     },
@@ -262,7 +263,7 @@
                     ];
 
                     option.series[0].data = hTsZ;
-                    option.title[0].text = myTitle + "男女比";
+                    option.title[0].text = myTitle + "学生男女比";
                     option.title[0].subtext = '总人数:' + res.studentPercent.total;
                     myChart.setOption(option, true);
                 }

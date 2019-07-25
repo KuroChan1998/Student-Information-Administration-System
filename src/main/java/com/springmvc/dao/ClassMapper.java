@@ -20,7 +20,8 @@ public interface ClassMapper {
     /**
      * @return java.util.List<java.lang.Class>
      * @Author JinZhiyun
-     * @Description 查询符合条件的班级信息
+     * @Description 接收majorName参数，查询该majorName下的所有班级
+     * 若majorName为空，则返回class表中所有班级
      * @Date 22:33 2019/4/23
      * @Param [majorName]
      **/
@@ -73,7 +74,7 @@ public interface ClassMapper {
 
     /**
      * @author JinZhiyun
-     * @Description 查询符合条件的所有班级信息
+     * @Description 根据输入classSearch的查询条件查询符合条件的所有班级信息
      * @Date 8:52 2019/7/7
      * @Param [classSearch]
      * @return java.util.List<com.springmvc.dto.classP.ClassWithGradeMajorCollegeDto>
@@ -91,7 +92,7 @@ public interface ClassMapper {
 
     /**
      * @author JinZhiyun
-     * @Description 查询学生用户名对应的班级及其附带信息
+     * @Description 查询教师用户名对应的班级及其附带信息
      * @Date 12:41 2019/7/7
      * @Param [teaNum]
      * @return com.springmvc.dto.classP.ClassWithGradeMajorCollegeDto

@@ -1,13 +1,12 @@
 package com.springmvc.dao;
 
-import com.springmvc.service.OtherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import others.UnitTestBase;
 
 /**
  * @author JinZhiyun
  * @ClassName BaseMapperTest
- * @Description //TODO
+ * @Description mapper接口测试类的基类，用来继承
  * @Date 2019/6/5 16:39
  * @Version 1.0
  **/

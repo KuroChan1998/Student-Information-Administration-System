@@ -6,7 +6,7 @@ import others.UnitTestBase;
 /**
  * @author JinZhiyun
  * @ClassName BaseServiceTest
- * @Description //TODO
+ * @Description 服务层接口测试类的基类，用来继承
  * @Date 2019/6/5 16:35
  * @Version 1.0
  **/

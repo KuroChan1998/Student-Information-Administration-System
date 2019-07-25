@@ -191,7 +191,7 @@
                             icon: 5,
                             anim: 6
                         });
-                    } */else if (res.data == "regEmailExist") {
+                    } */ else if (res.data == "regEmailExist") {
                         layer.msg('邮箱已被注册', {
                             icon: 5,
                             anim: 6

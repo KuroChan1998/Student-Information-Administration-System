@@ -27,13 +27,13 @@ function idWithIdentityValid(id, identity) {
 
 function isValidBirthday(val) {
     var pattern = /^(19|20)\d{2}\-((0?[1-9])|(1[0-2]))\-((0?[1-9])|([1-2]\d)|3[01])$/;
-    if(pattern.test(val)) {
+    if (pattern.test(val)) {
         var date = new Date(val);
-        if(date < new Date("1919-12-31") || date > new Date()) {
+        if (date < new Date("1919-12-31") || date > new Date()) {
             return false;
         }
-        var month = val.substring(val.indexOf("-")+1,val.lastIndexOf("-"));
-        return date && (date.getMonth()+1 == parseInt(month));
+        var month = val.substring(val.indexOf("-") + 1, val.lastIndexOf("-"));
+        return date && (date.getMonth() + 1 == parseInt(month));
     }
     return false;
 }

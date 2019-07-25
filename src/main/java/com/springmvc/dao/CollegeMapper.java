@@ -1,6 +1,7 @@
 package com.springmvc.dao;
 
 import com.springmvc.dto.college.CollegeDto;
+import com.springmvc.dto.college.CollegeSearchDto;
 import com.springmvc.entity.College;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -55,11 +56,11 @@ public interface CollegeMapper {
     /**
      * @author JinZhiyun
      * @Description 查询符合条件的所有学院信息
-     * @Date 19:23 2019/7/10
-     * @Param [collegeDto]
+     * @Date 13:21 2019/7/25
+     * @Param [collegeSearchDto]
      * @return java.util.List<com.springmvc.dto.college.CollegeDto>
      **/
-    List<CollegeDto> selectAllCollegeInfo(CollegeDto collegeDto);
+    List<CollegeDto> selectAllCollegeInfo(CollegeSearchDto collegeSearchDto);
 
     /**
      * @author JinZhiyun

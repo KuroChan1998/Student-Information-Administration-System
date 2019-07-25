@@ -112,8 +112,9 @@
         // console.log(userPassword_cookie);
         $("#LAY-user-login-username").val(userId_cookie);
         $("#LAY-user-login-password").val(userPassword_cookie);
-        if (remember_cookie == 'true'){$("#remember").prop("checked",true);}
-
+        if (remember_cookie == 'true') {
+            $("#remember").prop("checked", true);
+        }
 
 
         //初始化图形验证码

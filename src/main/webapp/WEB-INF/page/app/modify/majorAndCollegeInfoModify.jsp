@@ -32,7 +32,7 @@
             <div class="layui-tab-content">
                 <div class="layui-tab-item layui-show">
                     <div class="layui-form layui-card-header layuiadmin-card-header-auto">
-                        <div class="layui-form-item">
+                        <div class="layui-form-item" id="form">
                             <%--学院和专业联动复选框--%>
                             <div class="layui-inline">
                                 <label class="layui-form-label">学院</label>
@@ -54,7 +54,7 @@
                             <div class="layui-inline">
                                 <label class="layui-form-label">性质</label>
                                 <div class="layui-input-inline">
-                                    <select id="property" name="property" lay-search>
+                                    <select id="property" name="property">
                                         <option value="">请选择标签</option>
                                         <option value="工科">工科</option>
                                         <option value="文科">文科</option>
@@ -63,9 +63,29 @@
                                 </div>
                             </div>
                             <div class="layui-inline">
+                                <label class="layui-form-label">筛选排序</label>
+                                <div class="layui-input-inline">
+                                    <select id="condition1" name="condition1" lay-filter="condition1">
+                                        <option value="">请选择要排序的类别</option>
+                                        <option value="majorCollegeProperty">按学科性质排序</option>
+                                    </select>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <select id="condition2" name="condition2" lay-filter="condition2">
+                                        <option value="">请选择要排序方式</option>
+                                        <option value="asc">从低到高</option>
+                                        <option value="desc">从高到低</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
                                 <button class="layui-btn layuiadmin-btn-comm" data-type="reload" lay-submit
                                         lay-filter="LAY-app-contcomm-search-major">
                                     <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                                </button>
+                                <button class="layui-btn layuiadmin-btn-comm" data-type="reload"
+                                        id="clear">
+                                    清空
                                 </button>
                             </div>
                         </div>
@@ -91,7 +111,7 @@
                 <div class="layui-tab-item">
                     <div class="layui-tab-item layui-show">
                         <div class="layui-form layui-card-header layuiadmin-card-header-auto">
-                            <div class="layui-form-item">
+                            <div class="layui-form-item" id="form2">
                                 <div class="layui-inline">
                                     <label class="layui-form-label">学院</label>
                                     <div class="layui-input-inline">
@@ -112,9 +132,29 @@
                                     </div>
                                 </div>
                                 <div class="layui-inline">
+                                    <label class="layui-form-label">筛选排序</label>
+                                    <div class="layui-input-inline">
+                                        <select id="condition12" name="condition12" lay-filter="condition12">
+                                            <option value="">请选择要排序的类别</option>
+                                            <option value="collegeProperty">按学科性质排序</option>
+                                        </select>
+                                    </div>
+                                    <div class="layui-input-inline">
+                                        <select id="condition22" name="condition22" lay-filter="condition22">
+                                            <option value="">请选择要排序方式</option>
+                                            <option value="asc">从低到高</option>
+                                            <option value="desc">从高到低</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
                                     <button class="layui-btn layuiadmin-btn-comm" data-type="reload" lay-submit
                                             lay-filter="LAY-app-contcomm-search-college">
                                         <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                                    </button>
+                                    <button class="layui-btn layuiadmin-btn-comm" data-type="reload"
+                                            id="clear2">
+                                        清空
                                     </button>
                                 </div>
                             </div>
@@ -137,7 +177,6 @@
                                     class="layui-icon layui-icon-delete"></i>删除</a>
                         </script>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -241,6 +280,16 @@
 
         });
 
+        form.on('select(condition1)', function (data) {
+            //获取部门的ID通过异步查询子集
+            $("#condition2").val("");
+            form.render('select');
+        });
+
+        $("#clear").click(function () {
+            $("#form input").val("");
+            $("#form select").val("");
+        });
 
         //监听搜索
         form.on('submit(LAY-app-contcomm-search-major)', function (data) {
@@ -253,6 +302,8 @@
                     majorName: field.major
                     , majorCollegeName: field.majorCollege
                     , majorCollegeProperty: field.property
+                    , condition1: field.condition1
+                    , condition2: field.condition2
                 }
                 , request: {
                     pageName: 'pageNum',
@@ -310,7 +361,7 @@
                     ,
                     title: '编辑专业'
                     ,
-                    content: '${ctx}/major/edit?majorId=' + data.majorId + '&majorName=' + data.majorName +'&majorCollegeName=' + data.majorCollegeName
+                    content: '${ctx}/major/edit?majorId=' + data.majorId + '&majorName=' + data.majorName + '&majorCollegeName=' + data.majorCollegeName
                     ,
                     maxmin: true
                     ,
@@ -401,6 +452,17 @@
                 }
             });
         });
+
+        form.on('select(condition12)', function (data) {
+            //获取部门的ID通过异步查询子集
+            $("#condition22").val("");
+            form.render('select');
+        });
+
+        $("#clear2").click(function () {
+            $("#form2 input").val("");
+            $("#form2 select").val("");
+        });
         //方法级渲染
         table.render({
             elem: '#collegeInfoQuery'
@@ -447,6 +509,8 @@
                 , where: { //设定异步数据接口的额外参数，任意设
                     collegeName: field.college
                     , collegeProperty: field.property2
+                    , condition1: field.condition12
+                    , condition2: field.condition22
                 }
                 , request: {
                     pageName: 'pageNum',

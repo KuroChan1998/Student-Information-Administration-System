@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author JinZhiyun
@@ -70,13 +71,40 @@ public interface OtherService {
      *      allCollege：表示全部学院的学生人数比
      *      allMajor: 表示全部专业的学生人数比
      *      allClass：表示全部班级的学生人数比
-     *      majorUnderCollege：表示特定学院下专业的学生人数比
-     *      classUnderMajor：表示特定专业下班级的学生人数比
+     *      byMajorOrCollege：表示特定学院或专业的学生人数比，根据这两个值判断调用dao中对应方法的type输入值
      *      grade：表示全部全部的学生人数比
      * @Date 18:32 2019/7/16
      * @Param [collegeName, majorName]
      * @return java.util.List<java.util.List<java.lang.Object>>
      **/
     List<List<Object>> proSelectStuTotalByCollegeOrMajorName(String type, String collegeName, String majorName);
+    
+    /**
+     * @author JinZhiyun
+     * @Description 查询本硕博人数比业务
+     * type为查询的类型：
+     *      wholeSchoolByStuDegree：表示全校的本硕博人数比，返回的List为1，即仅含一个Map
+     *      allCollegeByStuDegree: 表示全部学院的本硕博人数比
+     *      majorUnderCollegeByStuDegree：表示特定学院下专业的本硕博人数比，若输入collegeName变量为空，则等效于allCollegeByStuDegree类型查询
+     *      allMajorByStuDegree：表示全部专业的本硕博人数比
+     * @Date 17:20 2019/7/23
+     * @Param [type, collegeName]
+     * @return java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     **/
+    List<Map<String, Object>> transferStuTotalToValidJSON(String type, String collegeName);
+
+    /**
+     * @author JinZhiyun
+     * @Description 查找符合条件的对应类别名称的教师数的封装对象，这里用mysql存储过程实现
+     * type为查询的类型：
+     *      allCollegeByTeaTitle：表示某学院下的不同职称教师人数
+     *      byMajorOrCollege：表示特定学院或专业的学生人数比，根据这两个值判断调用dao中对应方法的type输入值
+     *      wholeSchoolByTeaTitle： 表示全校的不同职称教师人数
+     *      allMajorByTeaTitle： 表示某专业下的不同职称教师人数
+     * @Date 18:30 2019/7/24
+     * @Param [type, collegeName, majorName]
+     * @return java.util.Map<java.lang.String,java.lang.Object>
+     **/
+    Map<String,Object> transTeaTotalToValidJSON(String type, String collegeName, String majorName);
 }
 

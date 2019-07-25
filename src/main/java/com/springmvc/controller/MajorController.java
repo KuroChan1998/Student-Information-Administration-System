@@ -97,11 +97,11 @@ public class MajorController extends BaseController {
     }
 
     /**
-     * @return java.lang.String
-     * @Author JinZhiyun
+     * @author JinZhiyun
      * @Description 重定向到编辑专业iframe子页面并返回相应model
-     * @Date 10:52 2019/5/2
-     * @Param [model, majorId, majorCollegeName, majorName]
+     * @Date 16:46 2019/7/25
+     * @Param [model, majorWC]
+     * @return java.lang.String
      **/
     @RequestMapping("/edit")
     public String majorEdit(Model model, MajorWithCollegeDto majorWC) {
@@ -147,8 +147,6 @@ public class MajorController extends BaseController {
     @ResponseBody
     public Map<String, Object> insertMajor(MajorWithCollegeDto majorWC) {
         Map<String, Object> map = new HashMap();
-
-        System.out.println(majorWC);
         map.put("data", majorService.insertMajor(majorWC));
 
         return map;
@@ -164,9 +162,7 @@ public class MajorController extends BaseController {
     @RequestMapping("/deleteOne")
     @ResponseBody
     public Map<String, Object> deleteOneMajor(@RequestParam("majorName") String majorName) {
-        System.out.println(majorName);
         Map<String, Object> map = new HashMap();
-
         majorService.deleteOneMajor(majorName);
         map.put("data", "deleteSuccess");
         return map;

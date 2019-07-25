@@ -135,10 +135,16 @@
                         </a>
                         <dl class="layui-nav-child">
                             <dd data-name="echarts">
-                                <a href="javascript:;">Echarts集成</a>
+                                <a href="javascript:;">学生高级查询</a>
                                 <dl class="layui-nav-child">
-                                    <dd><a lay-href="${ctx}/senior/sex">男女比</a></dd>
+                                    <dd><a lay-href="${ctx}/senior/stuSex">学生男女比</a></dd>
                                     <dd><a lay-href="${ctx}/senior/stuNum">学生人数比</a></dd>
+                                </dl>
+                            </dd>
+                            <dd data-name="echarts">
+                                <a href="javascript:;">教师高级查询</a>
+                                <dl class="layui-nav-child">
+                                    <dd><a lay-href="${ctx}/senior/teaPower">师资力量</a></dd>
                                 </dl>
                             </dd>
                         </dl>

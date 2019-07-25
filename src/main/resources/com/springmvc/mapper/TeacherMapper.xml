@@ -136,6 +136,33 @@
             <bind name="teaCollegeLike" value=" '%' + teaCollegeName + '%' "/>
             and c1.college_name like #{teaCollegeName}
         </if>
+        <if test="condition1 == 'teaNum'">
+            order by t1.tea_num
+            <if test="condition2 == 'asc'">
+                asc
+            </if>
+            <if test="condition2 == 'desc'">
+                desc
+            </if>
+        </if>
+        <if test="condition1 == 'teaBirthday'">
+            order by t1.tea_birthday
+            <if test="condition2 == 'asc'">
+                desc
+            </if>
+            <if test="condition2 == 'desc'">
+                asc
+            </if>
+        </if>
+        <if test="condition1 == 'teaTitle'">
+            order by t1.tea_title
+            <if test="condition2 == 'asc'">
+                desc
+            </if>
+            <if test="condition2 == 'desc'">
+                asc
+            </if>
+        </if>
     </select>
     <select id="selectTeacherOwnInfoByNum" resultMap="TeacherWithTMCResultMap">
         select t1.*,t2.title_name as tea_title_name,m1.major_name as tea_major_name,c1.college_name as tea_college_name
@@ -145,5 +172,11 @@
     </select>
     <select id="selectTeacherByNum" resultMap="BaseResultMap">
         select * from teacher where tea_num=#{teaNum}
+    </select>
+    <select id="selectTeaTotalByCommonName"
+            resultType="com.springmvc.dto.other.senior.ObjectTotalGroupByCommonName" statementType="CALLABLE">
+    {
+      call count_tea_percent(#{type,mode=IN},#{collegeName,mode=IN},#{majorName,mode=IN})
+    }
     </select>
 </mapper>

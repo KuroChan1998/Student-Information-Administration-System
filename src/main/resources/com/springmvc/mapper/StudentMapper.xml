@@ -158,6 +158,41 @@
             <bind name="stuCollegeLike" value=" '%' + stuCollegeName + '%' "/>
             and c2.college_name like #{stuCollegeLike}
         </if>
+        <if test="condition1 == 'stuNum'">
+            order by s1.stu_num
+            <if test="condition2 == 'asc'">
+                asc
+            </if>
+            <if test="condition2 == 'desc'">
+                desc
+            </if>
+        </if>
+        <if test="condition1 == 'stuBirthday'">
+            order by s1.stu_birthday
+            <if test="condition2 == 'asc'">
+                desc
+            </if>
+            <if test="condition2 == 'desc'">
+                asc
+            </if>
+        </if>
+        <if test="condition1 == 'stuGrade'">
+            order by s1.stu_grade
+            <if test="condition2 == 'asc'">
+                desc
+            </if>
+            <if test="condition2 == 'desc'">
+                asc
+            </if>
+        </if>
+        <if test="condition1 == 'stuDegree'">
+            <if test="condition2 == 'asc'">
+                order by field(stu_degree,'本科','硕士','博士')
+            </if>
+            <if test="condition2 == 'desc'">
+                order by field(stu_degree,'博士','硕士','本科')
+            </if>
+        </if>
     </select>
     <select id="selectStudentOwnInfoByNum" resultMap="StudentWithGCMCResultMap">
         select s1.*,g1.grade_name as stu_grade_name,c1.class_name as stu_class_name,m1.major_name as stu_major_name,c2.college_name as stu_college_name

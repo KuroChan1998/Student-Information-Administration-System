@@ -4,12 +4,11 @@ import com.springmvc.dto.other.EmailVerifyCode;
 import com.springmvc.dto.other.senior.ObjectTotalGroupByCommonName;
 import com.springmvc.dto.other.senior.StudentPercentBySex;
 import com.springmvc.dto.other.senior.StudentTotalGroupBySex;
+import com.springmvc.entity.College;
+import com.springmvc.entity.Major;
 import com.springmvc.entity.User;
 import com.springmvc.service.OtherService;
-import com.springmvc.util.Constants;
-import com.springmvc.util.SendEmailUtil;
-import com.springmvc.util.MyTimeUtil;
-import com.springmvc.util.VerifyCode;
+import com.springmvc.util.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,14 +21,12 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author JinZhiyun
  * @ClassName OtherServiceImpl
- * @Description //TODO
+ * @Description 其他业务接口方法实现类
  * @Date 2019/6/6 13:12
  * @Version 1.0
  **/
@@ -126,12 +123,12 @@ public class OtherServiceImpl extends BaseServiceImpl implements OtherService {
 
     @Override
     public StudentPercentBySex selectStuTotalBySex(String stuCollegeName, String stuMajorName, String stuClassName) {
-        StudentPercentBySex studentPercentBySex=new StudentPercentBySex();
-        List<StudentTotalGroupBySex> studentTotalGroupBySexes =studentMapper.selectStuTotalBySex(stuCollegeName,stuMajorName,stuClassName);
+        StudentPercentBySex studentPercentBySex = new StudentPercentBySex();
+        List<StudentTotalGroupBySex> studentTotalGroupBySexes = studentMapper.selectStuTotalBySex(stuCollegeName, stuMajorName, stuClassName);
         studentPercentBySex.setStuCollegeName(stuCollegeName);
         studentPercentBySex.setStuMajorName(stuMajorName);
         studentPercentBySex.setStuClassName(stuClassName);
-        if (studentTotalGroupBySexes.size() !=0) {
+        if (studentTotalGroupBySexes.size() != 0) {
             for (StudentTotalGroupBySex studentTotalGroupBySex : studentTotalGroupBySexes) {
                 if (studentTotalGroupBySex.getSex().equals("男")) {
                     studentPercentBySex.setMale(studentTotalGroupBySex.getTotal());
@@ -149,29 +146,150 @@ public class OtherServiceImpl extends BaseServiceImpl implements OtherService {
 
     @Override
     public List<List<Object>> proSelectStuTotalByCollegeOrMajorName(String type, String collegeName, String majorName) {
-        List<List<Object>> result=new ArrayList<>();
+        List<List<Object>> result = new ArrayList<>();
         result.add(new ArrayList<>());
         result.add(new ArrayList<>());
-        List<ObjectTotalGroupByCommonName> objectTotals=new ArrayList<>();
-        if (type.equals("allCollege") || type.equals("allMajor") || type.equals("allClass") || type.equals("grade")){
-            objectTotals=studentMapper.selectStuTotalByCommonName(type,null,null);
-        } else if (type.equals("byMajorOrCollege")){
+        List<ObjectTotalGroupByCommonName> objectTotals = new ArrayList<>();
+        if (type.equals("allCollege") || type.equals("allMajor") || type.equals("allClass") || type.equals("grade")) {
+            objectTotals = studentMapper.selectStuTotalByCommonName(type, null, null);
+        } else if (type.equals("byMajorOrCollege")) {
             String tmpType;
             if (majorName == null || majorName.equals("")) {
                 if (collegeName == null || collegeName.equals("")) {
-                    tmpType="allCollege";
+                    tmpType = "allCollege";
                 } else {
-                    tmpType="majorUnderCollege";
+                    tmpType = "majorUnderCollege";
                 }
             } else {
-                tmpType="classUnderMajor";
+                tmpType = "classUnderMajor";
             }
-            objectTotals=studentMapper.selectStuTotalByCommonName(tmpType,collegeName,majorName);
+            objectTotals = studentMapper.selectStuTotalByCommonName(tmpType, collegeName, majorName);
         }
         for (ObjectTotalGroupByCommonName objectTotal : objectTotals) {
             result.get(0).add(objectTotal.getCommonName());
             result.get(1).add(objectTotal.getTotal());
         }
         return result;
+    }
+
+    @Override
+    public List<Map<String, Object>> transferStuTotalToValidJSON(String type, String collegeName) {
+        List<Map<String, Object>> result = new ArrayList<>();
+        if (type.equals("wholeSchoolByStuDegree")) {
+            Map<String, Object> tmpMap = new HashMap<>();
+            tmpMap.put("product", "全校");
+            List<ObjectTotalGroupByCommonName> objectTotals = studentMapper.selectStuTotalByCommonName(type, null, null);
+            tmpMap.putAll(MySimpleUtil.transferStuTotalToTmpMap(objectTotals));
+            result.add(tmpMap);
+            return result;
+        }
+        if (type.equals("allCollegeByStuDegree") || type.equals("majorUnderCollegeByStuDegree")) {
+            if (collegeName == null || collegeName.equals("")) {
+                List<College> colleges = collegeMapper.selectAllCollege();
+                for (College college : colleges) {
+                    Map<String, Object> tmpMap = new HashMap<>();
+                    tmpMap.put("product", college.getCollegeName());
+                    List<ObjectTotalGroupByCommonName> objectTotals = studentMapper.selectStuTotalByCommonName("allCollegeByStuDegree", college.getCollegeName(), null);
+                    tmpMap.putAll(MySimpleUtil.transferStuTotalToTmpMap(objectTotals));
+                    result.add(tmpMap);
+                }
+                return result;
+            } //collegeName非空即表示查询该学院下的专业本硕博人数，此时type="majorUnderCollegeByStuDegree"，在下一个if语句块中执行
+        }
+        if (type.equals("allMajorByStuDegree") || type.equals("majorUnderCollegeByStuDegree")) {
+/*            type="allMajorByStuDegree"
+                    或者type="majorUnderCollegeByStuDegree"，collegeName非空*/
+            System.out.println(collegeName);
+            List<Major> majors = majorMapper.selectMajorByCollegeName(collegeName);
+            System.out.println("xxx" + majors);
+            for (Major major : majors) {
+                Map<String, Object> tmpMap = new HashMap<>();
+                tmpMap.put("product", major.getMajorName());
+                List<ObjectTotalGroupByCommonName> objectTotals = studentMapper.selectStuTotalByCommonName(type.equals("allMajorByStuDegree") ? "majorUnderCollegeByStuDegree" : type, null, major.getMajorName());
+                tmpMap.putAll(MySimpleUtil.transferStuTotalToTmpMap(objectTotals));
+                result.add(tmpMap);
+            }
+            return result;
+        }
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> transTeaTotalToValidJSON(String type, String collegeName, String majorName) {
+        Map<String, Object> map = new HashMap<>();
+        List<List<Object>> source = new ArrayList<List<Object>>();
+        List<Object> series = new ArrayList<>();
+        final List<String> titleNames = titleMapper.selectAllTitleName();
+        source.add(new ArrayList<Object>() {//这个大括号 就相当于我们  new 接口
+            {//这个大括号 就是 构造代码块 会在构造函数前 调用
+                this.add("product");
+                this.addAll(titleNames);
+            }
+        });
+
+        if (type.equals("allCollegeByTeaTitle")) {
+            List<College> colleges = collegeMapper.selectAllCollege();
+            for (College college : colleges) {
+                List<Object> sourceTmp = new ArrayList<>();
+                sourceTmp.add(college.getCollegeName());
+                List<ObjectTotalGroupByCommonName> objectTotals = teacherMapper.selectTeaTotalByCommonName(type, college.getCollegeName(), null);
+                System.out.println(objectTotals);
+                System.out.println(titleNames);
+                sourceTmp.addAll(MySimpleUtil.transferTeaTotalToTmpMap(objectTotals, titleNames));
+                System.out.println(sourceTmp);
+                source.add(sourceTmp);
+            }
+            series.addAll(EchartsFactory.getSeriesInFirstGrids(colleges.size())); //设置第二张表格的bar
+            series.addAll(EchartsFactory.getSeriesInSecondGrids(titleNames.size())); //设置第一张表格的bar
+        } else if (type.equals("byMajorOrCollege")) {
+            String tmpType;
+            if (majorName == null || majorName.equals("")) {
+                if (collegeName == null || collegeName.equals("")) {
+                    tmpType = "allCollegeByTeaTitle";
+                    return transTeaTotalToValidJSON(tmpType, collegeName, majorName);
+                } else {
+                    tmpType = "allCollegeByTeaTitle"; //直接调用allCollegeByTeaTitle对应的sql
+                    List<Object> sourceTmp = new ArrayList<>();
+                    sourceTmp.add(collegeName);
+                    List<ObjectTotalGroupByCommonName> objectTotals = teacherMapper.selectTeaTotalByCommonName(tmpType, collegeName, null);
+                    sourceTmp.addAll(MySimpleUtil.transferTeaTotalToTmpMap(objectTotals, titleNames));
+                    source.add(sourceTmp);
+                    series.add(EchartsFactory.getSeriesInFirstGrid()); //设置第二张表格的bar
+                    series.addAll(EchartsFactory.getSeriesInSecondGrids(titleNames.size())); //设置第一张表格的bar
+                }
+            } else {
+                tmpType = "allMajorByTeaTitle"; //allMajorByTeaTitle
+                List<Object> sourceTmp = new ArrayList<>();
+                sourceTmp.add(majorName);
+                List<ObjectTotalGroupByCommonName> objectTotals = teacherMapper.selectTeaTotalByCommonName(tmpType, null, majorName);
+                sourceTmp.addAll(MySimpleUtil.transferTeaTotalToTmpMap(objectTotals, titleNames));
+                source.add(sourceTmp);
+                series.add(EchartsFactory.getSeriesInFirstGrid()); //设置第二张表格的bar
+                series.addAll(EchartsFactory.getSeriesInSecondGrids(titleNames.size())); //设置第一张表格的bar
+            }
+        } else if (type.equals("wholeSchoolByTeaTitle")) {
+            List<Object> sourceTmp = new ArrayList<>();
+            sourceTmp.add("全校");
+            List<ObjectTotalGroupByCommonName> objectTotals = teacherMapper.selectTeaTotalByCommonName(type, null, null);
+            sourceTmp.addAll(MySimpleUtil.transferTeaTotalToTmpMap(objectTotals, titleNames));
+            source.add(sourceTmp);
+            series.add(EchartsFactory.getSeriesInFirstGrid()); //设置第二张表格的bar
+            series.addAll(EchartsFactory.getSeriesInSecondGrids(titleNames.size())); //设置第一张表格的bar
+        } else if (type.equals("allMajorByTeaTitle")) {
+            List<Major> majors = majorMapper.selectMajorByCollegeName(null);
+            for (Major major : majors) {
+                List<Object> sourceTmp = new ArrayList<>();
+                sourceTmp.add(major.getMajorName());
+                List<ObjectTotalGroupByCommonName> objectTotals = teacherMapper.selectTeaTotalByCommonName(type, null, major.getMajorName());
+                sourceTmp.addAll(MySimpleUtil.transferTeaTotalToTmpMap(objectTotals, titleNames));
+                source.add(sourceTmp);
+            }
+            series.addAll(EchartsFactory.getSeriesInFirstGrids(majors.size())); //设置第二张表格的bar
+            series.addAll(EchartsFactory.getSeriesInSecondGrids(titleNames.size())); //设置第一张表格的bar
+        }
+
+        map.put("source", source);
+        map.put("series", series);
+        return map;
     }
 }
