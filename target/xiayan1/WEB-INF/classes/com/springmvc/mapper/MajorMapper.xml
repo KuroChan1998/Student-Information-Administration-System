@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.springmvc.dao.MajorMapper">
+    <resultMap id="BaseResultMap" type="com.springmvc.entity.Major">
+        <id column="major_id" property="majorId" jdbcType="INTEGER"/>
+        <result column="major_college" property="majorCollege" jdbcType="INTEGER"/>
+        <result column="major_name" property="majorName" jdbcType="VARCHAR"/>
+        <result column="major_tea_num" property="majorTeaNum" jdbcType="VARCHAR"/>
+        <result column="major_remark" property="majorRemark" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="MajorWithCollegeResultMap" type="com.springmvc.dto.major.MajorWithCollegeDto"
+               extends="BaseResultMap">
+        <result column="major_college_name" property="majorCollegeName" jdbcType="VARCHAR"/>
+        <result column="major_tea_name" property="majorTeaName" jdbcType="VARCHAR"/>
+        <result column="major_college_property" property="majorCollegeProperty" jdbcType="VARCHAR"/>
+    </resultMap>
+    <insert id="insertMajor" parameterType="com.springmvc.dto.major.MajorWithCollegeDto">
+        insert into major
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="majorCollegeName != null and majorCollegeName != ''">
+                major_college,
+            </if>
+            <if test="majorName != null and majorName != ''">
+                major_name,
+            </if>
+            major_tea_num,
+            major_remark
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="majorCollegeName != null and majorCollegeName != ''">
+                (select college_id from college where college_name=#{majorCollegeName,jdbcType=VARCHAR}),
+            </if>
+            <if test="majorName != null and majorName != ''">
+                #{majorName,jdbcType=VARCHAR},
+            </if>
+            #{majorTeaNum,jdbcType=VARCHAR},
+            #{majorRemark,jdbcType=VARCHAR}
+        </trim>
+    </insert>
+
+    <update id="updateMajorTeaNum">
+        update major set major_tea_num=#{teaNum} where major_tea_num=#{teaOriNum}
+    </update>
+    <update id="updateMajorInfo">
+        update major
+        <set>
+            <trim suffixOverrides=",">
+                <if test="majorWC.majorName != null and majorWC.majorName != ''">
+                    major_name=#{majorWC.majorName},
+                </if>
+                <if test="majorWC.majorCollegeName != null and majorWC.majorCollegeName != ''">
+                    major_college=(select college_id from college where college_name=#{majorWC.majorCollegeName}),
+                </if>
+                major_tea_num=#{majorWC.majorTeaNum},major_remark=#{majorWC.majorRemark}
+                where major_id=#{majorOriId}
+            </trim>
+        </set>
+    </update>
+    <delete id="deleteOneMajor">
+        delete from major where major_name=#{majorName}
+    </delete>
+
+    <select id="selectMajorByCollegeName" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select m1.* from major m1 inner join college c1
+        on m1.major_college=c1.college_id
+        <if test="collegeName!= null and collegeName!=''">
+            and c1.college_name=#{collegeName}
+        </if>
+    </select>
+    <select id="selectAllMajorInfo" resultMap="MajorWithCollegeResultMap"
+            parameterType="com.springmvc.dto.major.MajorSearchDto">
+        select m1.*,c1.college_name as major_college_name, c1.college_property as major_college_property, t1.tea_name as
+        major_tea_name
+        from major m1 inner join college c1 on m1.major_college = c1.college_id
+        <if test="majorCollegeName != null and majorCollegeName!=''">
+            <bind name="majorCollegeNameLike" value=" '%' + majorCollegeName + '%' "/>
+            and c1.college_name like #{majorCollegeNameLike}
+        </if>
+        <if test="majorName != null and majorName!=''">
+            <bind name="majorNameLike" value=" '%' + majorName + '%' "/>
+            and m1.major_name like #{majorNameLike}
+        </if>
+        <if test="majorCollegeProperty != null and majorCollegeProperty!=''">
+            and c1.college_property=#{majorCollegeProperty}
+        </if>
+        left join teacher t1 on m1.major_tea_num = t1.tea_num
+        <if test="condition1 == 'majorCollegeProperty'">
+            order by c1.college_property
+            <if test="condition2 == 'asc'">
+                asc
+            </if>
+            <if test="condition2 == 'desc'">
+                desc
+            </if>
+        </if>
+    </select>
+    <select id="selectStuMajorOwnInfoByNum" resultMap="MajorWithCollegeResultMap">
+         select m1.*,c2.college_name as major_college_name, c2.college_property as major_college_property, t1.tea_name as major_tea_name
+          from student s1 inner join class c1 on s1.stu_class = c1.class_id and s1.stu_num=#{stuNum}
+          inner join major m1 on c1.class_major = m1.major_id
+            inner join college c2 on m1.major_college=c2.college_id
+          left join teacher t1 on m1.major_tea_num = t1.tea_num
+    </select>
+    <select id="selectTeaMajorOwnInfoByNum" resultMap="MajorWithCollegeResultMap">
+        select m1.*,c1.college_name as major_college_name, c1.college_property as major_college_property, t2.tea_name as major_tea_name
+          from teacher t1 inner join major m1 on t1.tea_major = m1.major_id and t1.tea_num=#{teaNum}
+            inner join college c1 on m1.major_college=c1.college_id
+          left join teacher t2 on m1.major_tea_num = t2.tea_num
+    </select>
+    <select id="selectMajorByName" resultMap="BaseResultMap">
+        select * from major where major_name=#{majorName}
+    </select>
+    <select id="selectMajorByTeaNum" resultMap="BaseResultMap">
+        select * from major where major_tea_num=#{teaNum}
+    </select>
+</mapper>
