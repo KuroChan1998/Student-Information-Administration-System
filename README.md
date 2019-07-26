@@ -197,9 +197,14 @@
 
 ![Snipaste_2019-07-17_09-37-17](git_screenshot/Snipaste_2019-07-17_09-37-17.jpg)
 
+![Snipaste_2019-07-26_17-10-43](git_screenshot/Snipaste_2019-07-26_17-10-43.jpg)
 
+* 师资力量可视化
+
+  ![Snipaste_2019-07-26_17-12-36](git_screenshot/Snipaste_2019-07-26_17-12-36.jpg)
 
 ## 安全性
+
 ### 1 : 未登录用户进入系统
 *通过`LoginInterceptor.java`拦截器直接将未登录用户重定向到登录页面`login.jsp`,并用`log4j`记录当前日志*
 
