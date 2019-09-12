@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="
+             http://www.springframework.org/schema/beans
+             http://www.springframework.org/schema/beans/spring-beans.xsd
+             http://www.springframework.org/schema/util
+             http://www.springframework.org/schema/util/spring-util.xsd">
+    <util:properties id="redisConfig" location="classpath:redis.properties"></util:properties>
+
+    <!--<bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">-->
+    <!--<property name="maxIdle" value="#{redisConfig['redis.maxIdle']}" />-->
+    <!--<property name="maxTotal" value="#{redisConfig['redis.maxTotal']}" />-->
+    <!--<property name="maxWaitMillis" value="#{redisConfig['redis.maxWaitMillis']}" />-->
+    <!--<property name="testOnBorrow" value="#{redisConfig['redis.testOnBorrow']}" />-->
+    <!--</bean>-->
+
+
+    <!--<bean id="jedisPool" class="redis.clients.jedis.JedisPool">-->
+
+    <!--<constructor-arg index="0" ref="jedisPoolConfig" />-->
+    <!--&lt;!&ndash; 端口，默认6379 &ndash;&gt;-->
+    <!--<constructor-arg index="1" value="#{redisConfig['redis.host']}" name="host" type="java.lang.String"/>-->
+    <!--<constructor-arg index="2" value="#{redisConfig['redis.port']}"  name="port" type="int"/>-->
+    <!--<constructor-arg index="3" value="#{redisConfig['redis.timeout']}"  name="timeout" type="int"/>-->
+    <!--<constructor-arg index="4" value="#{redisConfig['redis.password']}"  name="password" type="java.lang.String"/>-->
+    <!--</bean>-->
+
+    <!-- redis配置 -->
+    <!-- redis连接池 -->
+    <bean id="jedisConfig" class="redis.clients.jedis.JedisPoolConfig">
+        <property name="maxTotal" value="#{redisConfig['redis.maxTotal']}"/>
+        <property name="maxIdle" value="#{redisConfig['redis.maxIdle']}"/>
+        <property name="MaxWaitMillis" value="#{redisConfig['redis.maxWaitMillis']}"/>
+        <property name="testOnBorrow" value="#{redisConfig['redis.testOnBorrow']}"/>
+        <property name="testOnReturn" value="#{redisConfig['redis.testOnReturn']}"/>
+    </bean>
+    <!-- redis连接工厂 -->
+    <bean id="connectionFactory"
+          class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
+        <property name="hostName" value="#{redisConfig['redis.host']}"/>
+        <property name="port" value="#{redisConfig['redis.port']}"/>
+        <property name="password" value="#{redisConfig['redis.password']}"/>
+        <property name="timeout" value="#{redisConfig['redis.timeout']}"/>
+        <property name="poolConfig" ref="jedisConfig"/>
+    </bean>
+
+    <!-- redis操作模板，这里采用尽量面向对象的模板 -->
+    <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
+        <property name="connectionFactory" ref="connectionFactory"/>
+        <property name="keySerializer">
+            <bean class="org.springframework.data.redis.serializer.StringRedisSerializer"/>
+        </property>
+        <property name="valueSerializer">
+            <bean class="org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer"/>
+        </property>
+
+        <property name="hashKeySerializer">
+            <bean class="org.springframework.data.redis.serializer.StringRedisSerializer"/>
+        </property>
+        <property name="hashValueSerializer">
+            <bean class="org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer"/>
+        </property>
+    </bean>
+</beans>

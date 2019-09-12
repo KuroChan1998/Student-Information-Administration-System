@@ -8,13 +8,6 @@ import org.junit.Test;
 
 import java.security.Key;
 
-/**
- * @author JinZhiyun
- * @Description //TODO 
- * @Date 17:16 2019/7/25
- * @Param 
- * @return 
- **/
 public class EncryptTest {
 
     //加密内容

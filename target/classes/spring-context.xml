@@ -20,15 +20,14 @@
     <context:annotation-config/>
 
     <!-- 开启组件自动扫描；使用Annotation自动注册Bean，解决事物失效问题：在主容器中不扫描@Controller注解，在SpringMvc中只扫描@Controller注解。  -->
-    <context:component-scan base-package="com.springmvc"><!-- base-package 如果多个，用“,”分隔 -->
+    <context:component-scan base-package="com.jzy"><!-- base-package 如果多个，用“,”分隔 -->
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
 
-    <!--<!– 自动扫描 –>-->
-    <!--<context:component-scan base-package="com.vitelon.v"/>-->
-
     <!--引入属性文件 -->
     <context:property-placeholder location="classpath:dbconfig.properties"/>
+
+    <import resource="classpath:spring-redis.xml" />
 
 
     <!-- dataSource 配置数据源 -->
@@ -70,7 +69,7 @@
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
         <!-- 自动扫描mapping.xml文件 -->
-        <property name="mapperLocations" value="classpath:com/springmvc/mapper/*.xml"/>
+        <property name="mapperLocations" value="classpath:com/jzy/mapper/*.xml"/>
         <!-- mybatis配置文件 -->
         <property name="configLocation" value="classpath:mybatis-config.xml"/>
         <!--分页插件配置-->
@@ -91,7 +90,7 @@
     <!-- DAO接口所在包名，Spring会自动查找其下的类 --><!--扫描包形式配置Mapper(mapper代理方式开发)-->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <!--配置mapper接口-->
-        <property name="basePackage" value="com.springmvc.dao"/>
+        <property name="basePackage" value="com.jzy.dao"/>
         <!--配置sqlSessionFactory-->
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
     </bean>
@@ -125,7 +124,7 @@
 
     <!-- 事务 aop 配置 -->
     <aop:config>
-        <aop:pointcut id="serviceMethods" expression="execution(public * com.springmvc.service.*.*(..))"/>
+        <aop:pointcut id="serviceMethods" expression="execution(public * com.jzy.service.*.*(..))"/>
         <aop:advisor advice-ref="txAdvice" pointcut-ref="serviceMethods"/>
     </aop:config>
 

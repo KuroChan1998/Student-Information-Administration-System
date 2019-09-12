@@ -321,7 +321,7 @@
             var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
 
             if (obj.event === 'tea_detail1') {
-                layer.open({
+                var index = layer.open({
                     type: 2
                     , title: '查看专业负责人'
                     , content: '/teacher/teaInfo?teaNum=' + data.majorTeaNum
@@ -331,6 +331,7 @@
                         layer.close(index); //关闭弹层
                     }
                 });
+                layer.full(index);
             } else if (obj.event === 'del') {
                 layer.confirm('确定删除此专业吗？删除后其下所有班级、学生、教师也都将被删除！！', function (index) {
 
@@ -356,7 +357,7 @@
                     });
                 });
             } else if (obj.event === 'edit') {
-                layer.open({
+                var index = layer.open({
                     type: 2
                     ,
                     title: '编辑专业'
@@ -431,6 +432,7 @@
                         othis.find('textarea[name="remark"]').val(data.majorRemark);
                     }
                 });
+                layer.full(index);
             }
         });
 
@@ -528,7 +530,7 @@
             var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
             // console.log(data);
             if (obj.event === 'tea_detail2') {
-                layer.open({
+                var index = layer.open({
                     type: 2
                     , title: '查看学院负责人'
                     , content: '/teacher/teaInfo?teaNum=' + data.collegeTeaNum
@@ -538,6 +540,7 @@
                         layer.close(index); //关闭弹层
                     }
                 });
+                layer.full(index);
             } else if (obj.event === 'del') {
                 layer.confirm('确定删除此学院吗？删除后其下所有专业、班级、学生、教师也都将被删除！！', function (index) {
 
@@ -563,7 +566,7 @@
                     });
                 });
             } else if (obj.event === 'edit') {
-                layer.open({
+                var index = layer.open({
                     type: 2
                     ,
                     title: '编辑学院'
@@ -635,6 +638,7 @@
                         othis.find('textarea[name="remark"]').val(data.collegeRemark);
                     }
                 });
+                layer.full(index);
             }
         });
 
@@ -695,7 +699,7 @@
                 });
             },
             add1: function () {
-                layer.open({
+                var index = layer.open({
                     type: 2
                     , title: '添加专业'
                     , content: '${ctx}/major/add'
@@ -748,6 +752,7 @@
 
                     }
                 });
+                layer.full(index);
             },
             batchdel2: function () {
                 var checkStatus = table.checkStatus('collegeInfoQuery')
@@ -786,7 +791,7 @@
                 });
             },
             add2: function () {
-                layer.open({
+                var index = layer.open({
                     type: 2
                     , title: '添加学院'
                     , content: '${ctx}/college/add'
@@ -839,6 +844,7 @@
 
                     }
                 });
+                layer.full(index);
             }
         };
 

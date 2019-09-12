@@ -41,7 +41,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">性别</label>
         <div class="layui-input-inline">
-            <input type="text" name="sex" readonly value="${stuInfo.sex}" class="layui-input">
+            <input type="text" name="sex" readonly value="${stuInfo.stuSex}" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">

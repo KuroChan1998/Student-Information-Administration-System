@@ -396,12 +396,11 @@
                 });
             },
             add: function () {
-                layer.open({
+                var index = layer.open({
                     type: 2
                     , title: '添加学生'
                     , content: '${ctx}/student/edit'
                     , maxmin: true
-                    , area: ['820px', '730px']
                     , btn: ['确定', '取消']
                     , yes: function (index, layero) {
                         //点击确认触发 iframe 内容中的按钮提交
@@ -414,7 +413,7 @@
                             var json = {
                                 stuNum: field.id
                                 , stuName: field.name
-                                , stuSex: field.stuSex
+                                , stuSex: field.sex
                                 , stuBirthdayToString: field.birthday
                                 , stuGradeName: field.grade
                                 , stuDegree: field.degree
@@ -452,6 +451,7 @@
 
                     }
                 });
+                layer.full(index);
             }
         };
 
@@ -488,7 +488,7 @@
                     });
                 });
             } else if (obj.event === 'edit') {
-                layer.open({
+                var index = layer.open({
                     type: 2
                     ,
                     title: '编辑学生'
@@ -496,8 +496,6 @@
                     content: '${ctx}/student/edit?stuNum=' + data.stuNum + '&stuCollegeName=' + data.stuCollegeName + '&stuMajorName=' + data.stuMajorName + '&stuClassName=' + data.stuClassName + '&stuGradeName=' + data.stuGradeName
                     ,
                     maxmin: true
-                    ,
-                    area: ['820px', '730px']
                     ,
                     btn: ['确定', '取消']
                     ,
@@ -570,6 +568,7 @@
                         othis.find('textarea[name="remark"]').val(data.stuRemark);
                     }
                 });
+                layer.full(index);
             }
         });
 

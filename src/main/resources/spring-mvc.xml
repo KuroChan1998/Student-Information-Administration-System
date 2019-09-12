@@ -13,7 +13,7 @@
     <mvc:annotation-driven/>
 
     <!-- 自动扫描该包，使SpringMVC认为包下用了@controller注解的类是控制器 -->
-    <context:component-scan base-package="com.springmvc.controller"/>
+    <context:component-scan base-package="com.jzy.controller"/>
 
     <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
         <property name="defaultLocale" value="zh_CN"/>
@@ -26,7 +26,7 @@
         <!--下面拦截任意包任意层-->
         <!--&ndash;&gt;-->
         <!--<mvc:mapping path="/**/*"/>-->
-        <!--<bean class="com.springmvc.controller.MethodTimerInterceptor">-->
+        <!--<bean class="com.jzyoller.MethodTimerInterceptor">-->
 
         <!--</bean>-->
         <!--</mvc:interceptor>-->
@@ -45,7 +45,7 @@
             <mvc:exclude-mapping path="/emailVerifyCodeTest"/>
             <mvc:exclude-mapping path="/resetPassword"/>
             <mvc:exclude-mapping path="/formRepeatSubmit"/>
-            <bean class="com.springmvc.interceptor.LoginInterceptor"/>
+            <bean class="com.jzy.interceptor.LoginInterceptor"/>
 
         </mvc:interceptor>
 
@@ -54,12 +54,12 @@
             <mvc:mapping path="/*/modify"/>
             <!--排除登录URL-->
 
-            <bean class="com.springmvc.interceptor.AuthorityInterceptor"/>
+            <bean class="com.jzy.interceptor.AuthorityInterceptor"/>
         </mvc:interceptor>
 
         <mvc:interceptor>
             <mvc:mapping path="/**"/>
-            <bean class="com.springmvc.interceptor.TokenInterceptor"/>
+            <bean class="com.jzy.interceptor.TokenInterceptor"/>
         </mvc:interceptor>
 
         <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor"/>

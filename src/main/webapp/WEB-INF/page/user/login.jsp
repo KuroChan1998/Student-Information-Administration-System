@@ -146,8 +146,8 @@
                     //     key: setter.request.tokenName
                     //     ,value: res.data.access_token
                     // });
-
-                    if (res.data == "resultSuccess") {
+                    console.log(res.data);
+                    if (res.data.loginFlag) {
                         //登入成功的提示与跳转
                         layer.msg('登入成功', {
                             offset: '15px'
@@ -156,8 +156,15 @@
                         }, function () {
                             location.href = '${ctx}/index'; //后台主页
                         });
-                    } else if (res.data == "resultFail") {
+                    } else if (!res.data.loginFlag) {
                         verifyCode = new GVerify("v_container");
+                        if (res.data.lockedFlag){
+                            return layer.msg('当前用户名连续输入错误'+res.data.wrongTimes+'次，已冻结，请'+res.data.timeRemaining+'分钟后重试，或通过点击下方忘记密码，通过邮箱找回密码', {
+                                offset: '15px'
+                                , icon: 2
+                                , time: 3000
+                            });
+                        }
                         layer.msg('用户名或密码错误', {
                             offset: '15px'
                             , icon: 2

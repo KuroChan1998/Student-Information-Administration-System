@@ -1,13 +1,21 @@
-## 项目简介
-这个项目是一个大学生信息管理系统,提供用户级别的登录注册资料管理,信息查询,信息修改（管理员权利），简单的数据可视化分析等功能，也有基本的安全性保障*
+## Brief Introduction
+这个项目是一个大学生信息管理系统,提供用户级别的登录注册资料管理,信息查询,信息修改（管理员权利），简单的数据可视化分析等功能，也有基本的安全性保障
 
 
 
-## 版本介绍
-### V1.1.0
-*目前的项目版本为 1.1.0,后期续将持续优化~*
+## Release Notes
 
-*更新如下内容 :*
+### v1.0.0
+
+*StuInfoAdmin-v1.0.0 的一切准备工作似乎都已到位。发布之弦，一触即发。*
+*不枉近百个日日夜夜与之为伴。因小而大，因弱而强。*
+
+*无论它能走多远，抑或如何支撑？至少我曾倾注全心，无怨无悔*
+
+### v1.1.0
+
+*版本1.1.0，更新如下内容 :*
+
 * 优化数据表结构，对原有的表的部分字段进行了修改，并增加了title和grade两个表
 * 优化sql语句效率
 * 优化前端查询界面及查询方式，使其更加全面，对用户友好
@@ -15,7 +23,18 @@
 * 更新邮箱验证码服务，增加了验证码有效时间
 * 优化源代码结构，增强了规范性和可拓展性
 
-### V2.0.0
+### v1.2.0 (Current Version)
+
+*目前版本为v1.2.0，更新如下内容 :*
+
+* 修复了前端编辑添加弹窗在不同分辨率客户机上的显示大小问题
+* 新增Redis技术，用以缓存用户名密码，用户错误登录次数限制，邮箱验证码等等
+* 新增连续输错用户名密码超过一定次数后的限制时间
+* 更改了邮箱验证码有效时间的实现方式，由服务端java实现改为redis过期时间实现
+* 提升了服务端的安全性和新增异常处理机制，用aop实现入参的校验，对不合法的请求及其参数值用日志记录，并抛出异常
+* 优化了util包等源代码的结构，增强了可拓展性
+
+### v2.0.0  (//TODO)
 *使用`SpringBoot`重构`SSM`,`Thymeleaf`重构`JSP`,提高项目的实用性及扩展性,尽情期待哟~*
 
 
@@ -27,8 +46,10 @@
 
 ### 后端
 * IOC容器 : `Spring`
-* Web框架 : `SpringMVC`
+* MVC框架 : `SpringMVC`
 * ORM框架 : `Mybatis`
+* 缓存技术：`Redis`
+* 数据库：`Mysql`
 * 日志框架 : `Log4j`
 * 安全框架 : `Shiro`
 
@@ -45,7 +66,7 @@
 │  ├─main                           //源代码目录
 │  │  ├─java
 │  │  │  └─com
-│  │  │      └─springmvc            // java代码目录
+│  │  │      └─jzy          // java代码目录
 │  │  │          ├─controller       // 控制层
 │  │  │          ├─dao              // 持久层
 │  │  │          ├─dto              // 传输对象
@@ -202,132 +223,3 @@
 * 师资力量可视化
 
   ![Snipaste_2019-07-26_17-12-36](git_screenshot/Snipaste_2019-07-26_17-12-36.jpg)
-
-## 安全性
-
-### 1 : 未登录用户进入系统
-*通过`LoginInterceptor.java`拦截器直接将未登录用户重定向到登录页面`login.jsp`,并用`log4j`记录当前日志*
-
-```java
-public class LoginInterceptor implements HandlerInterceptor {
-    private final static Logger logger = Logger.getLogger(LoginInterceptor.class);
-
-    @Override
-    public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
-        String userId = (String) httpServletRequest.getSession().getAttribute("userId");
-        if (userId != null && userId != "") {
-            logger.info(userId + "访问系统！");
-            return true;
-        }
-        logger.info(userId + "未登录下企图进入系统！");
-        httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + "/login");
-        return false;
-    }
-}
-```
-
-### 2 : 非管理员访问信息修改页面
-*通过AuthorityInterceptor拦截器直接将非管理员未用户重定向到错误提示录页面error.jsp，并用log4j记录当前日志*
-
-```java
-public class AuthorityInterceptor implements HandlerInterceptor {
-    private final static Logger logger = Logger.getLogger(AuthorityInterceptor.class);
-
-    @Autowired
-    private UserService userService;
-
-    @Override
-    public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
-        if (userService.ifAdmin(httpServletRequest.getSession(), httpServletRequest)) {
-            logger.info("管理员访问:" + httpServletRequest.getRequestURI());
-            return true;
-        }
-        logger.info("非管理员访问:" + httpServletRequest.getRequestURI() + " 无操作权限");
-        httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + "/error");
-        return false;
-    }
-}
-```
-
-### 3 : 防止用户重复提交表单
-*定义Token注解并实现,在访问页面时产生token,在执行ajax或其他与服务端的交互时删除token,对比前后token差异判断是否重复提交了表单*
-
-```java
-@Target(ElementType.METHOD)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Token {
-    boolean save() default false;
-    boolean remove() default false;
-}
-```
-
-```java
-public class TokenInterceptor extends HandlerInterceptorAdapter {
-    private final static Logger logger = Logger.getLogger(TokenInterceptor.class);
-
-    @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        if (handler instanceof HandlerMethod) {
-            HandlerMethod handlerMethod = (HandlerMethod) handler;
-            Method method = handlerMethod.getMethod();
-            Token annotation = method.getAnnotation(Token.class);
-            if (annotation != null) {
-                boolean needSaveSession = annotation.save();
-                if (needSaveSession) {
-                    request.getSession(false).setAttribute("token", UUID.randomUUID().toString());
-                }
-                boolean needRemoveSession = annotation.remove();
-                if (needRemoveSession) {
-                    if (isRepeatSubmit(request)) {
-                        logger.info(request.getSession().getAttribute("userId")+"重复提交了表单");
-                        response.sendRedirect(request.getContextPath() + "/formRepeatSubmit");
-                        return false;
-                    }
-                    request.getSession(false).removeAttribute("token");
-                }
-            }
-            return true;
-        } else {
-            return super.preHandle(request, response, handler);
-        }
-    }
-
-    private boolean isRepeatSubmit(HttpServletRequest request) {
-        String serverToken = (String) request.getSession(false).getAttribute("token");
-        System.out.println(serverToken);
-        if (serverToken == null) {
-            return true;
-        }
-        String clinetToken = request.getParameter("token");
-        System.out.println(clinetToken);
-        if (clinetToken == null) {
-            return true;
-        }
-        if (!serverToken.equals(clinetToken)) {
-            return true;
-        }
-        return false;
-    }
-}
-```
-
-
-### 4 : MD5带盐加密
-*通过shiro框架提供的加密算法,使用md5散列对用户的密码加密，对存储到mysql中,这里盐为用户id,加密次数为5次,即`en_pass=MD(MD(MD(MD(MD( userId+userPassword )))))`,盐选定为用户id这个唯一标识可以提升加密的安全性，盐的使用也可以有效防止md破解工具*
-
-```java
-public class MySecurity {
-    private static int hashIterations=5;
-
-    /**
-     * @Author JinZhiyun
-     * @Description md5加密，加密内容source,带盐加密salt，指定加密次数：hashIterations
-     * @Date 11:06 2019/5/12
-     * @Param [source, salt]
-     * @return java.lang.String
-     **/
-    public static String encryptUserPassword(String source, String salt){
-        return new Md5Hash(source, salt, hashIterations).toBase64();
-    }
-}
-```

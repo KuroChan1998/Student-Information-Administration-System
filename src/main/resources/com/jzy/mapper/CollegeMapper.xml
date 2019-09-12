@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jzy.dao.CollegeMapper">
+    <resultMap id="BaseResultMap" type="com.jzy.entity.College">
+        <id column="college_id" property="collegeId" jdbcType="INTEGER"/>
+        <result column="college_name" property="collegeName" jdbcType="VARCHAR"/>
+        <result column="college_property" property="collegeProperty" jdbcType="VARCHAR"/>
+        <result column="college_tea_num" property="collegeTeaNum" jdbcType="VARCHAR"/>
+        <result column="college_remark" property="collegeRemark" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="CollegeWithResultMap" type="com.jzy.dto.college.CollegeDto"
+               extends="BaseResultMap">
+        <result column="college_tea_name" property="collegeTeaName" jdbcType="VARCHAR"/>
+    </resultMap>
+    <insert id="insertCollege" parameterType="com.jzy.dto.college.CollegeDto">
+        insert into college
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="collegeName != null and collegeName != ''">
+                college_name,
+            </if>
+            <if test="collegeProperty != null and collegeProperty != ''">
+                college_property,
+            </if>
+            college_tea_num,
+            college_remark
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="collegeName != null and collegeName != ''">
+                #{collegeName,jdbcType=VARCHAR},
+            </if>
+            <if test="collegeProperty != null and collegeProperty != ''">
+                #{collegeProperty},
+            </if>
+            #{collegeTeaNum,jdbcType=VARCHAR},
+            #{collegeRemark,jdbcType=VARCHAR}
+        </trim>
+    </insert>
+
+    <update id="updateCollegeTeaNum">
+        update college set college_tea_num=#{teaNum} where college_tea_num=#{teaOriNum}
+    </update>
+
+    <update id="updateCollegeInfo">
+        update college
+        <set>
+            <trim suffixOverrides=",">
+                <if test="collegeDto.collegeName != null and collegeDto.collegeName != ''">
+                    college_name=#{collegeDto.collegeName},
+                </if>
+                <if test="collegeDto.collegeProperty != null and collegeDto.collegeProperty != ''">
+                    college_property=#{collegeDto.collegeProperty},
+                </if>
+                college_tea_num=#{collegeDto.collegeTeaNum},college_remark=#{collegeDto.collegeRemark}
+                where college_id=#{collegeOriId}
+            </trim>
+        </set>
+    </update>
+    <delete id="deleteOneCollege">
+        delete from college where college_name=#{collegeName}
+    </delete>
+
+    <select id="selectAllCollege" resultMap="BaseResultMap">
+        select * from college;
+    </select>
+    <select id="selectAllCollegeInfo" resultMap="CollegeWithResultMap"
+            parameterType="com.jzy.dto.college.CollegeSearchDto">
+        select c1.*, t1.tea_name as college_tea_name
+        from college c1 left join teacher t1 on c1.college_tea_num = t1.tea_num
+        <where>
+            <if test="collegeName != null and collegeName!=''">
+                <bind name="collegeNameLike" value=" '%' + collegeName + '%' "/>
+                and c1.college_name like #{collegeNameLike}
+            </if>
+            <if test="collegeProperty != null and collegeProperty!=''">
+                and c1.college_property=#{collegeProperty}
+            </if>
+        </where>
+        <if test="condition1 == 'collegeProperty'">
+            order by c1.college_property
+            <if test="condition2 == 'asc'">
+                asc
+            </if>
+            <if test="condition2 == 'desc'">
+                desc
+            </if>
+        </if>
+    </select>
+    <select id="selectStuCollegeOwnInfoByNum" resultMap="CollegeWithResultMap">
+        select c2.*, t1.tea_name as college_tea_name
+          from student s1 inner join class c1 on s1.stu_class = c1.class_id and s1.stu_num=#{stuNum}
+          inner join major m1 on c1.class_major = m1.major_id
+            inner join college c2 on m1.major_college=c2.college_id
+          left join teacher t1 on c2.college_tea_num = t1.tea_num
+    </select>
+    <select id="selectTeaCollegeOwnInfoByNum" resultMap="CollegeWithResultMap">
+        select c2.*, t2.tea_name as college_tea_name
+          from teacher t1
+          inner join major m1 on t1.tea_major = m1.major_id and t1.tea_num=#{teaNum}
+            inner join college c2 on m1.major_college=c2.college_id
+          left join teacher t2 on c2.college_tea_num = t2.tea_num
+    </select>
+    <select id="selectCollegeByName" resultMap="BaseResultMap">
+        select * from college where college_name=#{collegeName}
+    </select>
+    <select id="selectCollegeByTeaNum" resultMap="BaseResultMap">
+        select * from college where college_tea_num=#{teaNum}
+    </select>
+</mapper>

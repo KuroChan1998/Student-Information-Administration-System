@@ -117,7 +117,7 @@
             });
             //请求发送验证码
             $.ajax({
-                type: "get",
+                type: "post",
                 url: "${ctx}/sendVerifyCodeToEmail",
                 async: true,
                 data: {"userEmail": email},

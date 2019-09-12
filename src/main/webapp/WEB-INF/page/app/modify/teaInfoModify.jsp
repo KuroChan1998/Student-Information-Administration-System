@@ -124,6 +124,7 @@
 
 <script src="${ctx}/static/plugins/layuiadmin/layui/layui.js"></script>
 <script>
+
     layui.config({
         base: '${ctx}/static/plugins/layuiadmin/' //静态资源所在路径
     }).extend({
@@ -306,7 +307,6 @@
                 if (checkData.length === 0) {
                     return layer.msg('请选择数据');
                 }
-                //
                 // console.log(JSON.stringify(checkData));
                 // console.log(checkStatus);
                 // console.log(checkData);
@@ -339,12 +339,11 @@
                 });
             },
             add: function () {
-                layer.open({
+                var index = layer.open({
                     type: 2
                     , title: '添加教师'
                     , content: '${ctx}/teacher/edit'
                     , maxmin: true
-                    , area: ['680px', '680px']
                     , btn: ['确定', '取消']
                     , yes: function (index, layero) {
                         //点击确认触发 iframe 内容中的按钮提交
@@ -393,6 +392,7 @@
 
                     }
                 });
+                layer.full(index);
             }
         };
 
@@ -431,7 +431,7 @@
                     });
                 });
             } else if (obj.event === 'edit') {
-                layer.open({
+                var index = layer.open({
                     type: 2
                     ,
                     title: '编辑教师'
@@ -439,8 +439,6 @@
                     content: '${ctx}/teacher/edit?teaNum=' + data.teaNum + '&teaCollegeName=' + data.teaCollegeName + '&teaMajorName=' + data.teaMajorName + '&teaTitleName=' + data.teaTitleName
                     ,
                     maxmin: true
-                    ,
-                    area: ['680px', '680px']
                     ,
                     btn: ['确定', '取消']
                     ,
@@ -506,6 +504,7 @@
                         othis.find('textarea[name="remark"]').val(data.teaRemark);
                     }
                 });
+                layer.full(index);
             }
         });
 

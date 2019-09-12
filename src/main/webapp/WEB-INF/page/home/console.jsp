@@ -152,7 +152,7 @@
 
         <div class="layui-col-md4">
             <div class="layui-card">
-                <div class="layui-card-header">版本信息</div>
+                <div class="layui-card-header">版本信息(→<a lay-href="${ctx}/updateHistory">查看历史版本</a>)</div>
                 <div class="layui-card-body layui-text">
                     <table class="layui-table">
                         <colgroup>
@@ -164,7 +164,7 @@
                             <td>当前版本</td>
                             <td>
                                 <script type="text/html" template>
-                                    StuInfoAdmin-v1.1.0
+                                    ${projectWholeName}
                                 </script>
                             </td>
                         </tr>
@@ -177,10 +177,34 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>后端框架</td>
+                            <td>MVC框架</td>
                             <td>
                                 <script type="text/html" template>
-                                    spring+springmvc+mybatis
+                                    ${backEndTechMCV}
+                                </script>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>IOC框架</td>
+                            <td>
+                                <script type="text/html" template>
+                                    ${backEndTechIOC}
+                                </script>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>ORM框架</td>
+                            <td>
+                                <script type="text/html" template>
+                                    ${backEndTechORM}
+                                </script>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>缓存技术</td>
+                            <td>
+                                <script type="text/html" template>
+                                    ${caches}
                                 </script>
                             </td>
                         </tr>
@@ -188,7 +212,23 @@
                             <td>数据库</td>
                             <td>
                                 <script type="text/html" template>
-                                    mysql
+                                    ${databases}
+                                </script>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>安全框架</td>
+                            <td>
+                                <script type="text/html" template>
+                                    ${securityTech}
+                                </script>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>日志</td>
+                            <td>
+                                <script type="text/html" template>
+                                    ${logTech}
                                 </script>
                             </td>
                         </tr>
@@ -196,13 +236,13 @@
                             <td>主要语言</td>
                             <td>
                                 <script type="text/html" template>
-                                    java
+                                    ${language}
                                 </script>
                             </td>
                         </tr>
                         <tr>
                             <td>主要特色</td>
-                            <td>响应式 / 清爽 / 极简 / 沙雕</td>
+                            <td>${feature}</td>
                         </tr>
                         <tr>
                             <td>源码获取</td>
@@ -233,6 +273,7 @@
                     <p> 更新了登录界面记住密码的cookie设置</p>
                     <p> 更新了邮箱验证码服务，增加了验证码有效时间</p>
                     <p> 优化了源代码结构，增强了规范性和可拓展性</p>
+                    → <a lay-href="${ctx}/updateHistory">历史版本</a>
                 </div>
             </div>
             <div class="layui-card">

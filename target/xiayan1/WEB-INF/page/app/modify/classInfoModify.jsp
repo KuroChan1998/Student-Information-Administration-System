@@ -297,27 +297,27 @@
             var data = obj.data; //获得当前行数据
             var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
             if (obj.event === 'moni_detail') {
-                layer.open({
+                var index = layer.open({
                     type: 2
                     , title: '查看班长'
                     , content: '/student/stuInfo?stuNum=' + data.classStuNum
                     , maxmin: true
-                    , area: ['550px', '630px']
                     , yes: function (index, layero) {
                         layer.close(index); //关闭弹层
                     }
                 });
+                layer.full(index);
             } else if (obj.event === 'tea_detail') {
-                layer.open({
+                var index = layer.open({
                     type: 2
                     , title: '查看班主任'
                     , content: '/teacher/teaInfo?teaNum=' + data.classTeaNum
                     , maxmin: true
-                    , area: ['550px', '550px']
                     , yes: function (index, layero) {
                         layer.close(index); //关闭弹层
                     }
                 });
+                layer.full(index);
             } else if (obj.event === 'del') {
                 layer.confirm('确定删除此班级吗？删除后其下所有学生也将被删除！！', function (index) {
 
@@ -343,7 +343,7 @@
                     });
                 });
             } else if (obj.event === 'edit') {
-                layer.open({
+                var index = layer.open({
                     type: 2
                     ,
                     title: '编辑班级'
@@ -351,8 +351,6 @@
                     content: '${ctx}/class/edit?classId=' + data.classId + '&className=' + data.className + '&classCollegeName=' + data.classCollegeName + '&classMajorName=' + data.classMajorName + '&classGradeName=' + data.classGradeName
                     ,
                     maxmin: true
-                    ,
-                    area: ['700px', '720px']
                     ,
                     btn: ['确定', '取消']
                     ,
@@ -425,6 +423,7 @@
                         othis.find('textarea[name="remark"]').val(data.classRemark);
                     }
                 });
+                layer.full(index);
             }
         });
 
@@ -497,12 +496,11 @@
                 });
             },
             add: function () {
-                layer.open({
+                var index = layer.open({
                     type: 2
                     , title: '添加班级'
                     , content: '${ctx}/class/add'
                     , maxmin: true
-                    , area: ['700px', '720px']
                     , btn: ['确定', '取消']
                     , yes: function (index, layero) {
                         //点击确认触发 iframe 内容中的按钮提交
@@ -556,6 +554,7 @@
 
                     }
                 });
+                layer.full(index);
             }
         };
 
