@@ -53,8 +53,6 @@
 * 日志框架 : `Log4j`
 * 安全框架 : `Shiro`
 
-
-
 ## 项目结构
 ```
 ├─database                          // 数据库相关文件
@@ -78,7 +76,7 @@
 │  │  │          └─util             // 工具方法
 │  │  ├─resources                   // 资源文件目录
 │  │  │  └─com
-│  │  │      └─springmvc
+│  │  │      └─jzy
 │  │  │          └─mapper           // mybatis对dao接口的xml实现
 │  │  └─webapp                      // tomcat前端文件目录
 │  │      ├─static                  // 静态资源
@@ -97,6 +95,7 @@
 - IDE : `IntelliJ IDEA 2018.1.7`
 - 项目构建工具 : `Maven 3.x`
 - 数据库 : `Mysql 8.0.13`
+- Redis：`Redis server 3.2.100`
 - JDK版本 : `jdk 1.8`
 - Tomcat版本 : `Tomcat 8.x`
 
@@ -108,19 +107,18 @@
 
 ![Snipaste_2019-07-17_09-48-36](git_screenshot/Snipaste_2019-07-17_09-48-36.jpg)
 
-2. *进入src/main/resources修改dbconfig.properties配置文件,把数据库登录名和密码，改为你本地的*
-
-3. *进入src/main/resources查看log4j.properties，如果有必要可以修改日志输出路径，目前在D盘下，你可选择不修改跳过此步*
-
-4. *使用 IntelliJ IDEA 导入项目，选择Maven项目选项，一路点击next，即可将项目所需依赖导入。若有无法引入的依赖，可能是因为maven版本不同或是该依赖已过时不存在于现有maven仓库中，请前往maven官网映入最新的该类型依赖*
+2. *进入src/main/resources修改dbconfig.properties配置文件,把数据库主机、端口、用户名和密码，改为你本地的*
+3. *进入src/main/resources修改redis.properties配置文件,把数据库主机、端口、用户名和密码，改为你本地的*
+4. *进入src/main/resources查看log4j.properties，如果有必要可以修改日志输出路径，目前在D盘下，你可选择不修改跳过此步*
+5. *使用 IntelliJ IDEA 导入项目，选择Maven项目选项，一路点击next，即可将项目所需依赖导入。若有无法引入的依赖，可能是因为maven版本不同或是该依赖已过时不存在于现有maven仓库中，请前往maven官网映入最新的该类型依赖*
 
 ![Snipaste_2019-07-17_08-47-37](git_screenshot/Snipaste_2019-07-17_08-47-37.jpg)
 
 ![Snipaste_2019-07-17_08-49-48](git_screenshot/Snipaste_2019-07-17_08-49-48.jpg)
 
-5. *在 IntelliJ IDEA 中，配置我们的 Tomcat， 然后把使用Maven构建好的项目添加到Tomcat中，相关方法可以参考百度*
+5. *在 IntelliJ IDEA 中，配置我们的 Tomcat， 然后把使用Maven构建好的项目添加到Tomcat中，操作比较简单，相关方法可以参考百度*
 
-6. *用户登录页面*
+6. *运行项目，进入用户登录页面*
 
 ![Snipaste_2019-05-04_08-02-50](git_screenshot/Snipaste_2019-05-04_08-02-50.jpg)
 
@@ -146,7 +144,7 @@
 
 * 登录进入主页
 
-  ![Snipaste_2019-07-17_09-19-18](git_screenshot/Snipaste_2019-07-17_09-19-18.jpg)
+  ![Snipaste_2019-09-12_10-35-03](git_screenshot/Snipaste_2019-09-12_10-35-03.jpg)
 
 * 修改基本资料
 
