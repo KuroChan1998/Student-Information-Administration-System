@@ -38,7 +38,7 @@ Download: https://pan.baidu.com/s/1yHjrk7gAycHRFapU_Waf4g
 * 提升了服务端的安全性和新增异常处理机制，用aop实现入参的校验，对不合法的请求及其参数值用日志记录，并抛出异常
 * 优化了util包等源代码的结构，增强了可拓展性
 
-对`Redis`和`SpringAOP`不太熟的同学，下载`v1.2.0`版本足够学习或完成课设了~
+对`Redis`和`SpringAOP`不太熟的同学，下载`v1.1.0`版本足够学习或完成课设了~
 
 ### v2.0.0  (//TODO)
 *使用`SpringBoot`重构`SSM`,`Thymeleaf`重构`JSP`,提高项目的实用性及扩展性,尽情期待哟~*
