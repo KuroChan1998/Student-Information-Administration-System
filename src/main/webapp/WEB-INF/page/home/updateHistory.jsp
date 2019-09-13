@@ -40,6 +40,8 @@
                     <li>提升了服务端的安全性和新增异常处理机制，用aop实现入参的校验，对不合法的请求及其参数值用日志记录，并抛出异常</li>
                     <li>优化了util包等源代码的结构，增强了可拓展性</li>
                 </ul>
+                <p><a href="https://github.com/jinzhiyun1998/Student-Information-Administration-System"
+                   target="_blank" class="layui-btn">立即下载</a></p>
             </div>
         </div>
     </li>
@@ -56,6 +58,8 @@
                 <li>更新了邮箱验证码服务，增加了验证码有效时间</li>
                 <li>优化了源代码结构，增强了规范性和可拓展性</li>
             </ul>
+            <p><a href="https://pan.baidu.com/s/1yHjrk7gAycHRFapU_Waf4g"
+                  target="_blank" class="layui-btn">立即下载</a></p>
         </div>
     </li>
     <li class="layui-timeline-item">
@@ -66,6 +70,8 @@
                 <em>大学生信息管理系统</em>StuInfoAdmin-v1.0.0的一切准备工作似乎都已到位。发布之弦，一触即发。
                 <br>不枉近百个日日夜夜与之为伴。因小而大，因弱而强。
                 <br>无论它能走多远，抑或如何支撑？至少我曾倾注全心，无怨无悔 <i class="layui-icon"></i>
+                <br><a href="https://pan.baidu.com/s/1piVQnIFdz_BIoszIEzAJwQ"
+                  target="_blank" class="layui-btn">立即下载</a>
             </p>
         </div>
     </li>

@@ -8,25 +8,6 @@
              http://www.springframework.org/schema/util
              http://www.springframework.org/schema/util/spring-util.xsd">
     <util:properties id="redisConfig" location="classpath:redis.properties"></util:properties>
-
-    <!--<bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">-->
-    <!--<property name="maxIdle" value="#{redisConfig['redis.maxIdle']}" />-->
-    <!--<property name="maxTotal" value="#{redisConfig['redis.maxTotal']}" />-->
-    <!--<property name="maxWaitMillis" value="#{redisConfig['redis.maxWaitMillis']}" />-->
-    <!--<property name="testOnBorrow" value="#{redisConfig['redis.testOnBorrow']}" />-->
-    <!--</bean>-->
-
-
-    <!--<bean id="jedisPool" class="redis.clients.jedis.JedisPool">-->
-
-    <!--<constructor-arg index="0" ref="jedisPoolConfig" />-->
-    <!--&lt;!&ndash; 端口，默认6379 &ndash;&gt;-->
-    <!--<constructor-arg index="1" value="#{redisConfig['redis.host']}" name="host" type="java.lang.String"/>-->
-    <!--<constructor-arg index="2" value="#{redisConfig['redis.port']}"  name="port" type="int"/>-->
-    <!--<constructor-arg index="3" value="#{redisConfig['redis.timeout']}"  name="timeout" type="int"/>-->
-    <!--<constructor-arg index="4" value="#{redisConfig['redis.password']}"  name="password" type="java.lang.String"/>-->
-    <!--</bean>-->
-
     <!-- redis配置 -->
     <!-- redis连接池 -->
     <bean id="jedisConfig" class="redis.clients.jedis.JedisPoolConfig">
