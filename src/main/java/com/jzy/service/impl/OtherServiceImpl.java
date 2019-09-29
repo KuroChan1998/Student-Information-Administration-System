@@ -100,7 +100,7 @@ public class OtherServiceImpl extends BaseServiceImpl implements OtherService {
             // 邮件发送处理
             SendEmailUtil.sendMail(emailAddress, emailMsg);
             //设置redis缓存
-            ValueOperations<String, String> vOps = redisTemplate.opsForValue();
+            ValueOperations<String, Object> vOps = redisTemplate.opsForValue();
             final String baseKey = UserUtil.KEY_USER_VERIFYCODE_EMAIL;
             String key = baseKey + ":" + userEmail;
             vOps.set(key, verifyCode);
@@ -117,13 +117,13 @@ public class OtherServiceImpl extends BaseServiceImpl implements OtherService {
             logger.warn("服务端收到了非法请求，请引起警惕");
             return false;
         }
-        ValueOperations<String, String> vOps = redisTemplate.opsForValue();
+        ValueOperations<String, Object> vOps = redisTemplate.opsForValue();
         final String baseKey = UserUtil.KEY_USER_VERIFYCODE_EMAIL;
         String key = baseKey + ":" + emailVerifyCode.getEmail();
         System.out.println(emailVerifyCode);
         String codeInput = emailVerifyCode.getCode();
         System.out.println(key);
-        String codeFromRedis = vOps.get(key);
+        String codeFromRedis = (String) vOps.get(key);
         System.out.println(codeFromRedis);
         if (!redisTemplate.hasKey(key) || !codeInput.equals(codeFromRedis)) { //如果当前key过期（即邮箱验证码失效），或输入错误
             return false;
@@ -134,7 +134,7 @@ public class OtherServiceImpl extends BaseServiceImpl implements OtherService {
     @Override
     public boolean ifUserIsAdmin(HttpSession session) {
         User user = (User) session.getAttribute(UserUtil.USER_INFO_SESSION);
-        if (user.getUserIdentity().equals("管理员")) {
+        if (user.getUserIdentity().equals(UserUtil.USER_IDENTITIES.get(0))) {
             return true;
         } else {
             return false;

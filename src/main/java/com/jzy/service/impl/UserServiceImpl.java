@@ -30,7 +30,7 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService {
     @Override
     public UserLogin userLoginTest(User user) {
         UserLogin userLogin = new UserLogin();
-        ValueOperations<String, String> vOps = redisTemplate.opsForValue();
+        ValueOperations<String, Object> vOps = redisTemplate.opsForValue();
 
         String key = UserLogin.getUserLoginFailKey(user.getUserName());
         if (redisTemplate.hasKey(key) && redisTemplate.getExpire(key) != -1) { //检查当前用户名是否处于冻结状态
@@ -52,10 +52,10 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService {
                  * 登录失败次数加一，这里没有使用increment方法
                  * 因为redisTemplate配置中value序列化使用了GenericJackson2JsonRedisSerializer，这会导致该方法报String转换错误
                  */
-                int wrongTimes = Integer.parseInt(vOps.get(key));
+                int wrongTimes = Integer.parseInt((String) vOps.get(key));
                 vOps.set(key, wrongTimes + 1 + "");
             }
-            int wrongTimes = Integer.parseInt(vOps.get(key));
+            int wrongTimes = Integer.parseInt((String) vOps.get(key));
             userLogin.setWrongTimes(wrongTimes);
             if (userLogin.getWrongTimes() == UserLogin.DEFAULT_WRONG_TIMES) { //如果当前用户名连续五次输错密码
                 redisTemplate.expire(key, UserLogin.DEFAULT_BASE_DELAY_TIME, TimeUnit.MINUTES);//设置当前用户冻结冻结15分钟
@@ -78,7 +78,12 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService {
         final String baseKey = UserUtil.KEY_USER_LOGIN_NAMEANDPASSWORD;
         if (!hOps.hasKey(baseKey, userName)) { //没有缓存，去mysql查询
             System.out.println("走数据库");
-            User userTmp = userMapper.selectUserByName(userName);
+            User userTmp;
+            if (UserUtil.isValidUserEmail(userName)) { //先根据输入userName格式猜测输入是否为用户邮箱，若是通过邮箱验证登录
+                userTmp = userMapper.selectUserByEmail(userName);
+            } else {
+                userTmp = userMapper.selectUserByName(userName);
+            }
             if (userTmp == null) {
                 return null;
             } else {

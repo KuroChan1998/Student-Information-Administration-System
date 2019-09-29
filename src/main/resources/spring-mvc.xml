@@ -52,8 +52,9 @@
         <mvc:interceptor>
             <!--拦截修改页面-->
             <mvc:mapping path="/*/modify"/>
-            <!--排除登录URL-->
-
+            <mvc:mapping path="/*/insert*"/>
+            <mvc:mapping path="/*/update*"/>
+            <mvc:mapping path="/*/delete*"/>
             <bean class="com.jzy.interceptor.AuthorityInterceptor"/>
         </mvc:interceptor>
 

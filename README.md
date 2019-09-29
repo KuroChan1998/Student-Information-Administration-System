@@ -57,7 +57,6 @@ Download: https://pan.baidu.com/s/1yHjrk7gAycHRFapU_Waf4g
 * 缓存技术：`Redis`
 * 数据库：`Mysql`
 * 日志框架 : `Log4j`
-* 安全框架 : `Shiro`
 
 ## Project Structure
 ```

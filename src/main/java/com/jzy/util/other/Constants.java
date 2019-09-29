@@ -24,9 +24,9 @@ public class Constants {
 
         public static final String VISUALIZE_TECH="echarts-4.2.1";
 
-        public static final String BACK_END_TECH_MVC="SpringMVC-4.1.1.RELEASE";
+        public static final String BACK_END_TECH_MVC="SpringMVC-4.3.24.RELEASE";
 
-        public static final String BACK_END_TECH_IOC="Spring-4.1.1.RELEASE";
+        public static final String BACK_END_TECH_IOC="Spring-4.3.24.RELEASE";
 
         public static final String BACK_END_TECH_ORM="Mybatis-3.2.6";
 

@@ -38,7 +38,7 @@ public abstract class BaseServiceImpl {
     protected TitleMapper titleMapper;
 
     @Autowired
-    protected RedisTemplate<String,String> redisTemplate;
+    protected RedisTemplate<String,Object> redisTemplate;
 
     protected final static Logger logger = Logger.getLogger(BaseServiceImpl.class);
 }

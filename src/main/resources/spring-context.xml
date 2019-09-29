@@ -25,7 +25,7 @@
     <!--引入属性文件 -->
     <context:property-placeholder location="classpath:dbconfig.properties"/>
 
-    <import resource="classpath:spring-redis.xml" />
+    <import resource="classpath:spring-redis.xml"/>
 
 
     <!-- dataSource 配置数据源 -->

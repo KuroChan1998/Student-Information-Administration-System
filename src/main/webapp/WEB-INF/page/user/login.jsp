@@ -36,7 +36,7 @@
                 <label class="layadmin-user-login-icon layui-icon layui-icon-username"
                        for="LAY-user-login-username"></label>
                 <input type="text" name="username" id="LAY-user-login-username" lay-verify="required"
-                       placeholder="用户名(学号或工号)" class="layui-input">
+                       placeholder="用户名(学号或工号)/邮箱" class="layui-input">
             </div>
             <div class="layui-form-item">
                 <label class="layadmin-user-login-icon layui-icon layui-icon-password"

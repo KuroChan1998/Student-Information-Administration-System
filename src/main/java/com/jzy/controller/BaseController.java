@@ -58,7 +58,7 @@ public abstract class BaseController {
     protected OtherService otherService;
 
     @Autowired
-    protected RedisTemplate<String,String> redisTemplate;
+    protected RedisTemplate<String,Object> redisTemplate;
 
     protected final static Logger logger = Logger.getLogger(BaseController.class);
 

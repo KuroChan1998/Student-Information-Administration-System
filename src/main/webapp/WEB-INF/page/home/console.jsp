@@ -216,14 +216,14 @@
                                 </script>
                             </td>
                         </tr>
-                        <tr>
-                            <td>安全框架</td>
-                            <td>
-                                <script type="text/html" template>
-                                    ${securityTech}
-                                </script>
-                            </td>
-                        </tr>
+                        <%--<tr>--%>
+                            <%--<td>安全框架</td>--%>
+                            <%--<td>--%>
+                                <%--<script type="text/html" template>--%>
+                                    <%--${securityTech}--%>
+                                <%--</script>--%>
+                            <%--</td>--%>
+                        <%--</tr>--%>
                         <tr>
                             <td>日志</td>
                             <td>

@@ -23,7 +23,7 @@ public class UserUtil extends MyDatabaseUtil implements UserRedis, UserModel, Us
     private static final int USER_PASSWORD_MIN_LENGTH = 6;
     private static final int USER_PASSWORD_MAX_LENGTH = 50;
 
-    private static final List<String> USER_IDENTITIES = Arrays.asList("管理员", "学生", "教师");
+    public static final List<String> USER_IDENTITIES = Arrays.asList("管理员", "学生", "教师");
 
     private static final int USER_ICON_MAX_LENGTH = 500;
 

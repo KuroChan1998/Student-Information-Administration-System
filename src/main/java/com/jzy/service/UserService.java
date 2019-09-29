@@ -26,6 +26,7 @@ public interface UserService {
     /**
      * @author JinZhiyun
      * @Description 用户登录验证服务
+     *             注意，根据前台的输入法则，这里输入的userName不限于用户的用户名userName字段，也可以是用户邮箱等唯一标识
      * @Date 16:54 2019/6/5
      * @Param [userName, userPassword]
      * @return com.jzy.entity.User

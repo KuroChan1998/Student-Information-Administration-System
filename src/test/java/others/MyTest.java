@@ -3,6 +3,7 @@ package others;
 import com.jzy.entity.User;
 import com.jzy.util.user.UserUtil;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.ListOperations;
@@ -29,9 +30,9 @@ public class MyTest extends UnitTestBase {
     //先赋值set在申明失效时间expire
     @Test
     public void v1() {
-        String key = "123";
-        vOps.set("1231", key + "213");
-        System.out.println(vOps.get("1231"));
+//        String key = "123";
+//        vOps.set("1231", key + "213");
+        System.out.println(vOps.get("myKey"));
 
     }
 
@@ -59,6 +60,10 @@ public class MyTest extends UnitTestBase {
     public void t() {
         User user = (User) hOps.get(UserUtil.KEY_USER_LOGIN_NAMEANDPASSWORD, "516030910429");
         System.out.println(user);
+    }
+
+    @Test
+    public void t1() {
     }
 
     public static void main(String[] args) {

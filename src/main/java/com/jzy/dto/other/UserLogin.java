@@ -16,10 +16,10 @@ public class UserLogin implements Serializable {
     private static final long serialVersionUID = 3347183837879977277L;
 
     //默认连续输错多少次，触发
-    public static int DEFAULT_WRONG_TIMES=3;
+    public static int DEFAULT_WRONG_TIMES = 5;
 
     //默认连续输错达到阈值次数后，触发的下次可尝试登录的操作时间间隔，单位：分钟
-    public static int DEFAULT_BASE_DELAY_TIME=1;
+    public static int DEFAULT_BASE_DELAY_TIME = 15;
 
     //是否登录成功标志
     private boolean loginFlag;
@@ -87,7 +87,7 @@ public class UserLogin implements Serializable {
                 '}';
     }
 
-    public static String getUserLoginFailKey(String userName){
-        return UserUtil.KEY_USER_LOGIN_FAIL+":"+userName;
+    public static String getUserLoginFailKey(String userName) {
+        return UserUtil.KEY_USER_LOGIN_FAIL + ":" + userName;
     }
 }
