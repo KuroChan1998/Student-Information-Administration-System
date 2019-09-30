@@ -33,9 +33,8 @@
 
         <mvc:interceptor>
             <!--开放登录权限-->
-            <mvc:mapping path="/**/*"/>
+            <mvc:mapping path="/**"/>
             <!--排除登录未登录时可访问的URL-->
-            <mvc:exclude-mapping path="/"/>
             <mvc:exclude-mapping path="/login"/>
             <mvc:exclude-mapping path="/reg"/>
             <mvc:exclude-mapping path="/forget"/>

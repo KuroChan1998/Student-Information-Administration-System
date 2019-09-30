@@ -81,6 +81,7 @@
         <project.build.javax.mail.version>1.4.7</project.build.javax.mail.version>
         <project.build.sun.mail.javax.version>1.6.2</project.build.sun.mail.javax.version>
         <project.build.jedis>2.9.0</project.build.jedis>
+        <!--Redis-->
         <project.build.spring.data.redis>1.6.0.RELEASE</project.build.spring.data.redis>
     </properties>
 

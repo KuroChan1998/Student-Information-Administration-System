@@ -336,6 +336,13 @@ public class OtherController extends BaseController {
         return otherService.transTeaTotalToValidJSON(type,collegeName,majorName);
     }
 
+    /**
+     * @author JinZhiyun
+     * @description 跳转更新历史页面
+     * @date 10:33 2019/9/30
+     * @Param []
+     * @return java.lang.String
+     **/
     @RequestMapping("/updateHistory")
     public String updateHistory(){
         return "home/updateHistory";
