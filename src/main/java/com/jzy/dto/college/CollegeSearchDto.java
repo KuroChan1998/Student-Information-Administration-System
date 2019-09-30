@@ -20,6 +20,22 @@ public class CollegeSearchDto extends SearchCondition implements Serializable {
     //学院性质
     private String collegeProperty;
 
+    public String getCollegeName() {
+        return collegeName;
+    }
+
+    public void setCollegeName(String collegeName) {
+        this.collegeName = collegeName;
+    }
+
+    public String getCollegeProperty() {
+        return collegeProperty;
+    }
+
+    public void setCollegeProperty(String collegeProperty) {
+        this.collegeProperty = collegeProperty;
+    }
+
     @Override
     public String toString() {
         return "CollegeSearchDto{" +

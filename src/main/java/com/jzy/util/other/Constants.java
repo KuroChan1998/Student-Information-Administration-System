@@ -16,7 +16,7 @@ public class Constants {
     public static class ProjectInfo{
         public static final String PROJECT_NAME="StuInfoAdmin";
 
-        public static final String PROJECT_VERSION="1.2.0";
+        public static final String PROJECT_VERSION="1.0.0";
 
         public static final String PROJECT_WHOLE_NAME=PROJECT_NAME+"-v"+PROJECT_VERSION;
 
@@ -24,11 +24,9 @@ public class Constants {
 
         public static final String VISUALIZE_TECH="echarts-4.2.1";
 
-        public static final String BACK_END_TECH_MVC="SpringMVC-4.3.24.RELEASE";
+        public static final String BACK_END_TECH_SPRING_BOOT="SpringBoot-1.5.9.RELEASE";
 
-        public static final String BACK_END_TECH_IOC="Spring-4.3.24.RELEASE";
-
-        public static final String BACK_END_TECH_ORM="Mybatis-3.2.6";
+        public static final String BACK_END_TECH_ORM="Mybatis-3.4.6";
 
         public static final String CACHES="Redis-3.2.100";
 
@@ -36,7 +34,7 @@ public class Constants {
 
         public static final String SECURITY_TECH="shiro-1.4.0";
 
-        public static final String LOG_TECH="log4j-1.2.17";
+        public static final String LOG_TECH="log4j-1.7.25";
 
         public static final String LANGUAGE="java";
 

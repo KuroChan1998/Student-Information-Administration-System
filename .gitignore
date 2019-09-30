@@ -13,6 +13,7 @@
 *.iml
 *.ipr
 /target/
+/transaction-logs/
 
 ### NetBeans ###
 /nbproject/private/

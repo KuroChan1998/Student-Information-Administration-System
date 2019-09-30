@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  **/
 @Controller
 @RequestMapping("/grade")
-public class GradeController extends BaseController{
+public class GradeController extends BaseController {
     /**
      * @author JinZhiyun
      * @Description 用于ajax渲染年级select表单栏，找出数据库中所有的年级名称

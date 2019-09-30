@@ -16,7 +16,6 @@ import java.util.List;
  * @Date 2019/6/14 13:00
  * @Version 1.0
  **/
-@Repository
 public interface TeacherMapper {
     /**
      * @return java.util.List<com.jzy.dto.teacher.TeacherWithTitleMajorCollegeDto>

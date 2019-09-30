@@ -1,47 +1,20 @@
 ## Brief Introduction
-这个项目是一个大学生信息管理系统,提供用户级别的登录注册资料管理,信息查询,信息修改（管理员权利），简单的数据可视化分析等功能，也有基本的安全性保障
+这个项目是一个大学生信息管理系统,提供用户级别的登录注册资料管理,信息查询,信息修改（管理员权利），简单的数据可视化分析等功能，也有基本的安全性保障。
 
-
+该项目为master项目的分支项目，系统的后端是由`SpringBoot`+`Mybatis`实现，功能上与主支SSM项目相同。
 
 ## Release Notes
 
-### v1.0.0 - 2019.5.19
+### v1.0.0 - 2019.9.30
 
-*StuInfoAdmin-v1.0.0 的一切准备工作似乎都已到位。发布之弦，一触即发。*
-*不枉近百个日日夜夜与之为伴。因小而大，因弱而强。*
+*该版本功能上与主支SSM项目的v1.2.0版本对应。*
 
-*无论它能走多远，抑或如何支撑？至少我曾倾注全心，无怨无悔*
+*版本1.0.0，更新如下内容 :*
 
-Download: https://pan.baidu.com/s/1piVQnIFdz_BIoszIEzAJwQ
-
-### v1.1.0 - 2019.7.27
-
-*版本1.1.0，更新如下内容 :*
-
-* 优化数据表结构，对原有的表的部分字段进行了修改，并增加了title和grade两个表
-* 优化sql语句效率
-* 优化前端查询界面及查询方式，使其更加全面，对用户友好
-* 更新登录界面记住密码的cookie设置
-* 更新邮箱验证码服务，增加了验证码有效时间
-* 优化源代码结构，增强了规范性和可拓展性
-
-Download: https://pan.baidu.com/s/1yHjrk7gAycHRFapU_Waf4g
-
-### v1.2.0 - 2019.9.12 (Current Version)
-
-*目前版本为v1.2.0，更新如下内容 :*
-
-* 修复了前端编辑添加弹窗在不同分辨率客户机上的显示大小问题
-* 新增Redis技术，用以缓存用户名密码，用户错误登录次数限制，邮箱验证码等等
-* 新增连续输错用户名密码超过一定次数后的限制时间
-* 更改了邮箱验证码有效时间的实现方式，由服务端java实现改为redis过期时间实现
-* 提升了服务端的安全性和新增异常处理机制，用aop实现入参的校验，对不合法的请求及其参数值用日志记录，并抛出异常
-* 优化了util包等源代码的结构，增强了可拓展性
-
-对`Redis`和`SpringAOP`不太熟的同学，下载`v1.1.0`版本足够学习或完成课设了~
-
-### v2.0.0  (//TODO)
-*使用`SpringBoot`重构`SSM`,`Thymeleaf`重构`JSP`,提高项目的实用性及扩展性,尽情期待哟~*
+* 这里前端我没有进行修改，还是使用jsp，接口与SSM项目相同，所以前端资源在webapp目录下；需要注意的是：springboot官方强调不推荐使用jsp，可以使用*freemaker*、*thymeleaf*代替，这些模板文件应该放在resources的static和templates目录下。
+* layui和springboot整合时会出现layui一些图标无法显示问题，这里通过在pom.xml文件修改maven编译时对layui资源的拦截解决。
+* springmvc拦截器的定义有原来的spring-mvc.xml中改为在config包下的配置类*SpringmvcConfig*完成；redis的配置等也同样改成springboot风格即配置类完成。
+* 在原先的*com.jzy.controller.OtherController*中`"/error"`请求与springboot内部定义的出错请求相同，产生冲突，因而改成`"/myError"`
 
 
 
@@ -51,8 +24,7 @@ Download: https://pan.baidu.com/s/1yHjrk7gAycHRFapU_Waf4g
 * 数据可视化框架 : `echarts`
 
 ### 后端
-* IOC容器 : `Spring`
-* MVC框架 : `SpringMVC`
+* MVC&IOC框架 : `SpringBoot`
 * ORM框架 : `Mybatis`
 * 缓存技术：`Redis`
 * 数据库：`Mysql`
@@ -70,6 +42,7 @@ Download: https://pan.baidu.com/s/1yHjrk7gAycHRFapU_Waf4g
 │  │  ├─java
 │  │  │  └─com
 │  │  │      └─jzy          // java代码目录
+│  │  │          ├─config			//springboot配置类
 │  │  │          ├─controller       // 控制层
 │  │  │          ├─dao              // 持久层
 │  │  │          ├─dto              // 传输对象
@@ -81,8 +54,10 @@ Download: https://pan.baidu.com/s/1yHjrk7gAycHRFapU_Waf4g
 │  │  │          └─util             // 工具方法
 │  │  ├─resources                   // 资源文件目录
 │  │  │  └─com
-│  │  │      └─jzy
-│  │  │          └─mapper           // mybatis对dao接口的xml实现
+│  │  │  │   └─jzy
+│  │  │  │       └─mapper           // mybatis对dao接口的xml实现
+│  │  │  ├─static                   // springboot默认静态资源目录
+│  │  │  └─templates				// springboot默认页面模板目录
 │  │  └─webapp                      // tomcat前端文件目录
 │  │      ├─static                  // 静态资源
 │  │      │  ├─custom               // 自定义静态资源
@@ -112,18 +87,51 @@ Download: https://pan.baidu.com/s/1yHjrk7gAycHRFapU_Waf4g
 
 ![Snipaste_2019-07-17_09-48-36](git_screenshot/Snipaste_2019-07-17_09-48-36.jpg)
 
-2. *进入src/main/resources修改dbconfig.properties配置文件,把数据库主机、端口、用户名和密码，改为你本地的*
-3. *进入src/main/resources修改redis.properties配置文件,把数据库主机、端口、用户名和密码，改为你本地的*
-4. *进入src/main/resources查看log4j.properties，如果有必要可以修改日志输出路径，目前在D盘下，你可选择不修改跳过此步*
-5. *使用 IntelliJ IDEA 导入项目，选择Maven项目选项，一路点击next，即可将项目所需依赖导入。若有无法引入的依赖，可能是因为maven版本不同或是该依赖已过时不存在于现有maven仓库中，请前往maven官网映入最新的该类型依赖*
+2. *进入src/main/resources修改application.properties配置文件*
+
+   * 修改mysql连接信息
+
+     ```properties
+     #JDBC
+     #你的mysql连接url，localhost(本机)，端口：3306（默认），数据库：mydatabase2（上一步完成创建）
+     spring.datasource.url=jdbc:mysql://localhost:3306/mydatabase2?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false
+     #你的mysql用户名
+     spring.datasource.username=root
+     #你的mysql密码
+     spring.datasource.password=123
+     ```
+
+   * 修改redis连接信息
+
+     ```properties
+     #redis
+     #你的redis主机地址
+     spring.redis.host = localhost
+     #你的redis端口
+     spring.redis.port = 6379
+     #你的redis密码
+     spring.redis.password = 123
+     ```
+
+   * 如果有必要可以修改当前项目部署端口和部署路径（可选）
+
+     ```properties
+     #端口
+     server.port= 80
+     #项目部署路径
+     server.context-path= /
+     ```
+
+3. *进入src/main/resources查看log4j.properties，如果有必要可以修改日志输出路径，目前在D盘下，你可选择不修改跳过此步*
+
+4. *使用 IntelliJ IDEA 导入项目，选择Maven项目选项，一路点击next，即可将项目所需依赖导入。若有无法引入的依赖，可能是因为maven版本不同或是该依赖已过时不存在于现有maven仓库中，请前往maven官网映入最新的该类型依赖*
 
 ![Snipaste_2019-07-17_08-47-37](git_screenshot/Snipaste_2019-07-17_08-47-37.jpg)
 
 ![Snipaste_2019-07-17_08-49-48](git_screenshot/Snipaste_2019-07-17_08-49-48.jpg)
 
-5. *在 IntelliJ IDEA 中，配置我们的 Tomcat， 然后把使用Maven构建好的项目添加到Tomcat中，操作比较简单，相关方法可以参考百度*
+5. *运行com.jzy.App，进入用户登录页面*
 
-6. *运行项目，进入用户登录页面*
 
 ![Snipaste_2019-05-04_08-02-50](git_screenshot/Snipaste_2019-05-04_08-02-50.jpg)
 

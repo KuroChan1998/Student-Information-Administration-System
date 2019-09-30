@@ -177,18 +177,10 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>MVC框架</td>
+                            <td>MVC&IOC框架</td>
                             <td>
                                 <script type="text/html" template>
-                                    ${backEndTechMCV}
-                                </script>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>IOC框架</td>
-                            <td>
-                                <script type="text/html" template>
-                                    ${backEndTechIOC}
+                                    ${backEndTechSpringBoot}
                                 </script>
                             </td>
                         </tr>
@@ -265,14 +257,13 @@
                     <i class="layui-icon layui-icon-tips" lay-tips="注意查看哦" lay-offset="5"></i>
                 </div>
                 <div class="layui-card-body layui-text layadmin-text">
-                    <p>大学生信息管理系统 StuInfoAdmin-v1.2.0版本上线啦！</p>
+                    <p>大学生信息管理系统 StuInfoAdmin-v1.0.0版本上线啦！</p>
+                    <p>该版本功能上与主支SSM项目的v1.2.0版本对应。</p>
                     <p>更新如下内容：</p>
-                    <p>修复了前端编辑添加弹窗在不同分辨率客户机上的显示大小问题</p>
-                    <p>新增Redis技术，用以缓存用户名密码，用户错误登录次数限制，邮箱验证码等等</p>
-                    <p>新增连续输错用户名密码超过一定次数后的限制时间</p>
-                    <p>更改了邮箱验证码有效时间的实现方式，由服务端java实现改为redis过期时间实现</p>
-                    <p>提升了服务端的安全性和新增异常处理机制，用aop实现入参的校验，对不合法的请求及其参数值用日志记录，并抛出异常</p>
-                    <p>优化了util包等源代码的结构，增强了可拓展性</p>
+                    <p>这里前端我没有进行修改，还是使用jsp，接口与SSM项目相同，所以前端资源在webapp目录下；需要注意的是：springboot官方强调不推荐使用jsp，可以使用freemaker、thymeleaf代替，这些模板文件应该放在resources的static和templates目录下。</p>
+                    <p>layui和springboot整合时会出现layui一些图标无法显示问题，这里通过在pom.xml文件修改maven编译时对layui资源的拦截解决。</p>
+                    <p>springmvc拦截器的定义有原来的spring-mvc.xml中改为在config包下的配置类SpringmvcConfig完成；redis的配置等也同样改成springboot风格即配置类完成。</p>
+                    <p>在原先的com.jzy.controller.OtherController中"/error"请求与springboot内部定义的出错请求相同，产生冲突，因而改成"/myError"</p>
                     → <a lay-href="${ctx}/updateHistory">历史版本</a>
                 </div>
             </div>

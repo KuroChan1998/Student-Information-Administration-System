@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -198,8 +200,8 @@ public class OtherController extends BaseController {
      * @Date 13:17 2019/5/3
      * @Param []
      **/
-    @RequestMapping("/error")
-    public String error() {
+    @RequestMapping("/myError")
+    public String myError() {
         return "tips/error";
     }
 
@@ -215,8 +217,7 @@ public class OtherController extends BaseController {
         model.addAttribute("projectWholeName",Constants.ProjectInfo.PROJECT_WHOLE_NAME);
         model.addAttribute("frontEndTech",Constants.ProjectInfo.FRONT_END_TECH);
         model.addAttribute("visualizeTech",Constants.ProjectInfo.VISUALIZE_TECH);
-        model.addAttribute("backEndTechIOC",Constants.ProjectInfo.BACK_END_TECH_IOC);
-        model.addAttribute("backEndTechMCV",Constants.ProjectInfo.BACK_END_TECH_MVC);
+        model.addAttribute("backEndTechSpringBoot",Constants.ProjectInfo.BACK_END_TECH_SPRING_BOOT);
         model.addAttribute("backEndTechORM",Constants.ProjectInfo.BACK_END_TECH_ORM);
         model.addAttribute("caches",Constants.ProjectInfo.CACHES);
         model.addAttribute("databases",Constants.ProjectInfo.DATABASES);
@@ -332,12 +333,57 @@ public class OtherController extends BaseController {
     @RequestMapping("/findTeaTotalGroupByTitle")
     @ResponseBody
     public Map<String, Object> findTeaTotalGroupByTitle(@RequestParam(value = "college", required = false) String collegeName
-            , @RequestParam(value = "major", required = false) String majorName,@RequestParam(value = "type", required = false) String type) {
+            , @RequestParam(value = "major", required = false) String majorName, @RequestParam(value = "type", required = false) String type) {
         return otherService.transTeaTotalToValidJSON(type,collegeName,majorName);
     }
 
+    /**
+     * @author JinZhiyun
+     * @description 跳转更新历史页面
+     * @date 10:33 2019/9/30
+     * @Param []
+     * @return java.lang.String
+     **/
     @RequestMapping("/updateHistory")
     public String updateHistory(){
         return "home/updateHistory";
     }
+
+    /**
+     * @author JinZhiyun
+     * @description 404页面
+     * @date 10:34 2019/9/30
+     * @Param [response, request]
+     * @return java.lang.String
+     **/
+    @RequestMapping("/404")
+    public String error404Page(HttpServletResponse response, HttpServletRequest request) {
+        int status = response.getStatus();
+        String msg="";
+        if (status==404) {
+            msg="Not Found! 未找到，服务器找不到请求的网页";
+            logger.error(msg);
+        }
+        return "tips/HTTP-404";
+    }
+
+    /**
+     * @author JinZhiyun
+     * @description 500页面
+     * @date 10:34 2019/9/30
+     * @Param [response, request]
+     * @return java.lang.String
+     **/
+    @RequestMapping("/500")
+    public String error500Page(HttpServletResponse response, HttpServletRequest request) {
+        int status = response.getStatus();
+        String msg="";
+        if (status==500) {
+            msg="Internal Server Error! 服务器内部错误，服务器遇到错误，无法完成请求";
+            logger.error(msg);
+        }
+        return "tips/HTTP-500";
+    }
 }
+
+

@@ -54,4 +54,12 @@ public class MyPage implements Serializable {
         return myPage != null && myPage.getPageNum() != null && myPage.getPageSize() != null
                 && myPage.getPageNum() > 0 && myPage.getPageSize() > 0;
     }
+
+    @Override
+    public String toString() {
+        return "MyPage{" +
+                "pageNum=" + pageNum +
+                ", pageSize=" + pageSize +
+                '}';
+    }
 }

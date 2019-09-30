@@ -1,57 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <groupId>com.jzy</groupId>
-    <artifactId>mavenTemplate</artifactId>
+    <artifactId>springboottest</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
 
-    <name>UIMS</name>
-    <url>https://github.com/kfoolish/UIMS</url>
-    <description>A Information Management System For University</description>
+    <name>springboottest Maven Webapp</name>
+    <!-- FIXME change it to the project's website -->
+    <url>http://www.example.com</url>
 
     <properties>
         <!-- JDK version -->
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <!-- Spring -->
-        <project.build.spring.context>4.3.24.RELEASE</project.build.spring.context>
-        <project.build.spring.tx.version>4.3.24.RELEASE</project.build.spring.tx.version>
-        <project.build.spring.aop.version>4.3.24.RELEASE</project.build.spring.aop.version>
-        <project.build.spring.core.version>4.3.24.RELEASE</project.build.spring.core.version>
-        <project.build.spring.bean.versoin>4.3.24.RELEASE</project.build.spring.bean.versoin>
-        <project.build.spring.test.version>4.3.24.RELEASE</project.build.spring.test.version>
-        <project.build.spring.aspect.version>4.3.24.RELEASE</project.build.spring.aspect.version>
-        <project.build.spring.context.support.version>4.3.24.RELEASE</project.build.spring.context.support.version>
-        <project.build.spring.web.version>4.3.24.RELEASE</project.build.spring.web.version>
-        <project.build.spring.jdbc.version>4.3.24.RELEASE</project.build.spring.jdbc.version>
-        <project.build.spring.webmvc.version>4.3.24.RELEASE</project.build.spring.webmvc.version>
-        <!-- MyBatis -->
-        <project.build.mybatis.version>3.2.6</project.build.mybatis.version>
-        <!-- MyBatis and Spring -->
-        <project.build.mybatis.spring.version>1.2.2</project.build.mybatis.spring.version>
-        <!-- Logging -->
-        <project.build.log4j.version>1.2.17</project.build.log4j.version>
-        <project.build.slf4j.api.version>1.7.7</project.build.slf4j.api.version>
-        <project.build.slf4j.log4j12.version>1.7.7</project.build.slf4j.log4j12.version>
-        <!-- MySQL connector -->
-        <project.build.mysql.connector.version>8.0.13</project.build.mysql.connector.version>
+        <!-- Spring Boot-->
+        <project.build.spring.boot.starter.parent.version>1.5.9.RELEASE</project.build.spring.boot.starter.parent.version>
+        <!-- MyBatis and Spring Boot -->
+        <project.build.mybatis.spring.boot.starter.version>1.3.2</project.build.mybatis.spring.boot.starter.version>
         <!-- Database connection pool -->
-        <project.build.druid.version>1.0.5</project.build.druid.version>
+        <project.build.druid.spring.boot.starter.version>1.1.10</project.build.druid.spring.boot.starter.version>
         <!-- PageHelper -->
-        <project.build.pagehelper.version>5.0.0</project.build.pagehelper.version>
+        <project.build.pagehelper.spring.boot.starter.version>1.2.3</project.build.pagehelper.spring.boot.starter.version>
         <!-- Servlet -->
         <project.build.servlet.api.version>3.0.1</project.build.servlet.api.version>
         <project.build.servlet.jsp.version>2.2</project.build.servlet.jsp.version>
         <project.build.servlet.jstl.version>1.2</project.build.servlet.jstl.version>
-        <!-- Freemarker -->
-        <project.build.freemarker.version>2.3.19</project.build.freemarker.version>
-        <!-- Junit -->
-        <project.build.junit.version>4.12</project.build.junit.version>
         <!-- Aspectj -->
         <project.build.aspectj.aspectjrt.version>1.7.4</project.build.aspectj.aspectjrt.version>
         <project.build.aspectj.aspectjweaver.version>1.7.4</project.build.aspectj.aspectjweaver.version>
@@ -80,129 +58,89 @@
         <!-- Mail -->
         <project.build.javax.mail.version>1.4.7</project.build.javax.mail.version>
         <project.build.sun.mail.javax.version>1.6.2</project.build.sun.mail.javax.version>
-        <project.build.jedis>2.9.0</project.build.jedis>
-        <project.build.spring.data.redis>1.6.0.RELEASE</project.build.spring.data.redis>
     </properties>
 
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.5.9.RELEASE</version>
+    </parent>
+
     <dependencies>
+        <!--对于web的依赖-->
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${project.build.junit.version}</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- Spring Boot log4j依赖 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-log4j</artifactId>
+            <version>1.3.8.RELEASE</version>
+        </dependency>
+        <!--aop-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+         <!--tomcat 的支持.-->
         <dependency>
-            <groupId>com.github.pagehelper</groupId>
-            <artifactId>pagehelper</artifactId>
-            <version>${project.build.pagehelper.version}</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
-            <version>${project.build.spring.test.version}</version>
-            <scope>test</scope>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-jasper</artifactId>
         </dependency>
+
+        <!--jta管理多个数据源事务-->
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
-            <version>${project.build.spring.webmvc.version}</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jta-atomikos</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId>
-            <version>${project.build.spring.core.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-beans</artifactId>
-            <version>${project.build.spring.bean.versoin}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-            <version>${project.build.spring.context}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context-support</artifactId>
-            <version>${project.build.spring.context.support.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-aop</artifactId>
-            <version>${project.build.spring.aop.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-aspects</artifactId>
-            <version>${project.build.spring.aspect.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-tx</artifactId>
-            <version>${project.build.spring.tx.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-            <version>${project.build.spring.web.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-jdbc</artifactId>
-            <version>${project.build.spring.jdbc.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjrt</artifactId>
-            <version>${project.build.aspectj.aspectjrt.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjweaver</artifactId>
-            <version>${project.build.aspectj.aspectjweaver.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>cglib</groupId>
-            <artifactId>cglib</artifactId>
-            <version>${project.build.cglib.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.mybatis</groupId>
-            <artifactId>mybatis</artifactId>
-            <version>${project.build.mybatis.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.mybatis</groupId>
-            <artifactId>mybatis-spring</artifactId>
-            <version>${project.build.mybatis.spring.version}</version>
-        </dependency>
+
+        <!-- mysql驱动 -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>${project.build.mysql.connector.version}</version>
         </dependency>
+        <!--redis-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+        <!-- mybatis依赖 -->
+        <dependency>
+            <groupId>org.mybatis.spring.boot</groupId>
+            <artifactId>mybatis-spring-boot-starter</artifactId>
+            <version>${project.build.mybatis.spring.boot.starter.version}</version>
+        </dependency>
+        <!--springboot pagehelper-->
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper-spring-boot-starter</artifactId>
+            <version>${project.build.pagehelper.spring.boot.starter.version}</version>
+        </dependency>
+
+        <!-- connection pool -->
         <dependency>
             <groupId>com.alibaba</groupId>
-            <artifactId>druid</artifactId>
-            <version>${project.build.druid.version}</version>
-            <scope>runtime</scope>
+            <artifactId>druid-spring-boot-starter</artifactId>
+            <version>${project.build.druid.spring.boot.starter.version}</version>
         </dependency>
-        <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>${project.build.log4j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${project.build.slf4j.api.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>${project.build.slf4j.log4j12.version}</version>
-        </dependency>
+
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
@@ -337,55 +275,37 @@
             <artifactId>javax.mail</artifactId>
             <version>${project.build.sun.mail.javax.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.freemarker</groupId>
-            <artifactId>freemarker</artifactId>
-            <version>${project.build.freemarker.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>redis.clients</groupId>
-            <artifactId>jedis</artifactId>
-            <version>${project.build.jedis}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-redis</artifactId>
-            <version>${project.build.spring.data.redis}</version>
-        </dependency>
+
+
     </dependencies>
 
     <build>
-        <finalName>xiayan1</finalName>
+        <finalName>springboottest</finalName>
         <plugins>
-            <!-- MyBatis generator -->
-            <plugin>
-                <groupId>org.mybatis.generator</groupId>
-                <artifactId>mybatis-generator-maven-plugin</artifactId>
-                <version>1.3.2</version>
-                <configuration>
-                    <verbose>true</verbose>
-                    <overwrite>true</overwrite>
-                </configuration>
-            </plugin>
+            <!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
             <plugin>
                 <artifactId>maven-clean-plugin</artifactId>
-                <version>3.0.0</version>
+                <version>3.1.0</version>
             </plugin>
+            <!-- default lifecycle, jar packaging: see https://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_jar_packaging -->
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>3.0.2</version>
             </plugin>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.7.0</version>
+                <version>3.8.0</version>
             </plugin>
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.20.1</version>
+                <version>2.22.1</version>
+                <configuration>
+                    <testFailureIgnore>true</testFailureIgnore>
+                </configuration>
             </plugin>
             <plugin>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>3.2.0</version>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.0.2</version>
             </plugin>
             <plugin>
                 <artifactId>maven-install-plugin</artifactId>
@@ -395,12 +315,50 @@
                 <artifactId>maven-deploy-plugin</artifactId>
                 <version>2.8.2</version>
             </plugin>
+            <!-- site lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#site_Lifecycle -->
+            <plugin>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>3.7.1</version>
+            </plugin>
+            <plugin>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>3.0.0</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <!-- 工程主入口-->
+                    <mainClass>com.jzy.App</mainClass>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
-        <!-- 解决项目编译后classes文件中没有.xml等配置问题 -->
+
+
+        <!--解决maven项目编译后classes文件中没有.xml问题-->
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
+                <excludes>
+                    <exclude>static/static/plugins/layuiadmin/**/*</exclude>
+                </excludes>
+            </resource>
+            <resource>
+                <!--解决layui图标无法显示-->
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+                <includes>
+                    <include>static/static/plugins/layuiadmin/**/*</include>
+                </includes>
             </resource>
         </resources>
     </build>
