@@ -9,7 +9,7 @@
 
 ### v1.0.0 - 2019.9.30
 
-*该版本功能上与主支SSM项目的[v1.2.0](https://github.com/KuroChan1998/Student-Information-Administration-System/tree/master)版本对应。*
+*该版本功能上与主支SSM项目的[v1.2.0](https://github.com/KuroChan1998/Student-Information-Administration-System/tree/v1.2.0)版本对应。*
 
 *版本1.0.0，更新如下内容 :*
 
