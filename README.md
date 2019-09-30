@@ -3,11 +3,13 @@
 
 该项目为master项目的分支项目，系统的后端是由`SpringBoot`+`Mybatis`实现，功能上与主支SSM项目相同。
 
+* SpringMVC+Spring+Mybatis主支：[https://github.com/KuroChan1998/Student-Information-Administration-System/tree/master](https://github.com/KuroChan1998/Student-Information-Administration-System/tree/master)
+
 ## Release Notes
 
 ### v1.0.0 - 2019.9.30
 
-*该版本功能上与主支SSM项目的v1.2.0版本对应。*
+*该版本功能上与主支SSM项目的[v1.2.0](https://github.com/KuroChan1998/Student-Information-Administration-System/tree/master)版本对应。*
 
 *版本1.0.0，更新如下内容 :*
 
