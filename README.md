@@ -1,7 +1,7 @@
 ## Brief Introduction
 这个项目是一个大学生信息管理系统,提供用户级别的登录注册资料管理,信息查询,信息修改（管理员权利），简单的数据可视化分析等功能，也有基本的安全性保障
 
-* SpringMVC+Spring+Mybatis主支：[https://github.com/KuroChan1998/Student-Information-Administration-System/tree/master](https://github.com/KuroChan1998/Student-Information-Administration-System/tree/master)
+* SpringBoot+Mybatis分支：[https://github.com/KuroChan1998/Student-Information-Administration-System/tree/Sb_M](https://github.com/KuroChan1998/Student-Information-Administration-System/tree/Sb_M)
 
 ## Release Notes
 
