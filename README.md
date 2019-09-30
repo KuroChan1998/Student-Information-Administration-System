@@ -1,7 +1,7 @@
 ## Brief Introduction
 这个项目是一个大学生信息管理系统,提供用户级别的登录注册资料管理,信息查询,信息修改（管理员权利），简单的数据可视化分析等功能，也有基本的安全性保障
 
-
+* SpringMVC+Spring+Mybatis主支：[https://github.com/KuroChan1998/Student-Information-Administration-System/tree/master](https://github.com/KuroChan1998/Student-Information-Administration-System/tree/master)
 
 ## Release Notes
 
@@ -12,7 +12,7 @@
 
 *无论它能走多远，抑或如何支撑？至少我曾倾注全心，无怨无悔*
 
-Download: https://pan.baidu.com/s/1piVQnIFdz_BIoszIEzAJwQ
+Download: [https://pan.baidu.com/s/1piVQnIFdz_BIoszIEzAJwQ](https://pan.baidu.com/s/1piVQnIFdz_BIoszIEzAJwQ)
 
 ### v1.1.0 - 2019.7.27
 
@@ -25,7 +25,7 @@ Download: https://pan.baidu.com/s/1piVQnIFdz_BIoszIEzAJwQ
 * 更新邮箱验证码服务，增加了验证码有效时间
 * 优化源代码结构，增强了规范性和可拓展性
 
-Download: https://pan.baidu.com/s/1yHjrk7gAycHRFapU_Waf4g
+Download: [https://pan.baidu.com/s/1yHjrk7gAycHRFapU_Waf4g](https://pan.baidu.com/s/1yHjrk7gAycHRFapU_Waf4g)
 
 ### v1.2.0 - 2019.9.12 (Current Version)
 
@@ -39,9 +39,6 @@ Download: https://pan.baidu.com/s/1yHjrk7gAycHRFapU_Waf4g
 * 优化了util包等源代码的结构，增强了可拓展性
 
 对`Redis`和`SpringAOP`不太熟的同学，下载`v1.1.0`版本足够学习或完成课设了~
-
-### v2.0.0  (//TODO)
-*使用`SpringBoot`重构`SSM`,`Thymeleaf`重构`JSP`,提高项目的实用性及扩展性,尽情期待哟~*
 
 
 
@@ -113,8 +110,31 @@ Download: https://pan.baidu.com/s/1yHjrk7gAycHRFapU_Waf4g
 ![Snipaste_2019-07-17_09-48-36](git_screenshot/Snipaste_2019-07-17_09-48-36.jpg)
 
 2. *进入src/main/resources修改dbconfig.properties配置文件,把数据库主机、端口、用户名和密码，改为你本地的*
+
+   ```properties
+   #mysql
+   jdbc.driver=com.mysql.cj.jdbc.Driver
+   #你的mysql连接url，localhost(本机)，端口：3306（默认），数据库：mydatabase2（上一步完成创建）
+   jdbc.url=jdbc:mysql://localhost:3306/mydatabase2?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false
+   #你的mysql用户名
+   jdbc.username=root
+   #你的mysql密码
+   jdbc.password=123
+   ```
+
 3. *进入src/main/resources修改redis.properties配置文件,把数据库主机、端口、用户名和密码，改为你本地的*
+
+   ```properties
+   #你的redis主机地址
+   redis.host=localhost
+   #你的redis端口
+   redis.port=6379
+   #你的redis密码
+   redis.password=123
+   ```
+
 4. *进入src/main/resources查看log4j.properties，如果有必要可以修改日志输出路径，目前在D盘下，你可选择不修改跳过此步*
+
 5. *使用 IntelliJ IDEA 导入项目，选择Maven项目选项，一路点击next，即可将项目所需依赖导入。若有无法引入的依赖，可能是因为maven版本不同或是该依赖已过时不存在于现有maven仓库中，请前往maven官网映入最新的该类型依赖*
 
 ![Snipaste_2019-07-17_08-47-37](git_screenshot/Snipaste_2019-07-17_08-47-37.jpg)

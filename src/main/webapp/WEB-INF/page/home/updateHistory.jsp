@@ -40,7 +40,7 @@
                     <li>提升了服务端的安全性和新增异常处理机制，用aop实现入参的校验，对不合法的请求及其参数值用日志记录，并抛出异常</li>
                     <li>优化了util包等源代码的结构，增强了可拓展性</li>
                 </ul>
-                <p><a href="https://github.com/jinzhiyun1998/Student-Information-Administration-System"
+                <p><a href="https://github.com/KuroChan1998/Student-Information-Administration-System/tree/v1.2.0"
                    target="_blank" class="layui-btn">立即下载</a></p>
             </div>
         </div>
