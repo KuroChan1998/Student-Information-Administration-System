@@ -2,13 +2,16 @@ package com.jzy.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.jzy.dao.TeacherMapper;
 import com.jzy.dto.other.MyPage;
+import com.jzy.dto.other.senior.ObjectTotalGroupByCommonName;
 import com.jzy.dto.teacher.TeacherSearchDto;
 import com.jzy.dto.teacher.TeacherWithTitleMajorCollegeDto;
 import com.jzy.entity.Teacher;
 import com.jzy.service.TeacherService;
 import com.jzy.util.other.MyTimeUtil;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +28,8 @@ import java.util.List;
 @Service("teacherService")
 @Transactional
 public class TeacherServiceImpl extends BaseServiceImpl implements TeacherService {
+    @Autowired
+    private TeacherMapper teacherMapper;
 
     @Override
     public PageInfo<TeacherWithTitleMajorCollegeDto> selectAllTeacherInfo(MyPage myPage, TeacherSearchDto teacherSearch) {
@@ -68,10 +73,10 @@ public class TeacherServiceImpl extends BaseServiceImpl implements TeacherServic
     @Override
     public void updateTeacherInfo(String teaOriNum, TeacherWithTitleMajorCollegeDto teaWTMC) {
         if (!teaOriNum.equals(teaWTMC.getTeaNum())) {
-            classMapper.updateClassTeaNum(teaOriNum, teaWTMC.getTeaNum());
-            gradeMapper.updateGradeTeaNum(teaOriNum, teaWTMC.getTeaNum());
-            majorMapper.updateMajorTeaNum(teaOriNum, teaWTMC.getTeaNum());
-            collegeMapper.updateCollegeTeaNum(teaOriNum, teaWTMC.getTeaNum());
+            classService.updateClassTeaNum(teaOriNum, teaWTMC.getTeaNum());
+            gradeService.updateGradeTeaNum(teaOriNum, teaWTMC.getTeaNum());
+            majorService.updateMajorTeaNum(teaOriNum, teaWTMC.getTeaNum());
+            collegeService.updateCollegeTeaNum(teaOriNum, teaWTMC.getTeaNum());
         }
         if (teaWTMC.getTeaBirthdayToString() != null) {
             teaWTMC.setTeaBirthday(MyTimeUtil.strToDate(teaWTMC.getTeaBirthdayToString()));
@@ -93,10 +98,10 @@ public class TeacherServiceImpl extends BaseServiceImpl implements TeacherServic
 
     @Override
     public void deleteOneTeacher(String teaNum) {
-        gradeMapper.updateGradeTeaNum(teaNum, null); //若是年级教师负责人，该班年级教师负责人工号置null
-        classMapper.updateClassTeaNum(teaNum, null); //若是年级学生负责人，该年级学生负责人学号置null
-        majorMapper.updateMajorTeaNum(teaNum, null);
-        collegeMapper.updateCollegeTeaNum(teaNum, null);
+        gradeService.updateGradeTeaNum(teaNum, null); //若是年级教师负责人，该班年级教师负责人工号置null
+        classService.updateClassTeaNum(teaNum, null); //若是年级学生负责人，该年级学生负责人学号置null
+        majorService.updateMajorTeaNum(teaNum, null);
+        collegeService.updateCollegeTeaNum(teaNum, null);
         teacherMapper.deleteOneTeacher(teaNum);
     }
 
@@ -119,5 +124,10 @@ public class TeacherServiceImpl extends BaseServiceImpl implements TeacherServic
             }
         }
         return teaWTMC;
+    }
+
+    @Override
+    public List<ObjectTotalGroupByCommonName> selectTeaTotalByCommonName(String type, String collegeName, String majorName) {
+        return teacherMapper.selectTeaTotalByCommonName(type, collegeName, majorName);
     }
 }

@@ -55,6 +55,15 @@ public interface CollegeService {
 
     /**
      * @author JinZhiyun
+     * @description 更新学院教师负责人工号
+     * @date 18:14 2019/10/14
+     * @Param [teaOriNum, teaNum]
+     * @return void
+     **/
+    void updateCollegeTeaNum(String teaOriNum, String teaNum);
+
+    /**
+     * @author JinZhiyun
      * @Description 根据业务逻辑返回更新学院ajax的map键data值
      * @Date 15:05 2019/7/14
      * @Param [collegeDto]

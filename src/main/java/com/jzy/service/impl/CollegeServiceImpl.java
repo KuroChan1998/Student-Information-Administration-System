@@ -2,12 +2,14 @@ package com.jzy.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.jzy.dao.CollegeMapper;
 import com.jzy.dto.college.CollegeDto;
 import com.jzy.dto.college.CollegeSearchDto;
 import com.jzy.dto.other.MyPage;
 import com.jzy.entity.College;
 import com.jzy.entity.User;
 import com.jzy.service.CollegeService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +26,9 @@ import java.util.List;
 @Service("collegeService")
 @Transactional
 public class CollegeServiceImpl extends BaseServiceImpl implements CollegeService {
+    @Autowired
+    private CollegeMapper collegeMapper;
+
     @Override
     public List<College> selectAllCollege() {
         return collegeMapper.selectAllCollege();
@@ -58,7 +63,7 @@ public class CollegeServiceImpl extends BaseServiceImpl implements CollegeServic
         }
 
         if (!collegeDto.getCollegeTeaNum().equals("")) { //如果该学院有负责人
-            if (teacherMapper.selectTeacherByNum(collegeDto.getCollegeTeaNum()) == null) { //如果负责人工号不存在
+            if (teacherService.selectTeacherByNum(collegeDto.getCollegeTeaNum()) == null) { //如果负责人工号不存在
                 return "collegeTeaNumNotExist";
             } else {
                 College college = collegeMapper.selectCollegeByTeaNum(collegeDto.getCollegeTeaNum());
@@ -73,12 +78,17 @@ public class CollegeServiceImpl extends BaseServiceImpl implements CollegeServic
     }
 
     @Override
+    public void updateCollegeTeaNum(String teaOriNum, String teaNum) {
+        collegeMapper.updateCollegeTeaNum(teaOriNum, teaNum);
+    }
+
+    @Override
     public String insertCollege(CollegeDto collegeDto) {
         if (collegeMapper.selectCollegeByName(collegeDto.getCollegeName()) != null) { //如果添加的学院名称已存在
             return "collegeNameExist";
         }
         if (!collegeDto.getCollegeTeaNum().equals("")) { //如果该学院有负责人
-            if (teacherMapper.selectTeacherByNum(collegeDto.getCollegeTeaNum()) == null) { //如果负责人id不存在
+            if (teacherService.selectTeacherByNum(collegeDto.getCollegeTeaNum()) == null) { //如果负责人id不存在
                 return "collegeTeaNumNotExist";
             } else {
                 College college = collegeMapper.selectCollegeByTeaNum(collegeDto.getCollegeTeaNum());

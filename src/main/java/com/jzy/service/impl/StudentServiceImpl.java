@@ -2,13 +2,17 @@ package com.jzy.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.jzy.dao.StudentMapper;
 import com.jzy.dto.other.MyPage;
+import com.jzy.dto.other.senior.ObjectTotalGroupByCommonName;
+import com.jzy.dto.other.senior.StudentTotalGroupBySex;
 import com.jzy.dto.student.StudentSearchDto;
 import com.jzy.dto.student.StudentWithGradeClassMajorCollegeDto;
 import com.jzy.entity.Student;
 import com.jzy.service.StudentService;
 import com.jzy.util.other.MyTimeUtil;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +29,10 @@ import java.util.List;
 @Service("studentService")
 @Transactional
 public class StudentServiceImpl extends BaseServiceImpl implements StudentService {
+    @Autowired
+    private StudentMapper studentMapper;
+
+
     @Override
     public Student selectStudentByNum(String stuNum) {
         return !StringUtils.isEmpty(stuNum) ? studentMapper.selectStudentByNum(stuNum) : null;
@@ -68,9 +76,9 @@ public class StudentServiceImpl extends BaseServiceImpl implements StudentServic
     public void updateStudentInfo(String stuOriNum, StudentWithGradeClassMajorCollegeDto stuWGCMC) {
         if (!stuOriNum.equals(stuWGCMC.getStuNum())) {
             //更新班长学号
-            classMapper.updateClassStuNum(stuOriNum, stuWGCMC.getStuNum());
+            classService.updateClassStuNum(stuOriNum, stuWGCMC.getStuNum());
             //更新年级学生负责人
-            gradeMapper.updateGradeStuNum(stuOriNum, stuWGCMC.getStuNum());
+            gradeService.updateGradeStuNum(stuOriNum, stuWGCMC.getStuNum());
         }
 
         if (stuWGCMC.getStuBirthdayToString() != null) {
@@ -93,8 +101,8 @@ public class StudentServiceImpl extends BaseServiceImpl implements StudentServic
 
     @Override
     public void deleteOneStudent(String stuNum) {
-        gradeMapper.updateGradeStuNum(stuNum, null); //若是年级学生负责人，该年级学生负责人学号置null
-        classMapper.updateClassStuNum(stuNum, null); //若是班长，该班班长学号置null
+        gradeService.updateGradeStuNum(stuNum, null); //若是年级学生负责人，该年级学生负责人学号置null
+        classService.updateClassStuNum(stuNum, null); //若是班长，该班班长学号置null
         studentMapper.deleteOneStudent(stuNum);
     }
 
@@ -117,5 +125,15 @@ public class StudentServiceImpl extends BaseServiceImpl implements StudentServic
             }
         }
         return stuWGCMC;
+    }
+
+    @Override
+    public List<StudentTotalGroupBySex> selectStuTotalBySex(String stuCollegeName, String stuMajorName, String stuClassName) {
+        return studentMapper.selectStuTotalBySex(stuCollegeName, stuMajorName, stuClassName);
+    }
+
+    @Override
+    public List<ObjectTotalGroupByCommonName> selectStuTotalByCommonName(String type, String collegeName, String majorName) {
+        return studentMapper.selectStuTotalByCommonName(type, collegeName, majorName);
     }
 }

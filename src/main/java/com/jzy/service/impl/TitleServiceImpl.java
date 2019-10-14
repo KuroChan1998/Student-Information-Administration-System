@@ -1,7 +1,9 @@
 package com.jzy.service.impl;
 
+import com.jzy.dao.TitleMapper;
 import com.jzy.entity.Title;
 import com.jzy.service.TitleService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,8 +19,16 @@ import java.util.List;
 @Service("titleService")
 @Transactional
 public class TitleServiceImpl extends BaseServiceImpl implements TitleService {
+    @Autowired
+    private TitleMapper titleMapper;
+
     @Override
     public List<Title> selectAllTitle() {
         return titleMapper.selectAllTitle();
+    }
+
+    @Override
+    public List<String> selectAllTitleName() {
+        return titleMapper.selectAllTitleName();
     }
 }

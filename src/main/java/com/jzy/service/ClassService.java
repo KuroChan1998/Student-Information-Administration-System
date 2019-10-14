@@ -54,6 +54,24 @@ public interface ClassService {
     String updateClassInfo(String classOriId, String classOriName, ClassWithGradeMajorCollegeDto classWGMC);
 
     /**
+     * @author JinZhiyun
+     * @description 更新班长学号
+     * @date 18:06 2019/10/14
+     * @Param [stuOriNum, stuNum]
+     * @return void
+     **/
+    void updateClassStuNum(String stuOriNum, String stuNum);
+
+    /**
+     * @author JinZhiyun
+     * @description 更新班主任工号
+     * @date 18:09 2019/10/14
+     * @Param [teaOriNum, teaNum]
+     * @return void
+     **/
+    void updateClassTeaNum(String teaOriNum, String teaNum);
+
+    /**
      * @return java.lang.String
      * @author JinZhiyun
      * @Description 根据业务逻辑返回更新班级ajax的map键data值

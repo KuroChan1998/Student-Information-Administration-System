@@ -2,12 +2,14 @@ package com.jzy.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.jzy.dao.ClassMapper;
 import com.jzy.dto.clazz.ClassSearchDto;
 import com.jzy.dto.clazz.ClassWithGradeMajorCollegeDto;
 import com.jzy.dto.other.MyPage;
 import com.jzy.entity.Class;
 import com.jzy.entity.User;
 import com.jzy.service.ClassService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +26,8 @@ import java.util.List;
 @Service("classService")
 @Transactional
 public class ClassServiceImpl extends BaseServiceImpl implements ClassService {
+    @Autowired
+    private ClassMapper classMapper;
 
     @Override
     public List<Class> selectClassByMajorName(String majorName) {
@@ -58,7 +62,7 @@ public class ClassServiceImpl extends BaseServiceImpl implements ClassService {
             }
         }
         if (!classWGMC.getClassStuNum().equals("")) { //如果该班级有班长
-            if (studentMapper.selectStudentByNum(classWGMC.getClassStuNum()) == null) { //如果班长学号不存在
+            if (studentService.selectStudentByNum(classWGMC.getClassStuNum()) == null) { //如果班长学号不存在
                 return "classMoniNumNotExist";
             } else {
                 Class mClass = classMapper.selectClassByStuNum(classWGMC.getClassStuNum());
@@ -69,7 +73,7 @@ public class ClassServiceImpl extends BaseServiceImpl implements ClassService {
 
         }
         if (!classWGMC.getClassTeaNum().equals("")) { //如果该班级有班主任
-            if (teacherMapper.selectTeacherByNum(classWGMC.getClassTeaNum()) == null) { //如果班主任长id不存在
+            if (teacherService.selectTeacherByNum(classWGMC.getClassTeaNum()) == null) { //如果班主任长id不存在
                 return "classTeaNumNotExist";
             } else {
                 Class mClass = classMapper.selectClassByTeaNum(classWGMC.getClassTeaNum());
@@ -85,12 +89,22 @@ public class ClassServiceImpl extends BaseServiceImpl implements ClassService {
     }
 
     @Override
+    public void updateClassStuNum(String stuOriNum, String stuNum) {
+        classMapper.updateClassStuNum(stuOriNum, stuNum);
+    }
+
+    @Override
+    public void updateClassTeaNum(String teaOriNum, String teaNum) {
+        classMapper.updateClassTeaNum(teaOriNum, teaNum);
+    }
+
+    @Override
     public String insertClass(ClassWithGradeMajorCollegeDto classWGMC) {
         if (classMapper.selectClassByName(classWGMC.getClassName()) != null) { //如果添加的班级名称已存在
             return "classNameExist";
         }
         if (!classWGMC.getClassStuNum().equals("")) { //如果该班级有班长
-            if (studentMapper.selectStudentByNum(classWGMC.getClassStuNum()) == null) { //如果班长学号不存在
+            if (studentService.selectStudentByNum(classWGMC.getClassStuNum()) == null) { //如果班长学号不存在
                 return "classMoniNumNotExist";
             } else {
                 Class mClass = classMapper.selectClassByStuNum(classWGMC.getClassStuNum());
@@ -101,7 +115,7 @@ public class ClassServiceImpl extends BaseServiceImpl implements ClassService {
 
         }
         if (!classWGMC.getClassTeaNum().equals("")) { //如果该班级有班主任
-            if (teacherMapper.selectTeacherByNum(classWGMC.getClassTeaNum()) == null) { //如果班主任长id不存在
+            if (teacherService.selectTeacherByNum(classWGMC.getClassTeaNum()) == null) { //如果班主任长id不存在
                 return "classTeaNumNotExist";
             } else {
                 Class mClass = classMapper.selectClassByTeaNum(classWGMC.getClassTeaNum());

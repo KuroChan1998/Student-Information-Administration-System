@@ -2,6 +2,7 @@ package com.jzy.service;
 
 import com.github.pagehelper.PageInfo;
 import com.jzy.dto.other.MyPage;
+import com.jzy.dto.other.senior.ObjectTotalGroupByCommonName;
 import com.jzy.dto.teacher.TeacherSearchDto;
 import com.jzy.dto.teacher.TeacherWithTitleMajorCollegeDto;
 import com.jzy.entity.Teacher;
@@ -87,4 +88,18 @@ public interface TeacherService {
      * @return com.jzy.dto.teacher.TeacherWithTitleMajorCollegeDto
      **/
     TeacherWithTitleMajorCollegeDto selectTeacherInfoByNum(String teaNum);
+
+    /**
+     * @author JinZhiyun
+     * @description 查找符合条件的对应类别名称的教师数的封装对象，这里直接调用dao，其用mysql存储过程实现
+     * type为查询的类型：
+     *      allCollegeByTeaTitle：查询某学院下的不同职称教师人数
+     *      wholeSchoolByTeaTitle： 查询全校的不同职称教师人数
+     *      allMajorByTeaTitle： 查询某专业下的不同职称教师人数
+     * @date 18:25 2019/10/14
+     * @Param [type, collegeName, majorName]
+     * @return java.util.List<com.jzy.dto.other.senior.ObjectTotalGroupByCommonName>
+     **/
+    List<ObjectTotalGroupByCommonName> selectTeaTotalByCommonName(String type, String collegeName, String majorName);
+
 }

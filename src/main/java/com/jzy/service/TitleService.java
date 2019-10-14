@@ -20,5 +20,14 @@ public interface TitleService {
      * @return java.util.List<com.jzy.entity.Title>
      **/
     List<Title> selectAllTitle();
+
+    /**
+     * @author JinZhiyun
+     * @description 查询所有的教师职称名称
+     * @date 18:23 2019/10/14
+     * @Param []
+     * @return java.util.List<java.lang.String>
+     **/
+    List<String> selectAllTitleName();
 }
 
