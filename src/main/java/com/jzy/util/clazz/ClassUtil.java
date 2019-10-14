@@ -8,7 +8,7 @@ import com.jzy.util.grade.GradeUtil;
 import com.jzy.util.major.MajorUtil;
 import com.jzy.util.student.StudentUtil;
 import com.jzy.util.teacher.TeacherUtil;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author JinZhiyun

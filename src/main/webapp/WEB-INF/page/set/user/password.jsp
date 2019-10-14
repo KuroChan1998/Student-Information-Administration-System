@@ -170,7 +170,7 @@
                         /*****************************************************/
                         //验证码正确后重置密码的ajax请求
                         $.ajax({
-                            url: '${ctx}/user/resetPasswordAfterLogin' //实际使用请改成服务端真实接口
+                            url: '${ctx}/user/resetPasswordAfterLogin?csrfToken=${csrfToken}' //实际使用请改成服务端真实接口
                             , type: 'post'
                             ,
                             data: {

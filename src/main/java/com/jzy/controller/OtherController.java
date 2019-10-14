@@ -1,6 +1,7 @@
 package com.jzy.controller;
 
 import com.jzy.dto.other.EmailVerifyCode;
+import com.jzy.dto.other.EmailVerifyCodeSession;
 import com.jzy.dto.other.UserLogin;
 import com.jzy.dto.other.senior.StudentPercentBySex;
 import com.jzy.entity.User;
@@ -90,6 +91,8 @@ public class OtherController extends BaseController {
             session.setAttribute(UserUtil.USER_INFO_SESSION, userLogin.getUser());
             //记住密码存cookie
             SetCookie.setUserLoginCookie(user.getUserName(), user.getUserPassword(), remember, request, response);
+            //设置CsrfToken
+            SetCookie.setCSRFTokenCookieAndSession(session, request, response);
         }
         map.put("data",userLogin);
         return map;
@@ -108,7 +111,7 @@ public class OtherController extends BaseController {
     }
 
     /**
-     * @return java.util.Map<java.lang.String                               ,                               java.lang.Object>
+     * @return java.util.Map<java.lang.String,  java.lang.Object>
      * @Author JinZhiyun
      * @Description 判断注册成功与否的ajax交互
      * @Date 9:39 2019/4/19
@@ -146,6 +149,7 @@ public class OtherController extends BaseController {
     @ResponseBody
     public Map<String, Object> sendVerifyCodeToEmail(User user) {
         Map<String, Object> map = new HashMap();
+        session.setAttribute(UserUtil.USER_EMAIL_SESSION, new EmailVerifyCodeSession(user.getUserEmail(),false));
         otherService.sendVerifyCodeToEmail(user.getUserEmail());
         map.put("msg", "sendSuccess");
         return map;
@@ -167,7 +171,7 @@ public class OtherController extends BaseController {
         } else if (!otherService.ifValidEmailVerifyCode(new EmailVerifyCode(user.getUserEmail(), emailVerifyCode))) {
             map.put("data", "verifyCodeWrong");
         } else {
-            session.setAttribute(UserUtil.USER_EMAIL_SESSION, user.getUserEmail());
+            session.setAttribute(UserUtil.USER_EMAIL_SESSION, new EmailVerifyCodeSession(user.getUserEmail(),true));
             map.put("data", "verifyCodeCorrect");
         }
         return map;
@@ -185,8 +189,8 @@ public class OtherController extends BaseController {
     @ResponseBody
     public Map<String, Object> resetPassword(User user) {
         Map<String, Object> map = new HashMap();
-        String userEmail = (String) session.getAttribute(UserUtil.USER_EMAIL_SESSION);
-        userService.updateResetPasswordByEmail(userEmail, user.getUserPassword());
+        EmailVerifyCodeSession emailVerifyCodeSession= (EmailVerifyCodeSession) session.getAttribute(UserUtil.USER_EMAIL_SESSION);
+        userService.updateResetPasswordByEmail(emailVerifyCodeSession.getUserEmail(), user.getUserPassword());
         map.put("data", "resetPasswordSuccess");
         return map;
     }
@@ -351,13 +355,31 @@ public class OtherController extends BaseController {
 
     /**
      * @author JinZhiyun
+     * @description 400页面
+     * @date 10:34 2019/9/30
+     * @Param []
+     * @return java.lang.String
+     **/
+    @RequestMapping("/400")
+    public String error400Page() {
+        int status = response.getStatus();
+        String msg="";
+        if (status==404) {
+            msg="400！服务器不理解请求的语法。";
+            logger.error(msg);
+        }
+        return "tips/HTTP-400";
+    }
+
+    /**
+     * @author JinZhiyun
      * @description 404页面
      * @date 10:34 2019/9/30
-     * @Param [response, request]
+     * @Param []
      * @return java.lang.String
      **/
     @RequestMapping("/404")
-    public String error404Page(HttpServletResponse response, HttpServletRequest request) {
+    public String error404Page() {
         int status = response.getStatus();
         String msg="";
         if (status==404) {
@@ -371,11 +393,11 @@ public class OtherController extends BaseController {
      * @author JinZhiyun
      * @description 500页面
      * @date 10:34 2019/9/30
-     * @Param [response, request]
+     * @Param []
      * @return java.lang.String
      **/
     @RequestMapping("/500")
-    public String error500Page(HttpServletResponse response, HttpServletRequest request) {
+    public String error500Page() {
         int status = response.getStatus();
         String msg="";
         if (status==500) {

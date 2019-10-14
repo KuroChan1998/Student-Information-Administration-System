@@ -4,7 +4,7 @@ import com.jzy.dto.college.CollegeDto;
 import com.jzy.entity.College;
 import com.jzy.util.MyDatabaseUtil;
 import com.jzy.util.teacher.TeacherUtil;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
 import java.util.List;

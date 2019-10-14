@@ -248,6 +248,12 @@
         table.render({
             elem: '#majorInfoQuery'
             , url: '${ctx}/major/showAllMajorInfo' //向后端默认传page和limit
+            ,toolbar: '#toolbarDemo2' //开启头部工具栏，并为其绑定左侧模板
+            ,defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+                title: '提示'
+                ,layEvent: 'LAYTABLE_TIPS'
+                ,icon: 'layui-icon-tips'
+            }]
             , cols: [[
                 , {field: 'majorId', title: '专业号', hide: true}
                 , {field: 'majorName', title: '专业', sort: true, fixed: true}
@@ -369,6 +375,12 @@
         table.render({
             elem: '#collegeInfoQuery'
             , url: '${ctx}/college/showAllCollegeInfo' //向后端默认传page和limit
+            ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+            ,defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+                title: '提示'
+                ,layEvent: 'LAYTABLE_TIPS'
+                ,icon: 'layui-icon-tips'
+            }]
             , cols: [[
                 {field: 'collegeId', title: '学院号', hide: true}
                 , {field: 'collegeName', title: '学院', sort: true, fixed: true}

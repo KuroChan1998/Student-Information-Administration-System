@@ -7,7 +7,7 @@ import com.jzy.util.college.CollegeUtil;
 import com.jzy.util.major.MajorUtil;
 import com.jzy.util.other.MySimpleUtil;
 import com.jzy.util.title.TitleUtil;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
 import java.util.Date;

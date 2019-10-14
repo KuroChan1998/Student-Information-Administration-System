@@ -29,50 +29,36 @@
     <li class="layui-timeline-item">
         <i class="layui-icon layui-timeline-axis"></i>
         <div class="layui-timeline-content layui-text">
-            <h3 class="layui-timeline-title">v1.0.0-2019.9.30</h3>
+            <h3 class="layui-timeline-title">v1.1.0-2019.10.14</h3>
             <div class="layui-timeline-title">
-                <p><em>大学生信息管理系统</em> StuInfoAdmin-v1.0.0版本上线啦！</p>
+                <p><em>大学生信息管理系统</em> StuInfoAdmin-v1.1.0版本上线啦！提升安全性，解决部分安全隐患：</p>
                 <ul>
-                    <li>这里前端我没有进行修改，还是使用jsp，接口与SSM项目相同，所以前端资源在webapp目录下；需要注意的是：springboot官方强调不推荐使用jsp，可以使用freemaker、thymeleaf代替，这些模板文件应该放在resources的static和templates目录下。</li>
-                    <li>layui和springboot整合时会出现layui一些图标无法显示问题，这里通过在pom.xml文件修改maven编译时对layui资源的拦截解决。</li>
-                    <li>springmvc拦截器的定义有原来的spring-mvc.xml中改为在config包下的配置类SpringmvcConfig完成；redis的配置等也同样改成springboot风格即配置类完成。</li>
-                    <li>在原先的com.jzy.controller.OtherController中"/error"请求与springboot内部定义的出错请求相同，产生冲突，因而改成"/myError"</li>
+                    <li>前端layUi数据表格，增加“筛选列”、“打印”、“导出”上方工具条。</li>
+                    <li>新增CsrfInterceptor拦截器，对修改请求进行CsrfToken的校验，有效防止CSRF攻击</li>
+                    <li>对注册用户信息后端服务层，强化在aop方法中对输入身份属性的校验，对“管理员”字段进行过滤，并抛出异常，防止攻击者拦截请求JSON数据进行修改以获得非法权限；对修改用户信息后端控制层，强化在UserController对应方法中对原身份属性和修改后身份属性的校验，对“管理员”字段进行过滤，防止攻击者拦截请求JSON数据进行修改以获得非法权限。</li>
+                    <li>感谢@<a href="https://github.com/Mydearbaby" target="_blank">Mydearbaby</a>发现的<a
+                            href="https://github.com/KuroChan1998/Student-Information-Administration-System/issues/3" target="_blank">邮箱验证码绕过安全漏洞</a>，在服务端发送验证码时新增一个标志位false，仅当服务端校验正确后才将此标志置true，可以有效避免攻击者拦截请求JSON数据进行修改以绕开验证码。</li>
                 </ul>
-                <p><a href="https://github.com/KuroChan1998/Student-Information-Administration-System/tree/v1.0.0-Sb_M"
+                <p><a href="https://github.com/KuroChan1998/Student-Information-Administration-System/tree/v1.1.0-Sb_M"
                    target="_blank" class="layui-btn">立即下载</a></p>
             </div>
         </div>
     </li>
-    <%--<li class="layui-timeline-item">--%>
-        <%--<i class="layui-icon layui-timeline-axis"></i>--%>
-        <%--<div class="layui-timeline-content layui-text">--%>
-            <%--<h3 class="layui-timeline-title">v1.1.0-2019.7.27</h3>--%>
-            <%--<p><em>大学生信息管理系统</em> StuInfoAdmin-v1.1.0版本上线啦！</p>--%>
-            <%--<ul>--%>
-                <%--<li>优化了数据表结构，对原有的表的部分字段进行了修改，并增加了title和grade两个表</li>--%>
-                <%--<li>优化了sql语句效率</li>--%>
-                <%--<li>优化了前端查询界面及查询方式，使其更加全面，对用户友好</li>--%>
-                <%--<li>更新了登录界面记住密码的cookie设置</li>--%>
-                <%--<li>更新了邮箱验证码服务，增加了验证码有效时间</li>--%>
-                <%--<li>优化了源代码结构，增强了规范性和可拓展性</li>--%>
-            <%--</ul>--%>
-            <%--<p><a href="https://pan.baidu.com/s/1yHjrk7gAycHRFapU_Waf4g"--%>
-                  <%--target="_blank" class="layui-btn">立即下载</a></p>--%>
-        <%--</div>--%>
-    <%--</li>--%>
-    <%--<li class="layui-timeline-item">--%>
-        <%--<i class="layui-icon layui-timeline-axis"></i>--%>
-        <%--<div class="layui-timeline-content layui-text">--%>
-            <%--<h3 class="layui-timeline-title">v1.0.0-2019.9.12</h3>--%>
-            <%--<p>--%>
-                <%--<em>大学生信息管理系统</em>StuInfoAdmin-v1.0.0的一切准备工作似乎都已到位。发布之弦，一触即发。--%>
-                <%--<br>不枉近百个日日夜夜与之为伴。因小而大，因弱而强。--%>
-                <%--<br>无论它能走多远，抑或如何支撑？至少我曾倾注全心，无怨无悔 <i class="layui-icon"></i>--%>
-                <%--<br><a href="https://pan.baidu.com/s/1piVQnIFdz_BIoszIEzAJwQ"--%>
-                  <%--target="_blank" class="layui-btn">立即下载</a>--%>
-            <%--</p>--%>
-        <%--</div>--%>
-    <%--</li>--%>
+    <li class="layui-timeline-item">
+        <i class="layui-icon layui-timeline-axis"></i>
+        <div class="layui-timeline-content layui-text">
+            <h3 class="layui-timeline-title">v1.0.0-2019.9.30</h3>
+            <p><em>大学生信息管理系统</em> StuInfoAdmin-v1.0.0版本上线啦！</p>
+            <ul>
+                <li>这里前端我没有进行修改，还是使用jsp，接口与SSM项目相同，所以前端资源在webapp目录下；需要注意的是：springboot官方强调不推荐使用jsp，可以使用freemaker、thymeleaf代替，这些模板文件应该放在resources的static和templates目录下。</li>
+                <li>layui和springboot整合时会出现layui一些图标无法显示问题，这里通过在pom.xml文件修改maven编译时对layui资源的拦截解决。</li>
+                <li>springmvc拦截器的定义有原来的spring-mvc.xml中改为在config包下的配置类SpringmvcConfig完成；redis的配置等也同样改成springboot风格即配置类完成。</li>
+                <li>在原先的com.jzy.controller.OtherController中"/error"请求与springboot内部定义的出错请求相同，产生冲突，因而改成"/myError"</li>
+            </ul>
+            <p><a href="https://github.com/KuroChan1998/Student-Information-Administration-System/tree/v1.0.0-Sb_M"
+                  target="_blank" class="layui-btn">立即下载</a></p>
+        </div>
+    </li>
     <li class="layui-timeline-item">
         <i class="layui-icon layui-anim layui-anim-rotate layui-anim-loop layui-timeline-axis"></i>
         <div class="layui-timeline-content layui-text">

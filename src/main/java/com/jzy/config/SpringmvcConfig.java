@@ -1,8 +1,6 @@
 package com.jzy.config;
 
-import com.jzy.interceptor.AuthorityInterceptor;
-import com.jzy.interceptor.LoginInterceptor;
-import com.jzy.interceptor.TokenInterceptor;
+import com.jzy.interceptor.*;
 import com.jzy.service.OtherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -30,6 +28,15 @@ public class SpringmvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/loginTest").excludePathPatterns("/regTest").excludePathPatterns("/sendVerifyCodeToEmail")
                 .excludePathPatterns("/emailVerifyCodeTest").excludePathPatterns("/resetPassword").excludePathPatterns("/formRepeatSubmit")
                 .excludePathPatterns("/**.ico");  //对项目中的哪些请求不拦截
+
+        //CsrfInterceptor
+        registry.addInterceptor(new CsrfInterceptor())
+                .addPathPatterns("/user/reset*").addPathPatterns("/*/update*")
+                .addPathPatterns("/*/insert*").addPathPatterns("/*/delete*"); //拦截项目中的哪些请求
+
+        //EmailVerifyCodeInterceptor
+        registry.addInterceptor(new EmailVerifyCodeInterceptor())
+                .addPathPatterns("/resetPassword").addPathPatterns("/user/reset*"); //拦截项目中的哪些请求
 
         //TokenInterceptor
         registry.addInterceptor(new TokenInterceptor())

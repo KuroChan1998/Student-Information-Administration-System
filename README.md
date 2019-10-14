@@ -7,16 +7,16 @@
 
 ## Release Notes
 
-### v1.0.0 - 2019.9.30
+### v1.1.0 - 2019.10.14 (Current Version)
 
-*该版本功能上与主支SSM项目的[v1.2.0](https://github.com/KuroChan1998/Student-Information-Administration-System/tree/v1.2.0)版本对应。*
+*版本1.1.0（同步SSM主支v1.3.0），提升安全性，解决部分安全隐患 :*
 
-*版本1.0.0，更新如下内容 :*
+- 前端layUi数据表格，增加“筛选列”、“打印”、“导出”上方工具条。
+- 新增CsrfInterceptor拦截器，对修改请求进行CsrfToken的校验，有效防止CSRF攻击
+- 对注册用户信息后端服务层，强化在aop方法中对输入身份属性的校验，对“管理员”字段进行过滤，并抛出异常，防止攻击者拦截请求JSON数据进行修改以获得非法权限；对修改用户信息后端控制层，强化在UserController对应方法中对原身份属性和修改后身份属性的校验，对“管理员”字段进行过滤，防止攻击者拦截请求JSON数据进行修改以获得非法权限。
+- 感谢@ 发现的邮箱验证码绕过安全漏洞，在服务端发送验证码时新增一个标志位false，仅当服务端校验正确后才将此标志置true，可以有效避免攻击者拦截请求JSON数据进行修改以绕开验证码。
 
-* 这里前端我没有进行修改，还是使用jsp，接口与SSM项目相同，所以前端资源在webapp目录下；需要注意的是：springboot官方强调不推荐使用jsp，可以使用*freemaker*、*thymeleaf*代替，这些模板文件应该放在resources的static和templates目录下。
-* layui和springboot整合时会出现layui一些图标无法显示问题，这里通过在pom.xml文件修改maven编译时对layui资源的拦截解决。
-* springmvc拦截器的定义有原来的spring-mvc.xml中改为在config包下的配置类*SpringmvcConfig*完成；redis的配置等也同样改成springboot风格即配置类完成。
-* 在原先的*com.jzy.controller.OtherController*中`"/error"`请求与springboot内部定义的出错请求相同，产生冲突，因而改成`"/myError"`
+[更多历史版本](#update_history)
 
 
 
@@ -132,7 +132,7 @@
 
 ![Snipaste_2019-07-17_08-49-48](git_screenshot/Snipaste_2019-07-17_08-49-48.jpg)
 
-5. *运行com.jzy.App，进入用户登录页面*
+5. *运行com.jzy.App，在浏览器中输入localhost:80，进入用户登录页面*
 
 
 ![Snipaste_2019-05-04_08-02-50](git_screenshot/Snipaste_2019-05-04_08-02-50.jpg)
@@ -237,7 +237,18 @@
 
   ![Snipaste_2019-07-26_17-12-36](git_screenshot/Snipaste_2019-07-26_17-12-36.jpg)
 
+## <span id='update_history'>Update History</span>
 
+### v1.0.0 - 2019.9.30
+
+*该版本功能上与主支SSM项目的[v1.2.0](https://github.com/KuroChan1998/Student-Information-Administration-System/tree/v1.2.0)版本对应。*
+
+*版本1.0.0，更新如下内容 :*
+
+- 这里前端我没有进行修改，还是使用jsp，接口与SSM项目相同，所以前端资源在webapp目录下；需要注意的是：springboot官方强调不推荐使用jsp，可以使用*freemaker*、*thymeleaf*代替，这些模板文件应该放在resources的static和templates目录下。
+- layui和springboot整合时会出现layui一些图标无法显示问题，这里通过在pom.xml文件修改maven编译时对layui资源的拦截解决。
+- springmvc拦截器的定义有原来的spring-mvc.xml中改为在config包下的配置类*SpringmvcConfig*完成；redis的配置等也同样改成springboot风格即配置类完成。
+- 在原先的*com.jzy.controller.OtherController*中`"/error"`请求与springboot内部定义的出错请求相同，产生冲突，因而改成`"/myError"`
 
 ## Contact me
 

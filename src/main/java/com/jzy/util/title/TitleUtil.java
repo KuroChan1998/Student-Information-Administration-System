@@ -2,7 +2,7 @@ package com.jzy.util.title;
 
 import com.jzy.entity.Title;
 import com.jzy.util.MyDatabaseUtil;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author JinZhiyun

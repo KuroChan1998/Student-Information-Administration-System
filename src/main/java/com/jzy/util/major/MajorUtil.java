@@ -5,7 +5,7 @@ import com.jzy.entity.Major;
 import com.jzy.util.MyDatabaseUtil;
 import com.jzy.util.college.CollegeUtil;
 import com.jzy.util.teacher.TeacherUtil;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author JinZhiyun

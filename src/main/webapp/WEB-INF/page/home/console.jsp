@@ -257,13 +257,13 @@
                     <i class="layui-icon layui-icon-tips" lay-tips="注意查看哦" lay-offset="5"></i>
                 </div>
                 <div class="layui-card-body layui-text layadmin-text">
-                    <p>大学生信息管理系统 StuInfoAdmin-v1.0.0版本上线啦！</p>
-                    <p>该版本功能上与主支SSM项目的v1.2.0版本对应。</p>
-                    <p>更新如下内容：</p>
-                    <p>这里前端我没有进行修改，还是使用jsp，接口与SSM项目相同，所以前端资源在webapp目录下；需要注意的是：springboot官方强调不推荐使用jsp，可以使用freemaker、thymeleaf代替，这些模板文件应该放在resources的static和templates目录下。</p>
-                    <p>layui和springboot整合时会出现layui一些图标无法显示问题，这里通过在pom.xml文件修改maven编译时对layui资源的拦截解决。</p>
-                    <p>springmvc拦截器的定义有原来的spring-mvc.xml中改为在config包下的配置类SpringmvcConfig完成；redis的配置等也同样改成springboot风格即配置类完成。</p>
-                    <p>在原先的com.jzy.controller.OtherController中"/error"请求与springboot内部定义的出错请求相同，产生冲突，因而改成"/myError"</p>
+                    <p>大学生信息管理系统 StuInfoAdmin-v1.1.0版本上线啦！</p>
+                    <p>该版本功能上与主支SSM项目的v1.3.0版本对应，提升安全性，解决部分安全隐患：</p>
+                    <p>前端layUi数据表格，增加“筛选列”、“打印”、“导出”上方工具条。</p>
+                    <p>新增CsrfInterceptor拦截器，对修改请求进行CsrfToken的校验，有效防止CSRF攻击</p>
+                    <p>对注册用户信息后端服务层，强化在aop方法中对输入身份属性的校验，对“管理员”字段进行过滤，并抛出异常，防止攻击者拦截请求JSON数据进行修改以获得非法权限；对修改用户信息后端控制层，强化在UserController对应方法中对原身份属性和修改后身份属性的校验，对“管理员”字段进行过滤，防止攻击者拦截请求JSON数据进行修改以获得非法权限。</p>
+                    <p>感谢@<a href="https://github.com/Mydearbaby" target="_blank">Mydearbaby</a>发现的<a
+                            href="https://github.com/KuroChan1998/Student-Information-Administration-System/issues/3" target="_blank">邮箱验证码绕过安全漏洞</a>，在服务端发送验证码时新增一个标志位false，仅当服务端校验正确后才将此标志置true，可以有效避免攻击者拦截请求JSON数据进行修改以绕开验证码。</p>
                     → <a lay-href="${ctx}/updateHistory">历史版本</a>
                 </div>
             </div>
@@ -282,7 +282,7 @@
                     <p>—— 贤心（<a href="http://www.layui.com/" target="_blank">layui.com</a>）</p>
                     <p>)</p>
                     <p>感谢贤心提供的后台模板，对在闲鱼上花20块钱买你这个1200块的后台模板深感抱歉，但你又能拿我怎么样呢23333？贤心？</p>
-                    <p>—— 酷乐酱（<a href="http://www.kurochan.cn/" target="_blank">kurochan.cn</a>）</p>
+                    <p>—— 酷乐酱（<a href="http://kurochan1998.github.io/" target="_blank">kurochan.cn</a>）</p>
                 </div>
             </div>
         </div>
