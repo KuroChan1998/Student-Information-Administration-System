@@ -1,6 +1,6 @@
 package com.jzy.service.impl;
 
-import com.jzy.dao.*;
+import com.jzy.service.*;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -14,28 +14,31 @@ import org.springframework.data.redis.core.RedisTemplate;
  **/
 public abstract class BaseServiceImpl {
     @Autowired
-    protected UserMapper userMapper;
+    protected UserService userService;
 
     @Autowired
-    protected StudentMapper studentMapper;
+    protected StudentService studentService;
 
     @Autowired
-    protected TeacherMapper teacherMapper;
+    protected TeacherService teacherService;
 
     @Autowired
-    protected ClassMapper classMapper;
+    protected ClassService classService;
 
     @Autowired
-    protected MajorMapper majorMapper;
+    protected MajorService majorService;
 
     @Autowired
-    protected CollegeMapper collegeMapper;
+    protected CollegeService collegeService;
 
     @Autowired
-    protected GradeMapper gradeMapper;
+    protected GradeService gradeService;
 
     @Autowired
-    protected TitleMapper titleMapper;
+    protected TitleService titleService;
+
+    @Autowired
+    protected OtherService otherService;
 
     @Autowired
     protected RedisTemplate<String,Object> redisTemplate;

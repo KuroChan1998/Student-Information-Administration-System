@@ -55,6 +55,15 @@ public interface MajorService {
 
     /**
      * @author JinZhiyun
+     * @description 更新专业教师负责人学号
+     * @date 18:13 2019/10/14
+     * @Param [teaOriNum, teaNum]
+     * @return void
+     **/
+    void updateMajorTeaNum(String teaOriNum, String teaNum);
+
+    /**
+     * @author JinZhiyun
      * @Description 根据业务逻辑返回更新专业ajax的map键data值
      * @Date 8:37 2019/7/14
      * @Param [majorWC]

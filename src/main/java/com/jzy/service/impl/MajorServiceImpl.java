@@ -2,12 +2,14 @@ package com.jzy.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.jzy.dao.MajorMapper;
 import com.jzy.dto.major.MajorSearchDto;
 import com.jzy.dto.major.MajorWithCollegeDto;
 import com.jzy.dto.other.MyPage;
 import com.jzy.entity.Major;
 import com.jzy.entity.User;
 import com.jzy.service.MajorService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +26,8 @@ import java.util.List;
 @Service("majorService")
 @Transactional
 public class MajorServiceImpl extends BaseServiceImpl implements MajorService {
+    @Autowired
+    protected MajorMapper majorMapper;
 
     @Override
     public List<Major> selectMajorByCollegeName(String collegeName) {
@@ -59,7 +63,7 @@ public class MajorServiceImpl extends BaseServiceImpl implements MajorService {
         }
 
         if (!majorWC.getMajorTeaNum().equals("")) { //如果该专业有负责人
-            if (teacherMapper.selectTeacherByNum(majorWC.getMajorTeaNum()) == null) { //如果负责人id不存在
+            if (teacherService.selectTeacherByNum(majorWC.getMajorTeaNum()) == null) { //如果负责人id不存在
                 return "majorTeaNumNotExist";
             } else {
                 Major major = majorMapper.selectMajorByTeaNum(majorWC.getMajorTeaNum());
@@ -74,12 +78,17 @@ public class MajorServiceImpl extends BaseServiceImpl implements MajorService {
     }
 
     @Override
+    public void updateMajorTeaNum(String teaOriNum, String teaNum) {
+        majorMapper.updateMajorTeaNum(teaOriNum, teaNum);
+    }
+
+    @Override
     public String insertMajor(MajorWithCollegeDto majorWC) {
         if (majorMapper.selectMajorByName(majorWC.getMajorName()) != null) { //如果添加的专业名称已存在
             return "majorNameExist";
         }
         if (!majorWC.getMajorTeaNum().equals("")) { //如果该专业有负责人
-            if (teacherMapper.selectTeacherByNum(majorWC.getMajorTeaNum()) == null) { //如果负责人工号不存在
+            if (teacherService.selectTeacherByNum(majorWC.getMajorTeaNum()) == null) { //如果负责人工号不存在
                 return "majorTeaNumNotExist";
             } else {
                 Major major = majorMapper.selectMajorByTeaNum(majorWC.getMajorTeaNum());

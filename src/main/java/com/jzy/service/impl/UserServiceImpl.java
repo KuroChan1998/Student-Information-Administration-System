@@ -1,11 +1,13 @@
 package com.jzy.service.impl;
 
+import com.jzy.dao.UserMapper;
 import com.jzy.dto.other.UserLogin;
 import com.jzy.entity.User;
 import com.jzy.service.UserService;
 import com.jzy.util.other.MySecurity;
 import com.jzy.util.user.UserUtil;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
@@ -27,6 +29,9 @@ import java.util.concurrent.TimeUnit;
 @Service("userService")
 @Transactional
 public class UserServiceImpl extends BaseServiceImpl implements UserService {
+    @Autowired
+    private UserMapper userMapper;
+
     @Override
     public UserLogin userLoginTest(User user) {
         UserLogin userLogin = new UserLogin();

@@ -20,4 +20,22 @@ public interface GradeService {
      * @return java.util.List<com.jzy.entity.Grade>
      **/
     List<Grade> selectAllGrade();
+
+    /**
+     * @author JinZhiyun
+     * @description 更新年级学生负责人学号
+     * @date 18:08 2019/10/14
+     * @Param [stuOriNum, stuNum]
+     * @return void
+     **/
+    void updateGradeStuNum(String stuOriNum, String stuNum);
+
+    /**
+     * @author JinZhiyun
+     * @description 更新年级教师负责人学号
+     * @date 18:11 2019/10/14
+     * @Param [teaOriNum, teaNum]
+     * @return void
+     **/
+    void updateGradeTeaNum(String teaOriNum, String teaNum);
 }

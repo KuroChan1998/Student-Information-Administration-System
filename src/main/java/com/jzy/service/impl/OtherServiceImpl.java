@@ -12,7 +12,7 @@ import com.jzy.util.other.EchartsFactory;
 import com.jzy.util.other.MySimpleUtil;
 import com.jzy.util.other.SendEmailUtil;
 import com.jzy.util.user.UserUtil;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -144,7 +144,7 @@ public class OtherServiceImpl extends BaseServiceImpl implements OtherService {
     @Override
     public StudentPercentBySex selectStuTotalBySex(String stuCollegeName, String stuMajorName, String stuClassName) {
         StudentPercentBySex studentPercentBySex = new StudentPercentBySex();
-        List<StudentTotalGroupBySex> studentTotalGroupBySexes = studentMapper.selectStuTotalBySex(stuCollegeName, stuMajorName, stuClassName);
+        List<StudentTotalGroupBySex> studentTotalGroupBySexes = studentService.selectStuTotalBySex(stuCollegeName, stuMajorName, stuClassName);
         studentPercentBySex.setStuCollegeName(stuCollegeName);
         studentPercentBySex.setStuMajorName(stuMajorName);
         studentPercentBySex.setStuClassName(stuClassName);
@@ -171,7 +171,7 @@ public class OtherServiceImpl extends BaseServiceImpl implements OtherService {
         result.add(new ArrayList<>());
         List<ObjectTotalGroupByCommonName> objectTotals = new ArrayList<>();
         if (type.equals("allCollege") || type.equals("allMajor") || type.equals("allClass") || type.equals("grade")) {
-            objectTotals = studentMapper.selectStuTotalByCommonName(type, null, null);
+            objectTotals = studentService.selectStuTotalByCommonName(type, null, null);
         } else if (type.equals("byMajorOrCollege")) {
             String tmpType;
             if (StringUtils.isEmpty(majorName)) {
@@ -183,7 +183,7 @@ public class OtherServiceImpl extends BaseServiceImpl implements OtherService {
             } else {
                 tmpType = "classUnderMajor";
             }
-            objectTotals = studentMapper.selectStuTotalByCommonName(tmpType, collegeName, majorName);
+            objectTotals = studentService.selectStuTotalByCommonName(tmpType, collegeName, majorName);
         }
         for (ObjectTotalGroupByCommonName objectTotal : objectTotals) {
             result.get(0).add(objectTotal.getCommonName());
@@ -198,18 +198,18 @@ public class OtherServiceImpl extends BaseServiceImpl implements OtherService {
         if (type.equals("wholeSchoolByStuDegree")) {
             Map<String, Object> tmpMap = new HashMap<>();
             tmpMap.put("product", "全校");
-            List<ObjectTotalGroupByCommonName> objectTotals = studentMapper.selectStuTotalByCommonName(type, null, null);
+            List<ObjectTotalGroupByCommonName> objectTotals = studentService.selectStuTotalByCommonName(type, null, null);
             tmpMap.putAll(MySimpleUtil.transferStuTotalToTmpMap(objectTotals));
             result.add(tmpMap);
             return result;
         }
         if (type.equals("allCollegeByStuDegree") || type.equals("majorUnderCollegeByStuDegree")) {
             if (StringUtils.isEmpty(collegeName)) {
-                List<College> colleges = collegeMapper.selectAllCollege();
+                List<College> colleges = collegeService.selectAllCollege();
                 for (College college : colleges) {
                     Map<String, Object> tmpMap = new HashMap<>();
                     tmpMap.put("product", college.getCollegeName());
-                    List<ObjectTotalGroupByCommonName> objectTotals = studentMapper.selectStuTotalByCommonName("allCollegeByStuDegree", college.getCollegeName(), null);
+                    List<ObjectTotalGroupByCommonName> objectTotals = studentService.selectStuTotalByCommonName("allCollegeByStuDegree", college.getCollegeName(), null);
                     tmpMap.putAll(MySimpleUtil.transferStuTotalToTmpMap(objectTotals));
                     result.add(tmpMap);
                 }
@@ -220,12 +220,12 @@ public class OtherServiceImpl extends BaseServiceImpl implements OtherService {
 /*            type="allMajorByStuDegree"
                     或者type="majorUnderCollegeByStuDegree"，collegeName非空*/
             System.out.println(collegeName);
-            List<Major> majors = majorMapper.selectMajorByCollegeName(collegeName);
+            List<Major> majors = majorService.selectMajorByCollegeName(collegeName);
             System.out.println("xxx" + majors);
             for (Major major : majors) {
                 Map<String, Object> tmpMap = new HashMap<>();
                 tmpMap.put("product", major.getMajorName());
-                List<ObjectTotalGroupByCommonName> objectTotals = studentMapper.selectStuTotalByCommonName(type.equals("allMajorByStuDegree") ? "majorUnderCollegeByStuDegree" : type, null, major.getMajorName());
+                List<ObjectTotalGroupByCommonName> objectTotals = studentService.selectStuTotalByCommonName(type.equals("allMajorByStuDegree") ? "majorUnderCollegeByStuDegree" : type, null, major.getMajorName());
                 tmpMap.putAll(MySimpleUtil.transferStuTotalToTmpMap(objectTotals));
                 result.add(tmpMap);
             }
@@ -239,7 +239,7 @@ public class OtherServiceImpl extends BaseServiceImpl implements OtherService {
         Map<String, Object> map = new HashMap<>();
         List<List<Object>> source = new ArrayList<List<Object>>();
         List<Object> series = new ArrayList<>();
-        final List<String> titleNames = titleMapper.selectAllTitleName();
+        final List<String> titleNames = titleService.selectAllTitleName();
         source.add(new ArrayList<Object>() {//这个大括号 就相当于我们  new 接口
             {//这个大括号 就是 构造代码块 会在构造函数前 调用
                 this.add("product");
@@ -248,11 +248,11 @@ public class OtherServiceImpl extends BaseServiceImpl implements OtherService {
         });
 
         if (type.equals("allCollegeByTeaTitle")) {
-            List<College> colleges = collegeMapper.selectAllCollege();
+            List<College> colleges = collegeService.selectAllCollege();
             for (College college : colleges) {
                 List<Object> sourceTmp = new ArrayList<>();
                 sourceTmp.add(college.getCollegeName());
-                List<ObjectTotalGroupByCommonName> objectTotals = teacherMapper.selectTeaTotalByCommonName(type, college.getCollegeName(), null);
+                List<ObjectTotalGroupByCommonName> objectTotals = teacherService.selectTeaTotalByCommonName(type, college.getCollegeName(), null);
                 System.out.println(objectTotals);
                 System.out.println(titleNames);
                 sourceTmp.addAll(MySimpleUtil.transferTeaTotalToTmpMap(objectTotals, titleNames));
@@ -271,7 +271,7 @@ public class OtherServiceImpl extends BaseServiceImpl implements OtherService {
                     tmpType = "allCollegeByTeaTitle"; //直接调用allCollegeByTeaTitle对应的sql
                     List<Object> sourceTmp = new ArrayList<>();
                     sourceTmp.add(collegeName);
-                    List<ObjectTotalGroupByCommonName> objectTotals = teacherMapper.selectTeaTotalByCommonName(tmpType, collegeName, null);
+                    List<ObjectTotalGroupByCommonName> objectTotals = teacherService.selectTeaTotalByCommonName(tmpType, collegeName, null);
                     sourceTmp.addAll(MySimpleUtil.transferTeaTotalToTmpMap(objectTotals, titleNames));
                     source.add(sourceTmp);
                     series.add(EchartsFactory.getSeriesInFirstGrid()); //设置第二张表格的bar
@@ -281,7 +281,7 @@ public class OtherServiceImpl extends BaseServiceImpl implements OtherService {
                 tmpType = "allMajorByTeaTitle"; //allMajorByTeaTitle
                 List<Object> sourceTmp = new ArrayList<>();
                 sourceTmp.add(majorName);
-                List<ObjectTotalGroupByCommonName> objectTotals = teacherMapper.selectTeaTotalByCommonName(tmpType, null, majorName);
+                List<ObjectTotalGroupByCommonName> objectTotals = teacherService.selectTeaTotalByCommonName(tmpType, null, majorName);
                 sourceTmp.addAll(MySimpleUtil.transferTeaTotalToTmpMap(objectTotals, titleNames));
                 source.add(sourceTmp);
                 series.add(EchartsFactory.getSeriesInFirstGrid()); //设置第二张表格的bar
@@ -290,17 +290,17 @@ public class OtherServiceImpl extends BaseServiceImpl implements OtherService {
         } else if (type.equals("wholeSchoolByTeaTitle")) {
             List<Object> sourceTmp = new ArrayList<>();
             sourceTmp.add("全校");
-            List<ObjectTotalGroupByCommonName> objectTotals = teacherMapper.selectTeaTotalByCommonName(type, null, null);
+            List<ObjectTotalGroupByCommonName> objectTotals = teacherService.selectTeaTotalByCommonName(type, null, null);
             sourceTmp.addAll(MySimpleUtil.transferTeaTotalToTmpMap(objectTotals, titleNames));
             source.add(sourceTmp);
             series.add(EchartsFactory.getSeriesInFirstGrid()); //设置第二张表格的bar
             series.addAll(EchartsFactory.getSeriesInSecondGrids(titleNames.size())); //设置第一张表格的bar
         } else if (type.equals("allMajorByTeaTitle")) {
-            List<Major> majors = majorMapper.selectMajorByCollegeName(null);
+            List<Major> majors = majorService.selectMajorByCollegeName(null);
             for (Major major : majors) {
                 List<Object> sourceTmp = new ArrayList<>();
                 sourceTmp.add(major.getMajorName());
-                List<ObjectTotalGroupByCommonName> objectTotals = teacherMapper.selectTeaTotalByCommonName(type, null, major.getMajorName());
+                List<ObjectTotalGroupByCommonName> objectTotals = teacherService.selectTeaTotalByCommonName(type, null, major.getMajorName());
                 sourceTmp.addAll(MySimpleUtil.transferTeaTotalToTmpMap(objectTotals, titleNames));
                 source.add(sourceTmp);
             }
