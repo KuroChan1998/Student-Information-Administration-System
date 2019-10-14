@@ -250,6 +250,8 @@
 - springmvc拦截器的定义有原来的spring-mvc.xml中改为在config包下的配置类*SpringmvcConfig*完成；redis的配置等也同样改成springboot风格即配置类完成。
 - 在原先的*com.jzy.controller.OtherController*中`"/error"`请求与springboot内部定义的出错请求相同，产生冲突，因而改成`"/myError"`
 
+Download: [https://github.com/KuroChan1998/Student-Information-Administration-System/tree/v1.0.0-Sb_M](https://github.com/KuroChan1998/Student-Information-Administration-System/tree/v1.0.0-Sb_M)
+
 ## Contact me
 
 - qq: 929703621
