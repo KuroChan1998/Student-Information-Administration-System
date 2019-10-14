@@ -23,6 +23,8 @@ public class UserUtil extends MyDatabaseUtil implements UserRedis, UserModel, Us
     private static final int USER_PASSWORD_MIN_LENGTH = 6;
     private static final int USER_PASSWORD_MAX_LENGTH = 50;
 
+    public static final List<String> VALID_USER_IDENTITIES = Arrays.asList("学生", "教师");
+
     public static final List<String> USER_IDENTITIES = Arrays.asList("管理员", "学生", "教师");
 
     private static final int USER_ICON_MAX_LENGTH = 500;
@@ -73,6 +75,7 @@ public class UserUtil extends MyDatabaseUtil implements UserRedis, UserModel, Us
     public static boolean isValidUserIdentity(String userIdentity) {
         return USER_IDENTITIES.contains(userIdentity);
     }
+
 
     public static boolean isValidUserIcon(String userIcon) {
         return userIcon == null || userIcon.length() <= USER_ICON_MAX_LENGTH;
@@ -142,7 +145,7 @@ public class UserUtil extends MyDatabaseUtil implements UserRedis, UserModel, Us
     public static boolean isValidUserRegInfo(User user) {
         //userId为代理主键不用校验，不在前端生成，无须担心其在服务端的安全问题
         return user != null && isValidUserName(user.getUserName()) && isValidUserNickname(user.getUserNickname()) && isValidUserPassword(user.getUserPassword())
-                && isValidUserIdentity(user.getUserIdentity()) && isValidUserNameByIdentity(user) && isValidUserIcon(user.getUserIcon())
+                && VALID_USER_IDENTITIES.contains(user.getUserIdentity()) && isValidUserNameByIdentity(user) && isValidUserIcon(user.getUserIcon())
                 && isValidUserEmail(user.getUserEmail()) && isValidUserPhone(user.getUserPhone());
     }
 

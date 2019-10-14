@@ -203,6 +203,12 @@
         table.render({
             elem: '#teaInfoQuery'
             , url: '${ctx}/teacher/showAllTeaInfo' //向后端默认传page和limit
+            ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+            ,defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+                title: '提示'
+                ,layEvent: 'LAYTABLE_TIPS'
+                ,icon: 'layui-icon-tips'
+            }]
             , cols: [[
                 {type: 'checkbox', fixed: 'left'}
                 , {field: 'teaNum', title: '工号', sort: true, fixed: true}
@@ -315,7 +321,7 @@
                     $.ajax({
                         type: 'post',
                         data: {teachers: JSON.stringify(checkData)},
-                        url: "${ctx}/teacher/deleteMany",
+                        url: "${ctx}/teacher/deleteMany?csrfToken=${csrfToken}",
                         success: function (data) {
                             if (data.data == "deleteSuccess") {
                                 table.reload('teaInfoQuery', {
@@ -369,7 +375,7 @@
                             $.ajax({
                                 data: json,
                                 type: 'post',
-                                url: "${ctx}/teacher/insert",
+                                url: "${ctx}/teacher/insert?csrfToken=${csrfToken}",
                                 success: function (data) {
                                     if (data.data == "teaNumExist") {
                                         return layer.msg('对不起，该工号已存在！');
@@ -413,7 +419,7 @@
                     $.ajax({
                         data: data,
                         type: 'post',
-                        url: "${ctx}/teacher/deleteOne",
+                        url: "${ctx}/teacher/deleteOne?csrfToken=${csrfToken}",
                         success: function (data) {
                             if (data.data == "deleteSuccess") {
                                 layer.msg('删除成功', {
@@ -466,7 +472,7 @@
                             $.ajax({
                                 data: json,
                                 type: 'post',
-                                url: "${ctx}/teacher/updateInfo",
+                                url: "${ctx}/teacher/updateInfo?csrfToken=${csrfToken}",
                                 success: function (data) {
                                     if (data.data == "teaNumExist") {
                                         return layer.msg('对不起，该工号已存在！');

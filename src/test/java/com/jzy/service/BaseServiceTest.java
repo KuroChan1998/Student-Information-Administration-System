@@ -10,7 +10,7 @@ import others.UnitTestBase;
  * @Date 2019/6/5 16:35
  * @Version 1.0
  **/
-public class BaseServiceTest extends UnitTestBase {
+public abstract class BaseServiceTest extends UnitTestBase {
     @Autowired
     protected UserService userService;
 

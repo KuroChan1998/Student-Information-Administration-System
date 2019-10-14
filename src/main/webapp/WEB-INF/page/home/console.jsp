@@ -217,12 +217,12 @@
                             </td>
                         </tr>
                         <%--<tr>--%>
-                            <%--<td>安全框架</td>--%>
-                            <%--<td>--%>
-                                <%--<script type="text/html" template>--%>
-                                    <%--${securityTech}--%>
-                                <%--</script>--%>
-                            <%--</td>--%>
+                        <%--<td>安全框架</td>--%>
+                        <%--<td>--%>
+                        <%--<script type="text/html" template>--%>
+                        <%--${securityTech}--%>
+                        <%--</script>--%>
+                        <%--</td>--%>
                         <%--</tr>--%>
                         <tr>
                             <td>日志</td>
@@ -265,14 +265,15 @@
                     <i class="layui-icon layui-icon-tips" lay-tips="注意查看哦" lay-offset="5"></i>
                 </div>
                 <div class="layui-card-body layui-text layadmin-text">
-                    <p>大学生信息管理系统 StuInfoAdmin-v1.2.0版本上线啦！</p>
-                    <p>更新如下内容：</p>
-                    <p>修复了前端编辑添加弹窗在不同分辨率客户机上的显示大小问题</p>
-                    <p>新增Redis技术，用以缓存用户名密码，用户错误登录次数限制，邮箱验证码等等</p>
-                    <p>新增连续输错用户名密码超过一定次数后的限制时间</p>
-                    <p>更改了邮箱验证码有效时间的实现方式，由服务端java实现改为redis过期时间实现</p>
-                    <p>提升了服务端的安全性和新增异常处理机制，用aop实现入参的校验，对不合法的请求及其参数值用日志记录，并抛出异常</p>
-                    <p>优化了util包等源代码的结构，增强了可拓展性</p>
+                    <p>StuInfoAdmin-v1.3.0版本上线啦！</p>
+                    <p>提升安全性，解决部分安全隐患：</p>
+                    <p>前端layUi数据表格，增加“筛选列”、“打印”、“导出”上方工具条。</p>
+                    <p>新增CsrfInterceptor拦截器，对修改请求进行CsrfToken的校验，有效防止CSRF攻击</p>
+                    <p>
+                        对注册用户信息后端服务层，强化在aop方法中对输入身份属性的校验，对“管理员”字段进行过滤，并抛出异常，防止攻击者拦截请求JSON数据进行修改以获得非法权限；对修改用户信息后端控制层，强化在UserController对应方法中对原身份属性和修改后身份属性的校验，对“管理员”字段进行过滤，防止攻击者拦截请求JSON数据进行修改以获得非法权限。</p>
+                    <p>感谢@<a href="https://github.com/Mydearbaby" target="_blank">Mydearbaby</a>发现的<a
+                            href="https://github.com/KuroChan1998/Student-Information-Administration-System/issues/3" target="_blank">邮箱验证码绕过安全漏洞</a>，在服务端发送验证码时新增一个标志位false，仅当服务端校验正确后才将此标志置true，可以有效避免攻击者拦截请求JSON数据进行修改以绕开验证码。
+                    </p>
                     → <a lay-href="${ctx}/updateHistory">历史版本</a>
                 </div>
             </div>
@@ -291,7 +292,7 @@
                     <p>—— 贤心（<a href="http://www.layui.com/" target="_blank">layui.com</a>）</p>
                     <p>)</p>
                     <p>感谢贤心提供的后台模板，对在闲鱼上花20块钱买你这个1200块的后台模板深感抱歉，但你又能拿我怎么样呢23333？贤心？</p>
-                    <p>—— 酷乐酱（<a href="http://www.kurochan.cn/" target="_blank">kurochan.cn</a>）</p>
+                    <p>—— 酷乐酱（<a href="http://kurochan1998.github.io/" target="_blank">kurochan.cn</a>）</p>
                 </div>
             </div>
         </div>

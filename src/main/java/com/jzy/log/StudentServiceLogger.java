@@ -3,7 +3,7 @@ package com.jzy.log;
 import com.jzy.dto.student.StudentWithGradeClassMajorCollegeDto;
 import com.jzy.exception.StudentDataException;
 import com.jzy.util.student.StudentUtil;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;

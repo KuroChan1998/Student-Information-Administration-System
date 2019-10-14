@@ -5,40 +5,18 @@
 
 ## Release Notes
 
-### v1.0.0 - 2019.5.19
+对`Redis`和`SpringAOP`不太熟的初学者，下载[v1.1.0](https://pan.baidu.com/s/1yHjrk7gAycHRFapU_Waf4g)版本足够学习或完成课设了~([更多历史版本](#update_history))
 
-*StuInfoAdmin-v1.0.0 的一切准备工作似乎都已到位。发布之弦，一触即发。*
-*不枉近百个日日夜夜与之为伴。因小而大，因弱而强。*
+### v1.3.0 - 2019.10.14 (Current Version)
 
-*无论它能走多远，抑或如何支撑？至少我曾倾注全心，无怨无悔*
+*版本1.3.0，提升安全性，解决部分安全隐患 :*
 
-Download: [https://pan.baidu.com/s/1piVQnIFdz_BIoszIEzAJwQ](https://pan.baidu.com/s/1piVQnIFdz_BIoszIEzAJwQ)
+- 前端layUi数据表格，增加“筛选列”、“打印”、“导出”上方工具条。
+- 新增CsrfInterceptor拦截器，对修改请求进行CsrfToken的校验，有效防止CSRF攻击
+- 对注册用户信息后端服务层，强化在aop方法中对输入身份属性的校验，对“管理员”字段进行过滤，并抛出异常，防止攻击者拦截请求JSON数据进行修改以获得非法权限；对修改用户信息后端控制层，强化在UserController对应方法中对原身份属性和修改后身份属性的校验，对“管理员”字段进行过滤，防止攻击者拦截请求JSON数据进行修改以获得非法权限。
+- 感谢@ 发现的邮箱验证码绕过安全漏洞，在服务端发送验证码时新增一个标志位false，仅当服务端校验正确后才将此标志置true，可以有效避免攻击者拦截请求JSON数据进行修改以绕开验证码。
 
-### v1.1.0 - 2019.7.27
 
-*版本1.1.0，更新如下内容 :*
-
-* 优化数据表结构，对原有的表的部分字段进行了修改，并增加了title和grade两个表
-* 优化sql语句效率
-* 优化前端查询界面及查询方式，使其更加全面，对用户友好
-* 更新登录界面记住密码的cookie设置
-* 更新邮箱验证码服务，增加了验证码有效时间
-* 优化源代码结构，增强了规范性和可拓展性
-
-Download: [https://pan.baidu.com/s/1yHjrk7gAycHRFapU_Waf4g](https://pan.baidu.com/s/1yHjrk7gAycHRFapU_Waf4g)
-
-### v1.2.0 - 2019.9.12 (Current Version)
-
-*目前版本为v1.2.0，更新如下内容 :*
-
-* 修复了前端编辑添加弹窗在不同分辨率客户机上的显示大小问题
-* 新增Redis技术，用以缓存用户名密码，用户错误登录次数限制，邮箱验证码等等
-* 新增连续输错用户名密码超过一定次数后的限制时间
-* 更改了邮箱验证码有效时间的实现方式，由服务端java实现改为redis过期时间实现
-* 提升了服务端的安全性和新增异常处理机制，用aop实现入参的校验，对不合法的请求及其参数值用日志记录，并抛出异常
-* 优化了util包等源代码的结构，增强了可拓展性
-
-对`Redis`和`SpringAOP`不太熟的同学，下载`v1.1.0`版本足够学习或完成课设了~
 
 
 
@@ -247,7 +225,42 @@ Download: [https://pan.baidu.com/s/1yHjrk7gAycHRFapU_Waf4g](https://pan.baidu.co
 
   ![Snipaste_2019-07-26_17-12-36](git_screenshot/Snipaste_2019-07-26_17-12-36.jpg)
 
+## <span id='update_history'>Update History</span>
 
+### v1.2.0 - 2019.9.12
+
+*版本1.2.0，更新如下内容 :*
+
+- 修复了前端编辑添加弹窗在不同分辨率客户机上的显示大小问题
+- 新增Redis技术，用以缓存用户名密码，用户错误登录次数限制，邮箱验证码等等
+- 新增连续输错用户名密码超过一定次数后的限制时间
+- 更改了邮箱验证码有效时间的实现方式，由服务端java实现改为redis过期时间实现
+- 提升了服务端的安全性和新增异常处理机制，用aop实现入参的校验，对不合法的请求及其参数值用日志记录，并抛出异常
+- 优化了util包等源代码的结构，增强了可拓展性
+
+Download: [https://github.com/KuroChan1998/Student-Information-Administration-System/tree/v1.2.0](https://github.com/KuroChan1998/Student-Information-Administration-System/tree/v1.2.0)
+
+### v1.1.0 - 2019.7.27
+
+*版本1.1.0，更新如下内容 :*
+
+- 优化数据表结构，对原有的表的部分字段进行了修改，并增加了title和grade两个表
+- 优化sql语句效率
+- 优化前端查询界面及查询方式，使其更加全面，对用户友好
+- 更新登录界面记住密码的cookie设置
+- 更新邮箱验证码服务，增加了验证码有效时间
+- 优化源代码结构，增强了规范性和可拓展性
+
+Download: [https://pan.baidu.com/s/1yHjrk7gAycHRFapU_Waf4g](https://pan.baidu.com/s/1yHjrk7gAycHRFapU_Waf4g)
+
+### v1.0.0 - 2019.5.19
+
+*StuInfoAdmin-v1.0.0 的一切准备工作似乎都已到位。发布之弦，一触即发。*
+*不枉近百个日日夜夜与之为伴。因小而大，因弱而强。*
+
+*无论它能走多远，抑或如何支撑？至少我曾倾注全心，无怨无悔*
+
+Download: [https://pan.baidu.com/s/1piVQnIFdz_BIoszIEzAJwQ](https://pan.baidu.com/s/1piVQnIFdz_BIoszIEzAJwQ)
 
 ## Contact me
 

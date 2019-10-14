@@ -39,7 +39,7 @@
         <project.build.slf4j.api.version>1.7.7</project.build.slf4j.api.version>
         <project.build.slf4j.log4j12.version>1.7.7</project.build.slf4j.log4j12.version>
         <!-- MySQL connector -->
-        <project.build.mysql.connector.version>8.0.13</project.build.mysql.connector.version>
+        <project.build.mysql.connector.version>8.0.17</project.build.mysql.connector.version>
         <!-- Database connection pool -->
         <project.build.druid.version>1.0.5</project.build.druid.version>
         <!-- PageHelper -->
@@ -383,6 +383,9 @@
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.20.1</version>
+                <configuration>
+                    <skipTests>true</skipTests>
+                </configuration>
             </plugin>
             <plugin>
                 <artifactId>maven-war-plugin</artifactId>

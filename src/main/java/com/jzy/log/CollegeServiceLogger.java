@@ -3,7 +3,7 @@ package com.jzy.log;
 import com.jzy.dto.college.CollegeDto;
 import com.jzy.exception.CollegeDataException;
 import com.jzy.util.college.CollegeUtil;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;

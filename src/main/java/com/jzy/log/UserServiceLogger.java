@@ -4,7 +4,7 @@ import com.jzy.entity.User;
 import com.jzy.exception.UserDataException;
 import com.jzy.util.other.MySimpleUtil;
 import com.jzy.util.user.UserUtil;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;

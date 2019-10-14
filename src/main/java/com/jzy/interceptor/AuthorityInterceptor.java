@@ -1,6 +1,7 @@
 package com.jzy.interceptor;
 
 import com.jzy.service.OtherService;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -16,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
  * @Version 1.0
  **/
 public class AuthorityInterceptor implements HandlerInterceptor {
-    private final static org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(AuthorityInterceptor.class);
+    private final static Logger logger = Logger.getLogger(AuthorityInterceptor.class);
 
     @Autowired
     private OtherService otherService;

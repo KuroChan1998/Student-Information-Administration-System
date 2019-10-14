@@ -10,7 +10,7 @@ import others.UnitTestBase;
  * @Date 2019/6/5 16:39
  * @Version 1.0
  **/
-public class BaseMapperTest extends UnitTestBase {
+public abstract class BaseMapperTest extends UnitTestBase {
     @Autowired
     protected UserMapper userMapper;
 

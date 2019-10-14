@@ -257,14 +257,14 @@
                             "userIdentity": field.role,
                             "userIcon": field.hiddenIconUrl,
                             "userPhone": field.cellphone,
-                            "userEmail": field.email,
+                            "userEmail": field.email
                         };
                         //请求接口
                         $.ajax({
                             type: 'post',
                             contentType: 'application/json;charset=utf-8',
                             data: JSON.stringify(allData),
-                            url: '${ctx}/user/userInfoReset' //实际使用请改成服务端真实接口
+                            url: '${ctx}/user/resetUserInfo?csrfToken=${csrfToken}' //实际使用请改成服务端真实接口
                             , success: function (res2) {
                                 if (res2.data == "updateSuccess") {
                                     layer.msg('修改已完成，请F5刷新页面', {

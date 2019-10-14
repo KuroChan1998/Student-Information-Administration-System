@@ -45,7 +45,22 @@
             <mvc:exclude-mapping path="/resetPassword"/>
             <mvc:exclude-mapping path="/formRepeatSubmit"/>
             <bean class="com.jzy.interceptor.LoginInterceptor"/>
+        </mvc:interceptor>
 
+        <mvc:interceptor>
+            <!--对所有用户登录状态下的涉及修改操作的请求拦截，进行CSRFToken验证-->
+            <mvc:mapping path="/user/reset*"/>
+            <mvc:mapping path="/*/update*"/>
+            <mvc:mapping path="/*/insert*"/>
+            <mvc:mapping path="/*/delete*"/>
+            <bean class="com.jzy.interceptor.CsrfInterceptor"/>
+        </mvc:interceptor>
+
+        <mvc:interceptor>
+            <!--拦截修改用户信息请求-->
+            <mvc:mapping path="/resetPassword"/>
+            <mvc:mapping path="/user/reset*"/>
+            <bean class="com.jzy.interceptor.EmailVerifyCodeInterceptor"/>
         </mvc:interceptor>
 
         <mvc:interceptor>

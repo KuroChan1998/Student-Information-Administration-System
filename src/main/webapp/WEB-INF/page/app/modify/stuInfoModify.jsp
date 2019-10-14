@@ -261,6 +261,12 @@
         table.render({
             elem: '#stuInfoQuery'
             , url: '${ctx}/student/showAllStuInfo' //向后端默认传page和limit
+            ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+            ,defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+                title: '提示'
+                ,layEvent: 'LAYTABLE_TIPS'
+                ,icon: 'layui-icon-tips'
+            }]
             , cols: [[
                 {type: 'checkbox', fixed: 'left'}
                 , {field: 'stuId', title: '学生id', sort: true, hide: true}
@@ -372,7 +378,7 @@
                     $.ajax({
                         type: 'post',
                         data: {students: JSON.stringify(checkData)},
-                        url: "${ctx}/student/deleteMany",
+                        url: "${ctx}/student/deleteMany?csrfToken=${csrfToken}",
                         success: function (data) {
                             if (data.data == "deleteSuccess") {
                                 layer.msg('已删除');
@@ -428,7 +434,7 @@
                             $.ajax({
                                 data: json,
                                 type: 'post',
-                                url: "${ctx}/student/insert",
+                                url: "${ctx}/student/insert?csrfToken=${csrfToken}",
                                 success: function (data) {
                                     if (data.data == "stuNumExist") {
                                         return layer.msg('对不起，该学号已存在！');
@@ -470,7 +476,7 @@
                     $.ajax({
                         data: data,
                         type: 'post',
-                        url: "${ctx}/student/deleteOne",
+                        url: "${ctx}/student/deleteOne?csrfToken=${csrfToken}",
                         success: function (data) {
                             if (data.data == "deleteSuccess") {
                                 layer.msg('删除成功', {
@@ -524,7 +530,7 @@
                             $.ajax({
                                 data: json,
                                 type: 'post',
-                                url: "${ctx}/student/updateInfo",
+                                url: "${ctx}/student/updateInfo?csrfToken=${csrfToken}",
                                 success: function (data) {
                                     if (data.data == "stuNumExist") {
                                         return layer.msg('对不起，该学号已存在！');

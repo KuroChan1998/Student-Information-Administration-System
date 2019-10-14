@@ -3,7 +3,7 @@ package com.jzy.log;
 import com.jzy.dto.teacher.TeacherWithTitleMajorCollegeDto;
 import com.jzy.exception.TeacherDataException;
 import com.jzy.util.teacher.TeacherUtil;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;

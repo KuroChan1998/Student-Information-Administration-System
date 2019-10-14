@@ -87,7 +87,7 @@
     </div>
 
     <div class="layui-trans layadmin-user-login-footer">
-        <p>© 2019 <a href="http://kurochan.cn/" target="_blank">kurochan.cn</a></p>
+        <p>© 2019 <a href="http://kurochan1998.github.io/" target="_blank">kurochan.cn</a></p>
     </div>
 </div>
 

@@ -2,7 +2,7 @@ package com.jzy.log;
 
 import com.jzy.dto.other.MyPage;
 import com.jzy.exception.DataException;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;

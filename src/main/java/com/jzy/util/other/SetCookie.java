@@ -3,6 +3,9 @@ package com.jzy.util.other;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.util.UUID;
+
 
 /**
  * @ClassName SetCookie
@@ -52,5 +55,20 @@ public class SetCookie {
         response.addCookie(loginAccountCookie);
         response.addCookie(loginPasswordCookie);
         response.addCookie(rememberCookie);
+    }
+
+    /**
+     * @author JinZhiyun
+     * @description 设置CSRFToken到session和cookie
+     * @date 10:26 2019/10/11
+     * @Param [session, request, response]
+     * @return void
+     **/
+    public static void setCSRFTokenCookieAndSession(HttpSession session, HttpServletRequest request, HttpServletResponse response){
+        String authorization = UUID.randomUUID().toString();
+        session.setAttribute(Constants.CSRF_NUMBER,authorization);
+        Cookie cookie = new Cookie(Constants.CSRF_NUMBER, authorization);
+        cookie.setPath(request.getContextPath()+"/");
+        response.addCookie(cookie);
     }
 }

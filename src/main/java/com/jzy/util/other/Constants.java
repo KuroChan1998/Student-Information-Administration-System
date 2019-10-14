@@ -10,6 +10,8 @@ package com.jzy.util.other;
 public class Constants {
     public static final String STUDENT_PERCENT_BY_SEX = "studentPercent";
 
+    public static final String CSRF_NUMBER = "csrfToken";
+
     /**
      *  存放系统版本信息的常量
      **/

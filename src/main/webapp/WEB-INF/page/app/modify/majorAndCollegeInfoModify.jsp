@@ -247,6 +247,12 @@
         table.render({
             elem: '#majorInfoQuery'
             , url: '${ctx}/major/showAllMajorInfo' //向后端默认传page和limit
+            ,toolbar: '#toolbarDemo2' //开启头部工具栏，并为其绑定左侧模板
+            ,defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+                title: '提示'
+                ,layEvent: 'LAYTABLE_TIPS'
+                ,icon: 'layui-icon-tips'
+            }]
             , cols: [[
                 {type: 'checkbox', fixed: 'left'}
                 , {field: 'majorId', title: '专业号', hide: true}
@@ -339,7 +345,7 @@
                     $.ajax({
                         data: data,
                         type: 'post',
-                        url: "${ctx}/major/deleteOne",
+                        url: "${ctx}/major/deleteOne?csrfToken=${csrfToken}",
                         success: function (data) {
                             if (data.data == "deleteSuccess") {
                                 layer.msg('删除成功', {
@@ -389,7 +395,7 @@
                             $.ajax({
                                 data: json,
                                 type: 'post',
-                                url: "${ctx}/major/updateInfo",
+                                url: "${ctx}/major/updateInfo?csrfToken=${csrfToken}",
                                 success: function (data) {
                                     if (data.data == "majorNameExist") {
                                         return layer.msg('对不起，该专业名称已存在！');
@@ -469,6 +475,12 @@
         table.render({
             elem: '#collegeInfoQuery'
             , url: '${ctx}/college/showAllCollegeInfo' //向后端默认传page和limit
+            ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+            ,defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+                title: '提示'
+                ,layEvent: 'LAYTABLE_TIPS'
+                ,icon: 'layui-icon-tips'
+            }]
             , cols: [[
                 {type: 'checkbox', fixed: 'left'}
                 , {field: 'collegeId', title: '学院号', hide: true}
@@ -548,7 +560,7 @@
                     $.ajax({
                         data: data,
                         type: 'post',
-                        url: "${ctx}/college/deleteOne",
+                        url: "${ctx}/college/deleteOne?csrfToken=${csrfToken}",
                         success: function (data) {
                             if (data.data == "deleteSuccess") {
                                 layer.msg('删除成功', {
@@ -598,7 +610,7 @@
                             $.ajax({
                                 data: json,
                                 type: 'post',
-                                url: "${ctx}/college/updateInfo",
+                                url: "${ctx}/college/updateInfo?csrfToken=${csrfToken}",
                                 success: function (data) {
                                     if (data.data == "collegeNameExist") {
                                         return layer.msg('对不起，该学院名称已存在！');
@@ -678,7 +690,7 @@
                     $.ajax({
                         type: 'post',
                         data: {majors: JSON.stringify(checkData)},
-                        url: "${ctx}/major/deleteMany",
+                        url: "${ctx}/major/deleteMany?csrfToken=${csrfToken}",
                         success: function (data) {
                             if (data.data == "deleteSuccess") {
                                 table.reload('majorInfoQuery', {
@@ -725,7 +737,7 @@
                             $.ajax({
                                 data: json,
                                 type: 'post',
-                                url: "${ctx}/major/insert",
+                                url: "${ctx}/major/insert?csrfToken=${csrfToken}",
                                 success: function (data) {
                                     if (data.data == "majorNameExist") {
                                         return layer.msg('对不起，该专业名称已存在！');
@@ -770,7 +782,7 @@
                     $.ajax({
                         type: 'post',
                         data: {colleges: JSON.stringify(checkData)},
-                        url: "${ctx}/college/deleteMany",
+                        url: "${ctx}/college/deleteMany?csrfToken=${csrfToken}",
                         success: function (data) {
                             if (data.data == "deleteSuccess") {
                                 table.reload('collegeInfoQuery', {
@@ -817,7 +829,7 @@
                             $.ajax({
                                 data: json,
                                 type: 'post',
-                                url: "${ctx}/college/insert",
+                                url: "${ctx}/college/insert?csrfToken=${csrfToken}",
                                 success: function (data) {
                                     if (data.data == "collegeNameExist") {
                                         return layer.msg('对不起，该学院名称已存在！');
