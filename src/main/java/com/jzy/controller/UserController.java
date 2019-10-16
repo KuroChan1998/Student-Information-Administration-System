@@ -82,7 +82,7 @@ public class UserController extends BaseController {
         Map<String, Object> map = new HashMap<>();
         if (!otherService.ifUserIsAdmin(request.getSession())) {
             if (user.getUserIdentity().equals(UserUtil.USER_IDENTITIES.get(0))) { //非管理员用户提交的更改信息中身份为管理员
-                logger.warn("非管理员用户提交的更改信息中身份为管理员，疑似攻击行为，引起警惕！");
+                logger.error("非管理员用户提交的更改信息中身份为管理员，疑似攻击行为，引起警惕！");
                 map.put("data", "unknownError");
                 return map;
             }

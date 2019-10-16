@@ -8,7 +8,6 @@ package com.jzy.interceptor;
  * @Version 1.0
  **/
 
-import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -41,7 +40,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
                 boolean needRemoveSession = annotation.remove();
                 if (needRemoveSession) {
                     if (isRepeatSubmit(request)) {
-                        logger.info(request.getSession().getAttribute("userId")+"重复提交了表单");
+                        logger.warn(request.getSession().getAttribute("userId")+"重复提交了表单");
                         response.sendRedirect(request.getContextPath() + "/formRepeatSubmit");
                         return false;
                     }
