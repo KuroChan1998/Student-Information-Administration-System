@@ -35,7 +35,7 @@ public class AuthorityInterceptor implements HandlerInterceptor {
             logger.info("管理员访问:" + httpServletRequest.getRequestURI());
             return true;
         }
-        logger.info("非管理员访问:" + httpServletRequest.getRequestURI() + " 无操作权限");
+        logger.warn("非管理员访问:" + httpServletRequest.getRequestURI() + " 无操作权限");
         httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + "/error");
         return false;
     }
