@@ -245,7 +245,7 @@
 
      修改working directory为$MODULE_DIR$
 
-     ![Snipaste_2019-10-16_10-22-51](D:\CDesktop\Engineering\java\idea\springboot\Student-Information-Administration-System-SpringBoot-Dubbo\git_screenshot\Snipaste_2019-10-16_10-22-51.jpg)
+     ![Snipaste_2019-10-16_10-22-51](git_screenshot/Snipaste_2019-10-16_10-22-51.jpg)
 
    * 进入子模块springboot-user-service（web模块），运行com.jzy.SpringbootUserServiceApplication。可以在dubbo-admin中查看服务状态是否正常。
 
