@@ -73,7 +73,7 @@ public class OtherServiceImpl extends BaseServiceImpl implements OtherService {
                 file.transferTo(files);
             }
         } catch (Exception e) {
-            logger.warn("服务端收到了非法请求，请引起警惕");
+            logger.error("服务端收到了非法请求，请引起警惕");
         } finally {
             try {
                 if (out != null) {
@@ -83,7 +83,7 @@ public class OtherServiceImpl extends BaseServiceImpl implements OtherService {
                     fileInput.close();
                 }
             } catch (IOException e) {
-                logger.warn("服务端收到了非法请求，请引起警惕");
+                logger.error("服务端收到了非法请求，请引起警惕");
             }
         }
 
@@ -114,7 +114,7 @@ public class OtherServiceImpl extends BaseServiceImpl implements OtherService {
     @Override
     public boolean ifValidEmailVerifyCode(EmailVerifyCode emailVerifyCode) {
         if (emailVerifyCode == null || StringUtils.isEmpty(emailVerifyCode.getCode()) || StringUtils.isEmpty(emailVerifyCode.getEmail())) {
-            logger.warn("服务端收到了非法请求，请引起警惕");
+            logger.error("服务端收到了非法请求，请引起警惕");
             return false;
         }
         ValueOperations<String, Object> vOps = redisTemplate.opsForValue();
