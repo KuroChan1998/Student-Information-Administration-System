@@ -30,11 +30,6 @@
         <project.build.servlet.api.version>3.0.1</project.build.servlet.api.version>
         <project.build.servlet.jsp.version>2.2</project.build.servlet.jsp.version>
         <project.build.servlet.jstl.version>1.2</project.build.servlet.jstl.version>
-        <!-- Aspectj -->
-        <project.build.aspectj.aspectjrt.version>1.7.4</project.build.aspectj.aspectjrt.version>
-        <project.build.aspectj.aspectjweaver.version>1.7.4</project.build.aspectj.aspectjweaver.version>
-        <!-- Cglib -->
-        <project.build.cglib.version>3.1</project.build.cglib.version>
         <!-- Jackson -->
         <project.build.alibaba.fastjson.version>1.2.56</project.build.alibaba.fastjson.version>
         <project.build.fasterxml.jackson.version>2.10.0.pr1</project.build.fasterxml.jackson.version>
@@ -280,7 +275,7 @@
     </dependencies>
 
     <build>
-        <finalName>springboottest</finalName>
+        <finalName>Student-Information-Administration-System</finalName>
         <plugins>
             <!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
             <plugin>

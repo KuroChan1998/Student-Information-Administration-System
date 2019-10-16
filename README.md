@@ -4,6 +4,7 @@
 该项目为master项目的分支项目，系统的后端是由`SpringBoot`+`Mybatis`实现，功能上与主支SSM项目相同。
 
 * SpringMVC+Spring+Mybatis主支：[https://github.com/KuroChan1998/Student-Information-Administration-System/tree/master](https://github.com/KuroChan1998/Student-Information-Administration-System/tree/master)
+* SpringBoot+Mybatis+Dubbo+Zookeeper分支：[https://github.com/KuroChan1998/Student-Information-Administration-System/tree/Sb_M_D_Z](https://github.com/KuroChan1998/Student-Information-Administration-System/tree/Sb_M_D_Z)
 
 ## Release Notes
 
@@ -49,6 +50,7 @@
 │  │  │          ├─dao              // 持久层
 │  │  │          ├─dto              // 传输对象
 │  │  │          ├─entity           // 实体类
+│  │  │          ├─exception        // 自定义异常类
 │  │  │          ├─interceptor      // 拦截器
 │  │  │          ├─log              // 日志管理
 │  │  │          ├─service          // 服务层
@@ -68,6 +70,7 @@
 │  │          └─page                // jsp页面目录 
 │  └─test                           // 测试代码目录
 ├─README.md                         // help
+├─ISSUES.md                         // 问题大全
 └─pom.xml                           // maven依赖
 ```
 
@@ -126,13 +129,13 @@
 
 3. *进入src/main/resources查看log4j.properties，如果有必要可以修改日志输出路径，目前在D盘下，你可选择不修改跳过此步*
 
-4. *使用 IntelliJ IDEA 导入项目，选择Maven项目选项，一路点击next，即可将项目所需依赖导入。若有无法引入的依赖，可能是因为maven版本不同或是该依赖已过时不存在于现有maven仓库中，请前往maven官网映入最新的该类型依赖*
+4. *使用 IntelliJ IDEA 导入项目，选择Maven项目选项，一路点击next，即可将项目所需依赖导入（若依赖下载速度较慢，请参考百度更改国内镜像）。若有无法引入的依赖，可能是因为maven版本不同或是该依赖已过时不存在于现有maven仓库中，请前往maven官网映入最新的该类型依赖*
 
 ![Snipaste_2019-07-17_08-47-37](git_screenshot/Snipaste_2019-07-17_08-47-37.jpg)
 
 ![Snipaste_2019-07-17_08-49-48](git_screenshot/Snipaste_2019-07-17_08-49-48.jpg)
 
-5. *运行com.jzy.App，在浏览器中输入localhost:80，进入用户登录页面*
+5. *运行com.jzy.App，在浏览器中输入localhost:80/login，进入用户登录页面*
 
 
 ![Snipaste_2019-05-04_08-02-50](git_screenshot/Snipaste_2019-05-04_08-02-50.jpg)
@@ -143,7 +146,11 @@
   - 学生账户：516030910429/123456
   - 教师账户：1000000001/123456
 
+### 3：项目的打包
 
+* 在配置好maven的环境变量的前提下，在项目根目录下cmd打开命令行 ，输入 `mvn clean package`，即可在target/目录下得到相应war包。
+
+* 继续在命令行中输入`java -jar Student-Information-Administration-System.war`，也可得到第二步一样的运行结果。
 
 ## Detailed Functions
 ### 用户服务

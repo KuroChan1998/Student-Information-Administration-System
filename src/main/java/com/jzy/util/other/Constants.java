@@ -18,7 +18,7 @@ public class Constants {
     public static class ProjectInfo{
         public static final String PROJECT_NAME="StuInfoAdmin";
 
-        public static final String PROJECT_VERSION="1.0.0";
+        public static final String PROJECT_VERSION="1.1.0";
 
         public static final String PROJECT_WHOLE_NAME=PROJECT_NAME+"-v"+PROJECT_VERSION;
 

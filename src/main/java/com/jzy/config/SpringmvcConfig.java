@@ -27,6 +27,7 @@ public class SpringmvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/login").excludePathPatterns("/reg").excludePathPatterns("/forget")
                 .excludePathPatterns("/loginTest").excludePathPatterns("/regTest").excludePathPatterns("/sendVerifyCodeToEmail")
                 .excludePathPatterns("/emailVerifyCodeTest").excludePathPatterns("/resetPassword").excludePathPatterns("/formRepeatSubmit")
+                .excludePathPatterns("/400").excludePathPatterns("/404").excludePathPatterns("/500")
                 .excludePathPatterns("/**.ico");  //对项目中的哪些请求不拦截
 
         //CsrfInterceptor
