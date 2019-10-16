@@ -44,6 +44,9 @@
             <mvc:exclude-mapping path="/emailVerifyCodeTest"/>
             <mvc:exclude-mapping path="/resetPassword"/>
             <mvc:exclude-mapping path="/formRepeatSubmit"/>
+            <mvc:exclude-mapping path="/400"/>
+            <mvc:exclude-mapping path="/404"/>
+            <mvc:exclude-mapping path="/500"/>
             <bean class="com.jzy.interceptor.LoginInterceptor"/>
         </mvc:interceptor>
 

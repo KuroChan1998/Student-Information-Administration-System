@@ -1,5 +1,6 @@
-package com.jzy.util.other;
+package com.jzy.dto.other.senior;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +11,9 @@ import java.util.List;
  * @Date 2019/7/23 21:21
  * @Version 1.0
  **/
-public class EchartsFactory {
+public class EchartsFactory implements Serializable {
+    private static final long serialVersionUID = -8277175130803043490L;
+
     private static class Series {
         private String type;
 

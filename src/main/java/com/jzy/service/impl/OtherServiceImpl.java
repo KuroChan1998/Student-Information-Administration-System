@@ -8,7 +8,7 @@ import com.jzy.entity.College;
 import com.jzy.entity.Major;
 import com.jzy.entity.User;
 import com.jzy.service.OtherService;
-import com.jzy.util.other.EchartsFactory;
+import com.jzy.dto.other.senior.EchartsFactory;
 import com.jzy.util.other.MySimpleUtil;
 import com.jzy.util.other.SendEmailUtil;
 import com.jzy.util.user.UserUtil;

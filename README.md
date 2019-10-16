@@ -2,6 +2,7 @@
 这个项目是一个大学生信息管理系统,提供用户级别的登录注册资料管理,信息查询,信息修改（管理员权利），简单的数据可视化分析等功能，也有基本的安全性保障
 
 * SpringBoot+Mybatis分支：[https://github.com/KuroChan1998/Student-Information-Administration-System/tree/Sb_M](https://github.com/KuroChan1998/Student-Information-Administration-System/tree/Sb_M)
+* SpringBoot+Mybatis+Dubbo+Zookeeper分支：[https://github.com/KuroChan1998/Student-Information-Administration-System/tree/Sb_M_D_Z](https://github.com/KuroChan1998/Student-Information-Administration-System/tree/Sb_M_D_Z)
 
 ## Release Notes
 
@@ -49,6 +50,7 @@
 │  │  │          ├─dao              // 持久层
 │  │  │          ├─dto              // 传输对象
 │  │  │          ├─entity           // 实体类
+│  │  │          ├─exception        // 自定义异常类
 │  │  │          ├─interceptor      // 拦截器
 │  │  │          ├─log              // 日志管理
 │  │  │          ├─service          // 服务层
@@ -66,6 +68,7 @@
 │  │          └─page                // jsp页面目录 
 │  └─test                           // 测试代码目录
 ├─README.md                         // help
+├─ISSUES.md                         // 问题大全
 └─pom.xml                           // maven依赖
 ```
 
@@ -113,7 +116,7 @@
 
 4. *进入src/main/resources查看log4j.properties，如果有必要可以修改日志输出路径，目前在D盘下，你可选择不修改跳过此步*
 
-5. *使用 IntelliJ IDEA 导入项目，选择Maven项目选项，一路点击next，即可将项目所需依赖导入。若有无法引入的依赖，可能是因为maven版本不同或是该依赖已过时不存在于现有maven仓库中，请前往maven官网映入最新的该类型依赖*
+5. *使用 IntelliJ IDEA 导入项目，选择Maven项目选项，一路点击next，即可将项目所需依赖导入（若依赖下载速度较慢，请参考百度更改国内镜像）。若有无法引入的依赖，可能是因为maven版本不同或是该依赖已过时不存在于现有maven仓库中，请前往maven官网映入最新的该类型依赖*
 
 ![Snipaste_2019-07-17_08-47-37](git_screenshot/Snipaste_2019-07-17_08-47-37.jpg)
 
@@ -130,6 +133,12 @@
   - 管理员账户：000000000000/admin1
   - 学生账户：516030910429/123456
   - 教师账户：1000000001/123456
+
+### 3：项目的打包
+
+* 在配置好maven的环境变量的前提下，在项目根目录下cmd打开命令行，输入 `mvn clean package`，即可在target/目录下得到相应war包。
+
+* 将war手动部署到tomcat的webapp目录下（手动部署的方式可以参考百度，这里不详述），也可得到第二步一样的运行结果。
 
 
 

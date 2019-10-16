@@ -194,6 +194,60 @@ public class OtherController extends BaseController {
         return map;
     }
 
+    /**
+     * @author JinZhiyun
+     * @description 400页面
+     * @date 10:34 2019/9/30
+     * @Param []
+     * @return java.lang.String
+     **/
+    @RequestMapping("/400")
+    public String error400Page() {
+        int status = response.getStatus();
+        String msg="";
+        if (status==404) {
+            msg="400！服务器不理解请求的语法。";
+            logger.error(msg);
+        }
+        return "tips/HTTP-400";
+    }
+
+    /**
+     * @author JinZhiyun
+     * @description 404页面
+     * @date 10:34 2019/9/30
+     * @Param []
+     * @return java.lang.String
+     **/
+    @RequestMapping("/404")
+    public String error404Page() {
+        int status = response.getStatus();
+        String msg="";
+        if (status==404) {
+            msg="Not Found! 未找到，服务器找不到请求的网页";
+            logger.error(msg);
+        }
+        return "tips/HTTP-404";
+    }
+
+    /**
+     * @author JinZhiyun
+     * @description 500页面
+     * @date 10:34 2019/9/30
+     * @Param []
+     * @return java.lang.String
+     **/
+    @RequestMapping("/500")
+    public String error500Page() {
+        int status = response.getStatus();
+        String msg="";
+        if (status==500) {
+            msg="Internal Server Error! 服务器内部错误，服务器遇到错误，无法完成请求";
+            logger.error(msg);
+        }
+        return "tips/HTTP-500";
+    }
+
     /*=================以上为非登录下的请求，在LoginInterceptor中应该排除==================*/
 
     /**
@@ -351,59 +405,5 @@ public class OtherController extends BaseController {
     @RequestMapping("/updateHistory")
     public String updateHistory(){
         return "home/updateHistory";
-    }
-
-    /**
-     * @author JinZhiyun
-     * @description 400页面
-     * @date 10:34 2019/9/30
-     * @Param []
-     * @return java.lang.String
-     **/
-    @RequestMapping("/400")
-    public String error400Page() {
-        int status = response.getStatus();
-        String msg="";
-        if (status==404) {
-            msg="400！服务器不理解请求的语法。";
-            logger.error(msg);
-        }
-        return "tips/HTTP-400";
-    }
-
-    /**
-     * @author JinZhiyun
-     * @description 404页面
-     * @date 10:34 2019/9/30
-     * @Param []
-     * @return java.lang.String
-     **/
-    @RequestMapping("/404")
-    public String error404Page() {
-        int status = response.getStatus();
-        String msg="";
-        if (status==404) {
-            msg="Not Found! 未找到，服务器找不到请求的网页";
-            logger.error(msg);
-        }
-        return "tips/HTTP-404";
-    }
-
-    /**
-     * @author JinZhiyun
-     * @description 500页面
-     * @date 10:34 2019/9/30
-     * @Param []
-     * @return java.lang.String
-     **/
-    @RequestMapping("/500")
-    public String error500Page() {
-        int status = response.getStatus();
-        String msg="";
-        if (status==500) {
-            msg="Internal Server Error! 服务器内部错误，服务器遇到错误，无法完成请求";
-            logger.error(msg);
-        }
-        return "tips/HTTP-500";
     }
 }
