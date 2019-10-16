@@ -274,12 +274,11 @@
                 </div>
                 <div class="layui-card-body layui-text layadmin-text">
                     <p>大学生信息管理系统 StuInfoAdmin-v1.0.0版本上线啦！</p>
-                    <p>该版本功能上与主支SSM项目的v1.3.1版本对应：</p>
-                    <p>前端layUi数据表格，增加“筛选列”、“打印”、“导出”上方工具条。</p>
-                    <p>新增CsrfInterceptor拦截器，对修改请求进行CsrfToken的校验，有效防止CSRF攻击</p>
-                    <p>对注册用户信息后端服务层，强化在aop方法中对输入身份属性的校验，对“管理员”字段进行过滤，并抛出异常，防止攻击者拦截请求JSON数据进行修改以获得非法权限；对修改用户信息后端控制层，强化在UserController对应方法中对原身份属性和修改后身份属性的校验，对“管理员”字段进行过滤，防止攻击者拦截请求JSON数据进行修改以获得非法权限。</p>
-                    <p>感谢@<a href="https://github.com/Mydearbaby" target="_blank">Mydearbaby</a>发现的<a
-                            href="https://github.com/KuroChan1998/Student-Information-Administration-System/issues/3" target="_blank">邮箱验证码绕过安全漏洞</a>，在服务端发送验证码时新增一个标志位false，仅当服务端校验正确后才将此标志置true，可以有效避免攻击者拦截请求JSON数据进行修改以绕开验证码。</p>
+                    <p>该版本功能上与主支SSM项目的v1.3.0版本对应：</p>
+                    <p>项目根据不同的功能模块分为学生、教师、班级、专业、学院、年级、职称、用户8个服务模块</p>
+                    <p>学生、教师、班级、专业、学院、年级、职称都是作为对外暴露的7个服务模块（分别暴露服务接口StudentService, TeacherService, ClassService, MajorService, CollegeService, GradeService, TitleService），基于dubbo暴露于不同的端口下，他们既是提供者也是消费者；用户服务模块，其中OtherService作为提供验证码发送等其他业务也隶属于用户服务的子服务，因此归于用户服务范畴，对外只暴露UserService接口。用户服务同时也是一个web项目，启动该服务的同时会启动springboot内置tomcat。</p>
+                    <p>common-api模块作为所有服务模块的公共api，提供entity对象、dto对象、工具类、自定义异常类等等。</p>
+                    <p>该项目为多模块项目，根（父）模块中没有代码；common-api是其子项目，其他服务子模块StudentService等都引用common-api，因此也是根（父）模块的子模块。</p>
                     → <a lay-href="${ctx}/updateHistory">历史版本</a>
                 </div>
             </div>
