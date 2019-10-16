@@ -79,10 +79,17 @@
             </exclusions>
         </dependency>
         <!-- Spring Boot log4j依赖 -->
+        <!-- Spring Boot log4j依赖 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-log4j</artifactId>
             <version>1.3.8.RELEASE</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!--aop-->

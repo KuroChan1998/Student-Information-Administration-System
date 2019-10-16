@@ -42,7 +42,7 @@ public class CsrfInterceptor implements HandlerInterceptor {
                 keyFromRequestParam.equals((String) request.getSession().getAttribute(Constants.CSRF_NUMBER)))) {
             result = true;
         } else {
-            logger.warn("可疑CSRF请求！");
+            logger.error("可疑CSRF请求！");
             request.getRequestDispatcher("/400").forward(request, response);
         }
 

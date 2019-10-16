@@ -40,7 +40,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
                 boolean needRemoveSession = annotation.remove();
                 if (needRemoveSession) {
                     if (isRepeatSubmit(request)) {
-                        logger.info(request.getSession().getAttribute("userId")+"重复提交了表单");
+                        logger.warn(request.getSession().getAttribute("userId")+"重复提交了表单");
                         response.sendRedirect(request.getContextPath() + "/formRepeatSubmit");
                         return false;
                     }

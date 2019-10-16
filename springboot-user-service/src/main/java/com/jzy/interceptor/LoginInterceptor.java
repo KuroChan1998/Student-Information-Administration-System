@@ -34,7 +34,7 @@ public class LoginInterceptor implements HandlerInterceptor {
             logger.info(user.getUserName() + "访问系统！");
             return true;
         }
-        logger.info("ip:"+MySimpleUtil.getIpAddress(httpServletRequest) + " 未登录下企图进入系统！");
+        logger.warn("ip:"+MySimpleUtil.getIpAddress(httpServletRequest) + " 未登录下企图进入系统！");
         httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + "/login");
         return false;
     }
