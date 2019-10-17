@@ -22,6 +22,10 @@ public class AuthorityInterceptor implements HandlerInterceptor {
     @Autowired
     private OtherService otherService;
 
+    public AuthorityInterceptor(OtherService otherService) {
+        this.otherService=otherService;
+    }
+
     /**
      * @return boolean
      * @Author JinZhiyun
@@ -36,7 +40,7 @@ public class AuthorityInterceptor implements HandlerInterceptor {
             return true;
         }
         logger.warn("非管理员访问:" + httpServletRequest.getRequestURI() + " 无操作权限");
-        httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + "/error");
+        httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + "/myError");
         return false;
     }
 

@@ -3,10 +3,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.5.9.RELEASE</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <groupId>com.jzy</groupId>
+        <artifactId>Student-Information-Administration-System</artifactId>
+        <version>1.0-SNAPSHOT</version>
     </parent>
     <groupId>com.jzy</groupId>
     <artifactId>springboot-major-service</artifactId>
@@ -16,45 +15,8 @@
     <packaging>jar</packaging>
 
     <properties>
-        <!-- JDK version -->
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <!-- Spring Boot-->
-        <project.build.spring.boot.starter.parent.version>1.5.9.RELEASE</project.build.spring.boot.starter.parent.version>
-        <!-- MyBatis and Spring Boot -->
-        <project.build.mybatis.spring.boot.starter.version>1.3.2</project.build.mybatis.spring.boot.starter.version>
-        <!-- Database connection pool -->
-        <project.build.druid.spring.boot.starter.version>1.1.10</project.build.druid.spring.boot.starter.version>
-        <!-- PageHelper -->
-        <project.build.pagehelper.spring.boot.starter.version>1.2.3</project.build.pagehelper.spring.boot.starter.version>
-        <!-- Servlet -->
-        <project.build.servlet.api.version>3.0.1</project.build.servlet.api.version>
-        <project.build.servlet.jsp.version>2.2</project.build.servlet.jsp.version>
-        <project.build.servlet.jstl.version>1.2</project.build.servlet.jstl.version>
-        <!-- Jackson -->
-        <project.build.alibaba.fastjson.version>1.2.56</project.build.alibaba.fastjson.version>
-        <project.build.fasterxml.jackson.version>2.10.0.pr1</project.build.fasterxml.jackson.version>
-        <project.build.codehaus.jackson.core.version>1.9.13</project.build.codehaus.jackson.core.version>
-        <!-- Demo4j -->
-        <project.build.dom4j.version>1.6.1</project.build.dom4j.version>
-        <!-- Json-lib -->
-        <project.build.sf.json.lib.version>2.1</project.build.sf.json.lib.version>
-        <!-- Echcache -->
-        <project.build.sf.echcache.core.version>2.6.9</project.build.sf.echcache.core.version>
-        <project.build.sf.echcache.web.version>2.0.4</project.build.sf.echcache.web.version>
-        <!-- Common util -->
-        <project.build.commons.io.version>2.4</project.build.commons.io.version>
-        <project.build.commons.codec.version>1.9</project.build.commons.codec.version>
-        <project.build.commons.lang3.version>3.3.2</project.build.commons.lang3.version>
-        <project.build.commons.beautils.version>1.7.0</project.build.commons.beautils.version>
-        <project.build.commons.fileupload.version>1.3.3</project.build.commons.fileupload.version>
-        <project.build.commons.collections4.version>4.0</project.build.commons.collections4.version>
-        <!-- Mail -->
-        <project.build.javax.mail.version>1.4.7</project.build.javax.mail.version>
-        <project.build.sun.mail.javax.version>1.6.2</project.build.sun.mail.javax.version>
-    </properties>
 
+    </properties>
 
     <dependencies>
         <dependency>
@@ -100,95 +62,77 @@
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
-            <version>${project.build.mybatis.spring.boot.starter.version}</version>
         </dependency>
         <!--springboot pagehelper-->
         <dependency>
             <groupId>com.github.pagehelper</groupId>
             <artifactId>pagehelper-spring-boot-starter</artifactId>
-            <version>${project.build.pagehelper.spring.boot.starter.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-core-asl</artifactId>
-            <version>${project.build.codehaus.jackson.core.version}</version>
         </dependency>
         <dependency>
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-mapper-asl</artifactId>
-            <version>${project.build.codehaus.jackson.core.version}</version>
         </dependency>
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>${project.build.alibaba.fastjson.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
-            <version>${project.build.fasterxml.jackson.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>${project.build.fasterxml.jackson.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
-            <version>${project.build.fasterxml.jackson.version}</version>
         </dependency>
         <dependency>
             <groupId>dom4j</groupId>
             <artifactId>dom4j</artifactId>
-            <version>${project.build.dom4j.version}</version>
         </dependency>
         <dependency>
             <groupId>net.sf.json-lib</groupId>
             <artifactId>json-lib</artifactId>
-            <version>${project.build.sf.json.lib.version}</version>
             <classifier>jdk15</classifier>
         </dependency>
         <dependency>
             <groupId>net.sf.ehcache</groupId>
             <artifactId>ehcache-core</artifactId>
-            <version>${project.build.sf.echcache.core.version}</version>
         </dependency>
         <dependency>
             <groupId>net.sf.ehcache</groupId>
             <artifactId>ehcache-web</artifactId>
-            <version>${project.build.sf.echcache.web.version}</version>
         </dependency>
         <dependency>
             <groupId>commons-fileupload</groupId>
             <artifactId>commons-fileupload</artifactId>
-            <version>${project.build.commons.fileupload.version}</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>${project.build.commons.io.version}</version>
         </dependency>
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
-            <version>${project.build.commons.codec.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-collections4</artifactId>
-            <version>${project.build.commons.collections4.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>${project.build.commons.lang3.version}</version>
         </dependency>
         <dependency>
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
-            <version>${project.build.commons.beautils.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>commons-logging</groupId>
@@ -199,28 +143,25 @@
         <dependency>
             <groupId>javax.mail</groupId>
             <artifactId>mail</artifactId>
-            <version>${project.build.javax.mail.version}</version>
         </dependency>
         <dependency>
             <groupId>com.sun.mail</groupId>
             <artifactId>javax.mail</artifactId>
-            <version>${project.build.sun.mail.javax.version}</version>
         </dependency>
 
         <!-- connection pool -->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
-            <version>1.1.10</version>
         </dependency>
 
         <dependency>
             <groupId>com.alibaba.boot</groupId>
             <artifactId>dubbo-spring-boot-starter</artifactId>
-            <version>0.1.1</version>
         </dependency>
 
     </dependencies>
+
 
     <build>
         <finalName>springboot-major-service</finalName>
