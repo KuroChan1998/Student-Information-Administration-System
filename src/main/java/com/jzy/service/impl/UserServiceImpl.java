@@ -78,10 +78,13 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService {
         if (StringUtils.isEmpty(userName) || StringUtils.isEmpty(userPassword)) { //服务端输入校验
             return null;
         }
+        /**
+         * 暂时取消用户登录信息缓存redis的功能，该功能在用户修改信息后要重新对redis进行删改操作，不甚合理
+         */
         //先检查redis缓存有无该用户登录信息，有则不必置数据库查询
-        HashOperations<String, String, Object> hOps = redisTemplate.opsForHash();
-        final String baseKey = UserUtil.KEY_USER_LOGIN_NAMEANDPASSWORD;
-        if (!hOps.hasKey(baseKey, userName)) { //没有缓存，去mysql查询
+//        HashOperations<String, String, Object> hOps = redisTemplate.opsForHash();
+//        final String baseKey = UserUtil.KEY_USER_LOGIN_NAMEANDPASSWORD;
+//        if (!hOps.hasKey(baseKey, userName)) { //没有缓存，去mysql查询
             System.out.println("走数据库");
             User userTmp;
             if (UserUtil.isValidUserEmail(userName)) { //先根据输入userName格式猜测输入是否为用户邮箱，若是通过邮箱验证登录
@@ -95,26 +98,27 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService {
                 String encryptedPasswordInput = MySecurity.encryptUserPassword(userPassword, userTmp.getUserId());
                 if (userTmp.getUserPassword().equals(encryptedPasswordInput)) {
                     //登录成功，同时把当前User对象设置redis缓存
-                    hOps.put(baseKey, userName, userTmp);
+//                    hOps.put(baseKey, userName, userTmp);
                     return userTmp;
                 } else {
                     return null;
                 }
             }
-        } else {//从缓存中校验
-            System.out.println("从缓存中查");
-            User userTmp = (User) hOps.get(baseKey, userName);
-            if (userTmp == null) {
-                return null;
-            } else {
-                String encryptedPasswordInput = MySecurity.encryptUserPassword(userPassword, userTmp.getUserId());
-                if (userTmp.getUserPassword().equals(encryptedPasswordInput)) {
-                    return userTmp;
-                } else {
-                    return null;
-                }
-            }
-        }
+//        }
+//        else {//从缓存中校验
+//            System.out.println("从缓存中查");
+//            User userTmp = (User) hOps.get(baseKey, userName);
+//            if (userTmp == null) {
+//                return null;
+//            } else {
+//                String encryptedPasswordInput = MySecurity.encryptUserPassword(userPassword, userTmp.getUserId());
+//                if (userTmp.getUserPassword().equals(encryptedPasswordInput)) {
+//                    return userTmp;
+//                } else {
+//                    return null;
+//                }
+//            }
+//        }
     }
 
     @Override
@@ -216,5 +220,19 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService {
     @Override
     public void updateResetEmailByEmail(String userOldEmail, String userNewEmail) {
         userMapper.updateResetEmailByEmail(userOldEmail, userNewEmail);
+    }
+
+    @Override
+    public void deleteRedisUserLoginKey(User user) {
+        final String baseKey = UserUtil.KEY_USER_LOGIN_NAMEANDPASSWORD;
+        HashOperations<String, String, Object> hOps = redisTemplate.opsForHash();
+        if (user != null) {
+            if (hOps.hasKey(baseKey, user.getUserEmail())) {
+                hOps.delete(baseKey, user.getUserEmail());
+            }
+            if (hOps.hasKey(baseKey, user.getUserName())) {
+                hOps.delete(baseKey, user.getUserName());
+            }
+        }
     }
 }

@@ -64,6 +64,9 @@ public class MyTest extends UnitTestBase {
 
     @Test
     public void t1() {
+        final String baseKey = UserUtil.KEY_USER_LOGIN_NAMEANDPASSWORD;
+        HashOperations<String, String, Object> hOps = redisTemplate.opsForHash();
+        hOps.delete(baseKey,"000000000001");
     }
 
     public static void main(String[] args) {

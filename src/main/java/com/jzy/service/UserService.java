@@ -140,4 +140,10 @@ public interface UserService {
      * @Param [userOldEmail, userNewEmail]
      **/
     void updateResetEmailByEmail(String userOldEmail, String userNewEmail);
+
+    /**
+     * 删除redis中用户登录的用户信息缓存
+     * @param user
+     */
+    void deleteRedisUserLoginKey(User user);
 }
