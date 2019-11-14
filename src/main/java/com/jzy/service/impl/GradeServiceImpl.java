@@ -5,7 +5,6 @@ import com.jzy.entity.Grade;
 import com.jzy.service.GradeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -17,7 +16,6 @@ import java.util.List;
  * @Version 1.0
  **/
 @Service("gradeService")
-@Transactional
 public class GradeServiceImpl extends BaseServiceImpl implements GradeService {
     @Autowired
     private GradeMapper gradeMapper;

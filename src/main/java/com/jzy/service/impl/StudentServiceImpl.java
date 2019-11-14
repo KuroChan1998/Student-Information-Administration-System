@@ -14,7 +14,6 @@ import com.jzy.util.other.MyTimeUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +26,6 @@ import java.util.List;
  * @Version 1.0
  **/
 @Service("studentService")
-@Transactional
 public class StudentServiceImpl extends BaseServiceImpl implements StudentService {
     @Autowired
     private StudentMapper studentMapper;

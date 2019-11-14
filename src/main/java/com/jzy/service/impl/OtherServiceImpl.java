@@ -1,6 +1,7 @@
 package com.jzy.service.impl;
 
 import com.jzy.dto.other.EmailVerifyCode;
+import com.jzy.dto.other.senior.EchartsFactory;
 import com.jzy.dto.other.senior.ObjectTotalGroupByCommonName;
 import com.jzy.dto.other.senior.StudentPercentBySex;
 import com.jzy.dto.other.senior.StudentTotalGroupBySex;
@@ -8,14 +9,12 @@ import com.jzy.entity.College;
 import com.jzy.entity.Major;
 import com.jzy.entity.User;
 import com.jzy.service.OtherService;
-import com.jzy.dto.other.senior.EchartsFactory;
 import com.jzy.util.other.MySimpleUtil;
 import com.jzy.util.other.SendEmailUtil;
 import com.jzy.util.user.UserUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -37,7 +36,6 @@ import java.util.concurrent.TimeUnit;
  * @Version 1.0
  **/
 @Service("otherService")
-@Transactional
 public class OtherServiceImpl extends BaseServiceImpl implements OtherService {
     @Override
     public String uploadUserIcon(MultipartFile file, HttpServletRequest request, String userId) {
@@ -98,7 +96,7 @@ public class OtherServiceImpl extends BaseServiceImpl implements OtherService {
         String emailMsg = "收到来自StuInfoAdmin--大学生学籍信息管理系统的验证码：\n" + verifyCode + "\n有效时间: " + EmailVerifyCode.getValidTimeMinutes() + "分钟";
         try {
             // 邮件发送处理
-            SendEmailUtil.sendMail(emailAddress, emailMsg);
+            SendEmailUtil.sendEncryptedEmail(emailAddress, emailMsg);
             //设置redis缓存
             ValueOperations<String, Object> vOps = redisTemplate.opsForValue();
             final String baseKey = UserUtil.KEY_USER_VERIFYCODE_EMAIL;

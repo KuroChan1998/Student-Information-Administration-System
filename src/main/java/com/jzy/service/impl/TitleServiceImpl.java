@@ -5,7 +5,6 @@ import com.jzy.entity.Title;
 import com.jzy.service.TitleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -17,7 +16,6 @@ import java.util.List;
  * @Version 1.0
  **/
 @Service("titleService")
-@Transactional
 public class TitleServiceImpl extends BaseServiceImpl implements TitleService {
     @Autowired
     private TitleMapper titleMapper;

@@ -24,7 +24,6 @@ import java.util.List;
  * @Version 1.0
  **/
 @Service("classService")
-@Transactional
 public class ClassServiceImpl extends BaseServiceImpl implements ClassService {
     @Autowired
     private ClassMapper classMapper;

@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
@@ -27,7 +26,6 @@ import java.util.concurrent.TimeUnit;
  * @Version 1.0
  **/
 @Service("userService")
-@Transactional
 public class UserServiceImpl extends BaseServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;

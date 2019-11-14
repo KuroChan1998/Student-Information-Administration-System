@@ -1,11 +1,10 @@
 package com.jzy.util.other;
 
-import javax.mail.Address;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
+import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.security.Security;
+import java.util.Date;
 import java.util.Properties;
 
 /**
@@ -26,7 +25,17 @@ public class SendEmailUtil {
 
     private static final String HOST = "smtp.qq.com"; //邮件服务器
 
-    private SendEmailUtil(){}
+    public static String getSubject() {
+        return subject;
+    }
+
+    public static void setSubject(String subject) {
+        SendEmailUtil.subject = subject;
+    }
+
+    public static boolean sendMail(String emailAddress, String emailMsg) {
+        return sendMail(emailAddress, emailMsg, subject);
+    }
 
     /**
      * @return boolean
@@ -35,9 +44,9 @@ public class SendEmailUtil {
      * @Date 23:22 2019/4/10
      * @Param [emailAddress, emailMsg]
      **/
-    public static boolean sendMail(String emailAddress, String emailMsg) {
+    public static boolean sendMail(String emailAddressTo, String emailMsg, String emailSubject) {
         // 发给谁
-        String to = emailAddress;
+        String to = emailAddressTo;
 
         // 定义properties对象，设置环境信息
         Properties properties = new Properties();
@@ -70,7 +79,7 @@ public class SendEmailUtil {
             message.setFrom(new InternetAddress(FROM));
 
             // 设置邮件发送的主题<邮件标题>
-            message.setSubject(subject);
+            message.setSubject(emailSubject);
 
             // 设置邮件发送的内容
             message.setContent(emailMsg, "text/html;charset=utf-8");
@@ -86,5 +95,64 @@ public class SendEmailUtil {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public static void sendEncryptedEmail(String emailAddressTo, String emailMessage) {
+        sendEncryptedEmail(emailAddressTo, subject, emailMessage);
+    }
+
+    /**
+     * 使用加密的方式,利用465端口进行传输邮件,开启ssl
+     * @param emailAddressTo    为收件人邮箱
+     * @param eamilMessage    发送的消息
+     */
+    public static void sendEncryptedEmail(String emailAddressTo,String emailSubject, String eamilMessage) {
+        try {
+            Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
+            final String SSL_FACTORY = "javax.net.ssl.SSLSocketFactory";
+            //设置邮件会话参数
+            Properties props = new Properties();
+            //邮箱的发送服务器地址
+            props.setProperty("mail.smtp.host", HOST);
+            props.setProperty("mail.smtp.socketFactory.class", SSL_FACTORY);
+            props.setProperty("mail.smtp.socketFactory.fallback", "false");
+            //邮箱发送服务器端口,这里设置为465端口
+            props.setProperty("mail.smtp.port", "465");
+            props.setProperty("mail.smtp.socketFactory.port", "465");
+            props.put("mail.smtp.auth", "true");
+//            final String username = from;
+//            final String password = psw;
+            //获取到邮箱会话,利用匿名内部类的方式,将发送者邮箱用户名和密码授权给jvm
+            Session session = Session.getDefaultInstance(props, new Authenticator() {
+                @Override
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(USERNAME, PASSWORD);
+                }
+            });
+            //通过会话,得到一个邮件,用于发送
+            Message msg = new MimeMessage(session);
+            //设置发件人
+            msg.setFrom(new InternetAddress(FROM));
+            //设置收件人,to为收件人,cc为抄送,bcc为密送
+            msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(emailAddressTo, false));
+            msg.setRecipients(Message.RecipientType.CC, InternetAddress.parse(emailAddressTo, false));
+            msg.setRecipients(Message.RecipientType.BCC, InternetAddress.parse(emailAddressTo, false));
+            msg.setSubject(emailSubject);
+            //设置邮件消息
+            msg.setText(eamilMessage);
+            //设置发送的日期
+            msg.setSentDate(new Date());
+
+            //调用Transport的send方法去发送邮件
+            Transport.send(msg);
+
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public static void main(String[] args) {
+        SendEmailUtil.sendEncryptedEmail("929703621@qq.com",subject,"aaa啊啊啊");
     }
 }
