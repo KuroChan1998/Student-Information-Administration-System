@@ -27,7 +27,6 @@ import java.util.concurrent.TimeUnit;
  * @Version 1.0
  **/
 @Service("userService")
-@Transactional
 public class UserServiceImpl extends BaseServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;

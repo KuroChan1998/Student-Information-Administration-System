@@ -17,7 +17,6 @@ import java.util.List;
  * @Version 1.0
  **/
 @Service("gradeService")
-@Transactional
 public class GradeServiceImpl extends BaseServiceImpl implements GradeService {
     @Autowired
     private GradeMapper gradeMapper;

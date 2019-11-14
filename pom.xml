@@ -62,6 +62,16 @@
     </parent>
 
     <dependencies>
+        <!--热部署 修改后立即生效-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>springloaded</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+        </dependency>
+
         <!--对于web的依赖-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -266,8 +276,6 @@
             <artifactId>javax.mail</artifactId>
             <version>${project.build.sun.mail.javax.version}</version>
         </dependency>
-
-
     </dependencies>
 
     <build>

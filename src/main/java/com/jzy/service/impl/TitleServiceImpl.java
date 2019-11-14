@@ -17,7 +17,6 @@ import java.util.List;
  * @Version 1.0
  **/
 @Service("titleService")
-@Transactional
 public class TitleServiceImpl extends BaseServiceImpl implements TitleService {
     @Autowired
     private TitleMapper titleMapper;

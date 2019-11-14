@@ -24,7 +24,6 @@ import java.util.List;
  * @Version 1.0
  **/
 @Service("majorService")
-@Transactional
 public class MajorServiceImpl extends BaseServiceImpl implements MajorService {
     @Autowired
     protected MajorMapper majorMapper;
