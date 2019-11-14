@@ -19,7 +19,6 @@ import java.util.List;
  * @Version 1.0
  **/
 @Service("titleService")
-@Transactional
 @com.alibaba.dubbo.config.annotation.Service
 public class TitleServiceImpl implements TitleService {
     @Reference

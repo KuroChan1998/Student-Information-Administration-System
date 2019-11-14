@@ -26,7 +26,6 @@ import java.util.List;
  * @Version 1.0
  **/
 @Service("classService")
-@Transactional
 @com.alibaba.dubbo.config.annotation.Service
 public class ClassServiceImpl implements ClassService {
     @Reference

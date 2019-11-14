@@ -41,7 +41,6 @@ import java.util.concurrent.TimeUnit;
  * @Version 1.0
  **/
 @Service("otherService")
-@Transactional
 public class OtherServiceImpl implements OtherService {
     private final static Logger logger = Logger.getLogger(OtherServiceImpl.class);
 
@@ -131,7 +130,7 @@ public class OtherServiceImpl implements OtherService {
         String emailMsg = "收到来自StuInfoAdmin--大学生学籍信息管理系统的验证码：\n" + verifyCode + "\n有效时间: " + EmailVerifyCode.getValidTimeMinutes() + "分钟";
         try {
             // 邮件发送处理
-            SendEmailUtil.sendMail(emailAddress, emailMsg);
+            SendEmailUtil.sendEncryptedEmail(emailAddress, emailMsg);
             //设置redis缓存
             ValueOperations<String, Object> vOps = redisTemplate.opsForValue();
             final String baseKey = UserUtil.KEY_USER_VERIFYCODE_EMAIL;

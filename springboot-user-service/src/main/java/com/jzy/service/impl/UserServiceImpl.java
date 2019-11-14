@@ -29,7 +29,6 @@ import java.util.concurrent.TimeUnit;
  * @Version 1.0
  **/
 @Service("userService")
-@Transactional
 @com.alibaba.dubbo.config.annotation.Service
 public class UserServiceImpl implements UserService {
     @Reference

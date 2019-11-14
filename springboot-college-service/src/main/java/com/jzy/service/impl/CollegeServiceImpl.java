@@ -26,7 +26,6 @@ import java.util.List;
  * @Version 1.0
  **/
 @Service("collegeService")
-@Transactional
 @com.alibaba.dubbo.config.annotation.Service
 public class CollegeServiceImpl implements CollegeService {
     @Reference
