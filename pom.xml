@@ -75,7 +75,7 @@
         <project.build.commons.codec.version>1.9</project.build.commons.codec.version>
         <project.build.commons.lang3.version>3.3.2</project.build.commons.lang3.version>
         <project.build.commons.beautils.version>1.7.0</project.build.commons.beautils.version>
-        <project.build.commons.fileupload.version>1.3.3</project.build.commons.fileupload.version>
+        <project.build.commons.fileupload.version>1.5</project.build.commons.fileupload.version>
         <project.build.commons.collections4.version>4.0</project.build.commons.collections4.version>
         <!-- Mail -->
         <project.build.javax.mail.version>1.4.7</project.build.javax.mail.version>
