@@ -59,7 +59,7 @@
         <project.build.cglib.version>3.1</project.build.cglib.version>
         <!-- Jackson -->
         <project.build.alibaba.fastjson.version>1.2.56</project.build.alibaba.fastjson.version>
-        <project.build.fasterxml.jackson.version>2.10.0.pr1</project.build.fasterxml.jackson.version>
+        <project.build.fasterxml.jackson.version>2.12.7.1</project.build.fasterxml.jackson.version>
         <project.build.codehaus.jackson.core.version>1.9.13</project.build.codehaus.jackson.core.version>
         <!-- Demo4j -->
         <project.build.dom4j.version>1.6.1</project.build.dom4j.version>
